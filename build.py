@@ -227,7 +227,7 @@ home_body = f'''
       <div class="grid3">
         <a class="card reveal" href="/journal/durango-rides">{photo('journal-1', 'Singletrack through ponderosa pines', 'ph')}<p class="post-meta">Ride</p><h3>Five rides that show you Durango</h3><span class="link">Read</span></a>
         <a class="card reveal" href="/journal">{photo('journal-2', 'The Animas River in morning light', 'ph')}<p class="post-meta">Coming soon</p><h3>A slow day on the Animas</h3></a>
-        <a class="card reveal" href="/journal">{photo('journal-3', 'A mountain home at dusk', 'ph')}<p class="post-meta">Owners · Coming soon</p><h3>What a Durango home can earn</h3></a>
+        <a class="card reveal" href="/journal/durango-home-earnings">{photo('journal-3', 'A mountain home at dusk', 'ph')}<p class="post-meta">Owners</p><h3>What a Durango vacation home earns</h3><span class="link">Read</span></a>
       </div>
     </div>
   </section>
@@ -473,7 +473,7 @@ journal_body = f'''
     <div class="wrap grid3">
       <a class="card reveal" href="/journal/durango-rides">{photo('journal-1', 'Singletrack through ponderosa pines', 'ph')}<p class="post-meta">Ride</p><h3>Five rides that show you Durango</h3><p>From a first lap at Horse Gulch to a long day on Hermosa Creek.</p><span class="link">Read</span></a>
       <div class="card reveal">{photo('journal-2', 'The Animas River in morning light', 'ph')}<p class="post-meta">Coming soon</p><h3>A slow day on the Animas</h3></div>
-      <div class="card reveal">{photo('journal-3', 'A mountain home at dusk', 'ph')}<p class="post-meta">Owners · Coming soon</p><h3>What a Durango home can earn</h3></div>
+      <a class="card reveal" href="/journal/durango-home-earnings">{photo('journal-3', 'A mountain home at dusk', 'ph')}<p class="post-meta">Owners</p><h3>What a Durango vacation home earns, and what decides it</h3><p>Three data firms, three answers. What the numbers say, and the five things that separate the top homes.</p><span class="link">Read</span></a>
     </div>
   </section>
 '''
@@ -563,9 +563,83 @@ def home_page(h):
 '''
     return page(f"{h['name']} · {h['area']} · Ophir Stays", f"{h['name']}: {h['beds']}-bedroom luxury home in {h['area']}, Durango, Colorado. {h['line']}", f"/homes/{slug}", 'homes', body)
 
+
+post2_body = f'''
+  <section style="padding-bottom:40px">
+    <div class="wrap narrow center reveal">
+      <p class="eyebrow">Owners</p>
+      <h1 class="display">What a Durango vacation home earns, and what decides it</h1>
+      <p class="post-meta">By Casey Roberts · October 2026</p>
+    </div>
+  </section>
+  <div class="wrap">{photo('journal-3', 'A mountain home above Durango at dusk')}</div>
+  <section style="padding-top:56px">
+    <div class="wrap narrow article">
+      <p><strong>A typical Durango short-term rental earns somewhere between $41,000 and $55,000 a year, depending on whose data you trust. The top homes earn roughly double that, and almost everything that separates them is in the owner's control.</strong></p>
+      <p>Below is what the three most-cited data firms report for Durango, what moves a home from average to excellent, and how to think about your own.</p>
+
+      <h2>The market, three ways</h2>
+      <p>Each firm counts listings and revenue differently, so their numbers don't match. Taken together, they draw a clear picture.</p>
+      <div class="table-wrap"><table class="data">
+        <thead><tr><th scope="col"></th><th scope="col">Airbtics</th><th scope="col">Rabbu</th><th scope="col">BnbCalc</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Active listings</th><td>1,256</td><td>581</td><td>~1,950</td></tr>
+          <tr><th scope="row">Revenue per year</th><td>$55,000</td><td>$45,478</td><td>~$41,000</td></tr>
+          <tr><th scope="row">Average nightly rate</th><td>$262</td><td>$301</td><td>$357</td></tr>
+          <tr><th scope="row">Occupancy</th><td>56%</td><td>37%</td><td>29–31%</td></tr>
+          <tr><th scope="row">Period</th><td>Feb 2025–Jan 2026</td><td>To Apr 2026</td><td>Oct 2025–Sep 2026</td></tr>
+        </tbody>
+      </table></div>
+      <p>One trend shows up everywhere: nightly rates are rising (up 12–16% year over year) while occupancy is flat or falling. Guests are paying more, but they're choosier about where they stay. That rewards the homes that stand out.</p>
+
+      <h2>Size matters most</h2>
+      <p>Bedrooms drive revenue more than anything else. The largest homes book slightly less often but command far higher rates.</p>
+      <div class="table-wrap"><table class="data">
+        <thead><tr><th scope="col">Bedrooms</th><th scope="col">Avg revenue / year</th><th scope="col">Avg nightly rate</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">2</th><td>$40,854</td><td>$242</td></tr>
+          <tr><th scope="row">3</th><td>$54,698</td><td>$350</td></tr>
+          <tr><th scope="row">4</th><td>$76,780</td><td>$496</td></tr>
+          <tr><th scope="row">5</th><td>$97,480</td><td>$724</td></tr>
+          <tr><th scope="row">6+</th><td>$112,767</td><td>$861</td></tr>
+        </tbody>
+      </table></div>
+      <p class="fine">Source: Rabbu, trailing twelve months to April 2026.</p>
+
+      <h2>Summer is the season. The shoulders decide the year.</h2>
+      <p>July is Durango's best month, averaging about $7,260 per home; April is the slowest, at about $1,710. That's a fourfold swing. Summer, June through September, carries the year, with a second bump at Christmas and in March for spring skiing.</p>
+      <p>Almost every home fills in July. The difference between an average year and a great one is made in April, May, October and November, when guests need a reason to come.</p>
+
+      <h2>What separates the top homes</h2>
+      <p>BnbCalc puts Durango's high performers at around $77,000 a year and its low performers at around $19,000. The gap isn't luck. It comes down to five things:</p>
+      <p><strong>1. Photography.</strong> Guests decide from the first image. Professional, naturally lit photos are the single cheapest upgrade an owner can make.</p>
+      <p><strong>2. A hot tub.</strong> In Durango, homes with a hot tub are associated with about 22% more revenue (BnbCalc). After a day on the mountain, it's the amenity guests search for.</p>
+      <p><strong>3. Pricing every day, not every season.</strong> With rates rising and occupancy falling, a set-and-forget price either leaves money on the table in July or sits empty in October. Rates should move with events, weather and demand.</p>
+      <p><strong>4. Reviews and response time.</strong> Ranking on Airbnb and VRBO rewards five-star stays and fast replies. A local who answers in minutes, and fixes the hot tub the same afternoon, protects both.</p>
+      <p><strong>5. A reason to come in the shoulder season.</strong> A fall aspen ride with bikes delivered, a spring ski weekend with lift tickets waiting. Homes that sell the trip, not just the beds, fill the months others don't.</p>
+
+      <h2>What it means for your home</h2>
+      <p>Start with your bedroom count and the table above, then ask honestly how your home scores on those five points. Every one of them is within an owner's control.</p>
+      <p>If you'd like a real number for your home, built from its size, location and history, we'll send you a personal estimate within two business days. No obligation.</p>
+      <p style="margin-top:32px"><a class="btn btn-rust" href="/owners#estimate">Get your free estimate</a></p>
+
+      <h2 style="font-size:20px;margin-top:56px">Sources</h2>
+      <p class="fine" style="margin:0">
+        <a href="https://airbtics.com/annual-airbnb-revenue-in-durango-united-states" rel="noopener">Airbtics: Airbnb revenue in Durango</a> (data Feb 2025–Jan 2026)<br>
+        <a href="https://rabbu.com/airbnb-data/durango-co" rel="noopener">Rabbu: Durango, CO Airbnb market data</a> (as of Apr 2026)<br>
+        <a href="https://www.bnbcalc.com/markets/us/durango-co" rel="noopener">BnbCalc: Durango, CO market</a> (12 months to Sep 2026)<br>
+        Figures are third-party estimates of Airbnb and VRBO listings and vary by method.
+      </p>
+    </div>
+  </section>
+'''
+post2 = page('What a Durango vacation home earns, and what decides it · The Journal · Ophir Stays',
+             'Durango short-term rentals earn about $41,000 to $55,000 a year on average; top homes earn roughly double. Revenue by bedroom count, seasonality, and the five things that separate the best homes.',
+             '/journal/durango-home-earnings', 'journal', post2_body)
+
 os.makedirs('journal', exist_ok=True); os.makedirs('homes', exist_ok=True)
-for name, html in [('index.html', home), ('owners.html', owners), ('about.html', about), ('journal.html', journal), ('journal/durango-rides.html', post), ('homes.html', homes_page)] + [(f"homes/{h['slug']}.html", home_page(h)) for h in LIVE_HOMES]:
+for name, html in [('index.html', home), ('owners.html', owners), ('about.html', about), ('journal.html', journal), ('journal/durango-rides.html', post), ('journal/durango-home-earnings.html', post2), ('homes.html', homes_page)] + [(f"homes/{h['slug']}.html", home_page(h)) for h in LIVE_HOMES]:
     open(name, 'w').write(html)
 open('sitemap.xml', 'w').write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' +
-    ''.join(f'<url><loc>https://ophirstays.com{p}</loc></url>\n' for p in ['/', '/homes', '/owners', '/about', '/journal', '/journal/durango-rides'] + [f"/homes/{h['slug']}" for h in HOMES if not h['sample']]) + '</urlset>\n')
+    ''.join(f'<url><loc>https://ophirstays.com{p}</loc></url>\n' for p in ['/', '/homes', '/owners', '/about', '/journal', '/journal/durango-rides', '/journal/durango-home-earnings'] + [f"/homes/{h['slug']}" for h in HOMES if not h['sample']]) + '</urlset>\n')
 print('built')

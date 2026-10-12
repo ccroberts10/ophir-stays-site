@@ -42,6 +42,17 @@ export default async function handler(req, res) {
         });
         return json(res, 200, { ok: true, id: trip.id, link: `/trip/${trip.access_token}` });
       }
+      case 'restaurants': return json(res, 200, { restaurants: await db.select('restaurants', 'order=active.desc,name') });
+      case 'restaurant_save': {
+        const r = b.restaurant || {};
+        const row = { name: String(r.name || '').trim().slice(0, 80), cuisine: (r.cuisine || '').slice(0, 60) || null, vibe: (r.vibe || '').slice(0, 80) || null,
+          price: [1, 2, 3, 4].includes(+r.price) ? +r.price : null, kid_friendly: !!r.kid_friendly, book_via: (r.book_via || '').slice(0, 40) || null,
+          phone: (r.phone || '').slice(0, 30) || null, booking_url: (r.booking_url || '').slice(0, 300) || null, first_round: !!r.first_round,
+          notes: (r.notes || '').slice(0, 300) || null, active: r.active !== false };
+        if (!row.name) return json(res, 400, { error: 'Name required' });
+        const out = r.id ? await db.update('restaurants', `id=eq.${r.id}`, row) : await db.insert('restaurants', [row]);
+        return json(res, 200, { ok: true, restaurant: out[0] });
+      }
       default: return json(res, 400, { error: 'Unknown action' });
     }
   } catch (e) {

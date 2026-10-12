@@ -143,3 +143,22 @@ alter table trips add column if not exists offers jsonb default '[]'::jsonb;
 alter table trips add column if not exists ready_list jsonb default '[]'::jsonb;
 alter table trips add column if not exists weather jsonb default '[]'::jsonb;
 alter table trips add column if not exists plan_summary text;
+
+-- v1.2: Casey's restaurant list (the AI only books from this)
+create table if not exists restaurants (
+  id uuid primary key default gen_random_uuid(),
+  name text not null,
+  cuisine text,
+  vibe text,                 -- e.g. quiet and romantic, lively, family-friendly, special occasion, casual
+  price int check (price between 1 and 4),
+  kid_friendly boolean default true,
+  book_via text,             -- phone, OpenTable, Resy, text the owner, walk-in
+  phone text,
+  booking_url text,
+  first_round boolean default false,   -- owner has agreed to the "first round on us" arrangement
+  notes text,
+  active boolean default true,
+  created_at timestamptz default now()
+);
+alter table restaurants enable row level security;
+grant all privileges on restaurants to service_role;

@@ -203,6 +203,8 @@ export async function planTrip(tripId) {
   const addons = await paidAddons(trip.id);
   const granted = new Set([...(INCLUDES[trip.package] || []), ...addons.map((k) => OFFERS[k]?.grants).filter(Boolean)]);
   const weather = await forecast(trip.check_in, trip.check_out);
+  const restaurants = await db.select('restaurants', 'active=eq.true&order=name').catch(() => []);
+  const dining = (answers && answers.raw && answers.raw.dining) || {};
   const offerKeys = Object.keys(OFFERS).filter((k) => !(k === 'arranged' && trip.package !== 'stay') && !(k === 'private' && trip.package === 'private') && !addons.includes(k)
     && !(OFFERS[k].grants && granted.has(OFFERS[k].grants)));
   const plan = await aiJSON(
@@ -213,10 +215,13 @@ PACKAGE RULES (strict):
 - Only promise or create tasks for those. "gear" = sizing and delivering skis/boots/bikes. "bookings" = guides, tickets, rafting, fishing, golf. "dinners" = holding tables and the first round. "groceries" = shopping and stocking the fridge. "arrival_setup" = fire, wine, flowers. "wellness" = massage, chef, sitter.
 - Anything the guest would enjoy that is NOT in that list: do not promise it and create no task for it. Put it in the itinerary as a plain idea (e.g. "Ride Horse Gulch", "Dinner on Main Avenue"), and instead add a matching offer key to "offers".
 - Allowed offer keys: ${offerKeys.join(', ') || 'none'}.
-Use the forecast when given: move outdoor plans away from storms, put riding in the morning in summer, flag powder days. If a resort or activity is closed for the season, plan around it and say why in the summary. Keep days relaxed, 2 to 4 items. Arrival day: settle in. Departure day: checkout by 10am. Task due times must be before they are needed, ISO 8601 with Denver offset. Every gear task lists each person's height, weight, boot size and level.`,
+Use the forecast when given: move outdoor plans away from storms, put riding in the morning in summer, flag powder days. If a resort or activity is closed for the season, plan around it and say why in the summary. Keep days relaxed, 2 to 4 items. Arrival day: settle in. Departure day: checkout by 10am. Task due times must be before they are needed, ISO 8601 with Denver offset. Every gear task lists each person's height, weight, boot size and level.
+DINNERS: Choose restaurants ONLY from Casey's list below, matching the guest's cuisine, atmosphere, budget, kids and dietary needs; never invent a restaurant. Book only as many dinners as the guest asked for. Each dinner task must read like: "Book <Restaurant>, <Day Mon D> <time>, party of N (X children), <occasion>, <seating/atmosphere request>, <dietary needs>. Book via <method> <phone or url>." and add "First round on Ophir" if that restaurant has first_round true. Use the restaurant name in the itinerary title (e.g. "Dinner at <Restaurant>"). If the list is empty, create one task "Choose and book dinner: <guest's preferences>" for Casey and keep the itinerary title generic.
+Casey's restaurant list: ${JSON.stringify(restaurants.map(({ name, cuisine, vibe, price, kid_friendly, book_via, phone, booking_url, first_round, notes }) => ({ name, cuisine, vibe, price: price ? '$'.repeat(price) : null, kid_friendly, book_via, phone, booking_url, first_round, notes })))}`,
     `Trip: ${home?.name || 'Home'} (${home?.area || 'Durango'}, sleeps ${home?.sleeps || '?'}). ${trip.check_in} to ${trip.check_out}. Package: ${trip.package}. Paid add-ons: ${addons.join(', ') || 'none'}.
 Party: ${JSON.stringify(party.map(({ name, age_group, height_cm, weight_kg, boot_size, ski_level, bike_level, notes }) => ({ name, age_group, height_cm, weight_kg, boot_size, ski_level, bike_level, notes })))}
 Answers: ${JSON.stringify(answers ? { interests: answers.interests, pace: answers.pace, groceries: answers.groceries, dietary: answers.dietary, coffee: answers.coffee, arrival_time: answers.arrival_time, celebrations: answers.celebrations, notes: answers.notes } : {})}
+Dining preferences: ${JSON.stringify(dining)}
 Forecast (may be empty if dates are far out): ${JSON.stringify(weather)}
 Return JSON: {"summary": "2-4 sentences for Casey: shape of the trip, anything to confirm, anything closed or risky",
 "ready_list": ["what the guest will find waiting on arrival, ONLY things Ophir will do, e.g. 'Bikes fitted for John and Loic in the gear room'; 3 to 6 short lines"],

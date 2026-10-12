@@ -22,7 +22,7 @@ export default async function handler(req, res) {
         check_in: trip.check_in, check_out: trip.check_out, adults: trip.adults, children: trip.children,
         package: trip.package, package_text: PACKAGES[trip.package], status: trip.status,
         party: t.party.map(({ name, age_group, height_cm, weight_kg, boot_size, ski_level, bike_level, notes }) => ({ name, age_group, height_cm, weight_kg, boot_size, ski_level, bike_level, notes })),
-        answers: t.answers ? { interests: t.answers.interests, pace: t.answers.pace, groceries: t.answers.groceries, dietary: t.answers.dietary, coffee: t.answers.coffee, arrival_time: t.answers.arrival_time, celebrations: t.answers.celebrations, notes: t.answers.notes } : null,
+        answers: t.answers ? { dining: (t.answers.raw && t.answers.raw.dining) || null, interests: t.answers.interests, pace: t.answers.pace, groceries: t.answers.groceries, dietary: t.answers.dietary, coffee: t.answers.coffee, arrival_time: t.answers.arrival_time, celebrations: t.answers.celebrations, notes: t.answers.notes } : null,
         itinerary: showPlan ? t.itinerary.map(({ day, start_time, title, details, kind, weather_note, partner }) => ({ day, start_time, title, details, kind, weather_note, place: partner })) : [],
         ready_list: showPlan ? (trip.ready_list || []) : [], offers: showPlan ? (trip.offers || []) : [], weather: showPlan ? (trip.weather || []) : [],
         host_phone: (process.env.HOST_PHONE || '').trim() || null, requested: (t.tasks || []).filter((k) => k.title.startsWith('Guest requested:')).map((k) => k.title.replace('Guest requested: ', '')),
@@ -59,7 +59,11 @@ export default async function handler(req, res) {
         trip_id: trip.id, interests: (Array.isArray(a.interests) ? a.interests : []).slice(0, 12).map((x) => String(x).slice(0, 40)),
         pace: clip(a.pace, 40), groceries: clip(a.groceries, 2000), dietary: clip(a.dietary, 500), coffee: clip(a.coffee, 200),
         arrival_time: clip(a.arrival_time, 40), celebrations: clip(a.celebrations, 300), notes: clip(a.notes, 1500),
-        raw: a, updated_at: new Date().toISOString(),
+        raw: { ...a, dining: a.dining && typeof a.dining === 'object' ? {
+          cuisines: (Array.isArray(a.dining.cuisines) ? a.dining.cuisines : []).slice(0, 10).map((x) => String(x).slice(0, 40)),
+          atmosphere: (Array.isArray(a.dining.atmosphere) ? a.dining.atmosphere : []).slice(0, 6).map((x) => String(x).slice(0, 40)),
+          budget: clip(a.dining.budget, 10), nights: num(a.dining.nights, 0, 14), notes: clip(a.dining.notes, 400) } : null },
+        updated_at: new Date().toISOString(),
       }], 'trip_id');
       await db.update('trips', `id=eq.${trip.id}`, { status: 'planning' });
       const result = await planTrip(trip.id);

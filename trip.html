@@ -64,6 +64,7 @@
   .offer .pr{font-size:14px;letter-spacing:.06em;margin-top:4px}
   .offer .btn{margin-top:10px;align-self:flex-start;height:44px;padding:0 18px;font-size:12px}
   @media (max-width:640px){.offers{grid-template-columns:1fr}}
+  .lbl{display:block;font-size:12px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;margin:0 0 10px}
   .err{color:#9B2C1C}
   .person input,.person select,.grid2 input,.grid2 textarea{width:100%;min-width:0}.hl select{min-width:0}
   @media (max-width:640px){.person{grid-template-columns:minmax(0,1fr) minmax(0,1fr);padding:16px}.person .field,.person .field.wide{grid-column:span 1}.person .field.name{grid-column:1/-1}.grid2{grid-template-columns:1fr}.item{grid-template-columns:72px 1fr}}
@@ -79,6 +80,8 @@
 (function(){
   var token=(location.pathname.split('/trip/')[1]||'').replace(/[^a-f0-9]/g,'');
   var app=document.getElementById('app'), data=null;
+  var CUISINES=['Steak and chophouse','Italian','Mexican','Asian','Seafood','Farm to table','Southwestern','Pizza','Chef\u2019s tasting','Brewpub'];
+  var ATMOS=['Quiet and romantic','Lively','Family-friendly','Special occasion','Casual'];
   var INTERESTS=['Skiing','Snowboarding','Mountain biking','Hiking','Fly fishing','Rafting','Golf','Hot springs','Spa and massage','Great dinners','Coffee and town','Slow mornings','Kids’ adventures','Live music'];
   var esc=function(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})};
   var fmt=function(d,o){return new Date(d+'T12:00:00').toLocaleDateString('en-US',o||{weekday:'long',month:'long',day:'numeric'})};
@@ -99,13 +102,19 @@
     var ft=parseInt(g('ft'),10),inch=parseInt(g('in'),10)||0,lb=parseInt(g('weight_lb'),10);
     return{name:g('name'),age_group:g('age_group'),height_cm:ft?Math.round((ft*12+inch)*2.54):null,weight_kg:lb?Math.round(lb/2.205):null,boot_size:g('boot_size'),ski_level:g('ski_level'),bike_level:g('bike_level')}})}
   function form(){
-    var a=data.answers||{},party=data.party.length?data.party:new Array(Math.max(1,data.adults+data.children)).fill(null),picked={};(a.interests||[]).forEach(function(x){picked[x]=1});
+    var a=data.answers||{},dn=(a&&a.dining)||{},party=data.party.length?data.party:new Array(Math.max(1,data.adults+data.children)).fill(null),picked={};(a.interests||[]).forEach(function(x){picked[x]=1});
     app.innerHTML=hero('Welcome, '+esc(data.guest_first)+'.','Tell us about your trip. We’ll size the gear, stock the house and plan every day around the forecast.')+
       '<form id="f" novalidate>'+
       '<section class="step"><p class="eyebrow">One</p><h2 class="display">Who’s coming</h2><p class="sub">Heights and sizes let us have skis, boots and bikes waiting with each name on them.</p><div id="people">'+party.map(personRow).join('')+'</div><button class="btn" type="button" id="add">Add a person</button></section>'+
-      '<section class="step"><p class="eyebrow">Two</p><h2 class="display">What you love</h2><p class="sub">Choose as many as you like.</p><div class="chips">'+INTERESTS.map(function(x){return '<button type="button" class="chip" aria-pressed="'+(picked[x]?'true':'false')+'">'+x+'</button>'}).join('')+'</div>'+
+      '<section class="step"><p class="eyebrow">Two</p><h2 class="display">What you love</h2><p class="sub">Choose as many as you like.</p><div class="chips" data-group="interests">'+INTERESTS.map(function(x){return '<button type="button" class="chip" aria-pressed="'+(picked[x]?'true':'false')+'">'+x+'</button>'}).join('')+'</div>'+
         '<div class="field" style="margin-top:24px;max-width:360px"><label for="pace">Pace</label><select id="pace" name="pace">'+opt([['','Choose'],['full','Full days, every day'],['balanced','A balance of both'],['slow','Slow and easy']],a.pace||'')+'</select></div></section>'+
-      '<section class="step"><p class="eyebrow">Three</p><h2 class="display">The house</h2><p class="sub">So everything is ready when you walk in.</p><div class="grid2">'+
+      '<section class="step"><p class="eyebrow">Three</p><h2 class="display">Dinners</h2><p class="sub">We hold the right table at the right place. Tell us what you\u2019re in the mood for.</p>'+
+        '<label class="lbl">Food you love</label><div class="chips" data-group="cuisines">'+CUISINES.map(function(x){return '<button type="button" class="chip" aria-pressed="'+(dn.cuisines&&dn.cuisines.indexOf(x)>=0?'true':'false')+'">'+x+'</button>'}).join('')+'</div>'+
+        '<label class="lbl" style="margin-top:22px">Atmosphere</label><div class="chips" data-group="atmosphere">'+ATMOS.map(function(x){return '<button type="button" class="chip" aria-pressed="'+(dn.atmosphere&&dn.atmosphere.indexOf(x)>=0?'true':'false')+'">'+x+'</button>'}).join('')+'</div>'+
+        '<div class="grid2" style="margin-top:22px"><div class="field"><label for="dnb">Budget</label><select id="dnb" name="dn_budget">'+opt([['','Choose'],['$$','$$ · relaxed'],['$$$','$$$ · a nice night out'],['$$$$','$$$$ · the best in town']],dn.budget||'')+'</select></div>'+
+        '<div class="field"><label for="dnn">Dinners to book</label><select id="dnn" name="dn_nights">'+opt([['','Choose'],['0','None, we\u2019ll figure it out'],['1','1'],['2','2'],['3','3'],['4','4'],['5','5'],['6','Every night']],dn.nights==null?'':String(dn.nights))+'</select></div>'+
+        '<div class="field full"><label for="dnt">Anything specific?</label><input id="dnt" name="dn_notes" value="'+esc(dn.notes)+'" placeholder="A view, a patio, somewhere the kids can be loud\u2026"></div></div></section>'+
+      '<section class="step"><p class="eyebrow">Four</p><h2 class="display">The house</h2><p class="sub">So everything is ready when you walk in.</p><div class="grid2">'+
         '<div class="field"><label for="arr">Arrival time</label><input id="arr" name="arrival_time" value="'+esc(a.arrival_time)+'" placeholder="Around 4pm"></div>'+
         '<div class="field"><label for="cof">Coffee</label><input id="cof" name="coffee" value="'+esc(a.coffee)+'" placeholder="Oat milk latte, dark roast beans"></div>'+
         '<div class="field full"><label for="gro">Grocery list</label><textarea id="gro" name="groceries" placeholder="Breakfast for 4, fruit, a good bottle of red…">'+esc(a.groceries)+'</textarea>'+(data.package==='private'?'':'<span class="hint">Shopping is included in The Private Stay, or add a fridge stock for $95 plus groceries.</span>')+'</div>'+
@@ -120,7 +129,8 @@
     app.querySelectorAll('.chip').forEach(function(c){c.onclick=function(){c.setAttribute('aria-pressed',c.getAttribute('aria-pressed')==='true'?'false':'true')}});
     app.querySelector('#f').onsubmit=async function(e){e.preventDefault();var f=e.target,st=f.querySelector('.form-status');
       var party=readParty().filter(function(p){return p.name});if(!party.length){st.textContent='Please add at least one name.';st.className='form-status err';return}
-      var answers={interests:[].filter.call(app.querySelectorAll('.chip'),function(c){return c.getAttribute('aria-pressed')==='true'}).map(function(c){return c.textContent}),pace:f.pace.value,arrival_time:f.arrival_time.value,coffee:f.coffee.value,groceries:f.groceries.value,dietary:f.dietary.value,celebrations:f.celebrations.value,notes:f.notes.value};
+      var pick=function(g){return [].filter.call(app.querySelectorAll('[data-group='+g+'] .chip'),function(c){return c.getAttribute('aria-pressed')==='true'}).map(function(c){return c.textContent})};
+      var answers={dining:{cuisines:pick('cuisines'),atmosphere:pick('atmosphere'),budget:f.dn_budget.value,nights:f.dn_nights.value===''?null:+f.dn_nights.value,notes:f.dn_notes.value},interests:[].filter.call(app.querySelectorAll('[data-group=interests] .chip'),function(c){return c.getAttribute('aria-pressed')==='true'}).map(function(c){return c.textContent}),pace:f.pace.value,arrival_time:f.arrival_time.value,coffee:f.coffee.value,groceries:f.groceries.value,dietary:f.dietary.value,celebrations:f.celebrations.value,notes:f.notes.value};
       app.innerHTML='<div class="state"><div class="spin" aria-hidden="true"></div><h2 class="display" style="font-size:30px">Planning your trip</h2><p class="lead">Checking the forecast and building your days. This takes about half a minute.</p></div>';window.scrollTo(0,0);
       try{var r=await fetch('/api/trip?t='+token,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({party:party,answers:answers})});var j=await r.json();if(!r.ok)throw new Error(j.error);data.status='plan_ready';render()}
       catch(err){await load();app.insertAdjacentHTML('afterbegin','<p class="err" role="alert" style="text-align:center;margin-top:24px">'+esc(err.message||'Something went wrong. Please try again.')+'</p>')}};

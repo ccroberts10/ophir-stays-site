@@ -56,3 +56,9 @@ Booking -> trip -> AI welcome email -> guest pre-trip page -> AI itinerary + tea
 - Hostaway webhook: `/api/hostaway?secret=<HOSTAWAY_WEBHOOK_SECRET>` (api/hostaway.js)
 - Database schema: `supabase/schema.sql`
 Env vars: SUPABASE_URL, SUPABASE_SECRET_KEY, ANTHROPIC_API_KEY, ADMIN_PASSWORD, RESEND_API_KEY, OWNER_INBOX, FROM_ADDRESS, (later) HOSTAWAY_WEBHOOK_SECRET, ANTHROPIC_MODEL.
+
+## Payments (Stripe)
+- `api/checkout.js` creates a Stripe Checkout session for fixed-price offers (packages and add-ons).
+- `api/stripe-webhook.js` marks the payment paid, upgrades the package, re-plans with AI and emails Casey to approve.
+- Env: `STRIPE_SECRET_KEY` (sk_test_… then sk_live_…), `STRIPE_WEBHOOK_SECRET` (whsec_…).
+- Webhook endpoint: https://ophirstays.com/api/stripe-webhook, event `checkout.session.completed`.

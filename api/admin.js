@@ -20,7 +20,8 @@ export default async function handler(req, res) {
         const t = await loadTrip(`id=eq.${b.id}`);
         if (!t) return json(res, 404, { error: 'Not found' });
         const messages = await db.select('messages', `trip_id=eq.${b.id}&order=created_at.desc&limit=20`);
-        return json(res, 200, { ...t, messages, link: `/trip/${t.trip.access_token}` });
+        const payments = await db.select('payments', `trip_id=eq.${b.id}&order=created_at.desc`);
+        return json(res, 200, { ...t, messages, payments, link: `/trip/${t.trip.access_token}` });
       }
       case 'approve': await approveTrip(b.id); return json(res, 200, { ok: true });
       case 'replan': return json(res, 200, { ok: true, ...(await planTrip(b.id)) });

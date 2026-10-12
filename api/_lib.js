@@ -129,11 +129,11 @@ export const INCLUDES = {
   private: ['gear', 'bookings', 'dinners', 'groceries', 'arrival_setup', 'host', 'wellness'],
 };
 export const OFFERS = {
-  arranged: { title: 'The Arranged Stay', price: '$395', blurb: 'We plan and book everything: gear sized and waiting, guides, tickets and tables.' },
-  private: { title: 'The Private Stay', price: '$1,250', blurb: 'Your own host. Groceries stocked, fire laid, chef or massage arranged.' },
-  addon_fridge: { title: 'A stocked fridge', price: '$95 plus groceries', blurb: 'Your grocery list, shopped the morning you arrive.', grants: 'groceries' },
-  addon_arrival: { title: 'Arrival setup', price: '$75', blurb: 'Fire laid, wine chosen, flowers on the table.', grants: 'arrival_setup' },
-  addon_gear: { title: 'Skis or bikes, fitted and delivered', price: '$45 plus rental', blurb: 'Sized to each guest and waiting in the gear room.', grants: 'gear' },
+  arranged: { title: 'The Arranged Stay', price: '$395', cents: 39500, blurb: 'We plan and book everything: gear sized and waiting, guides, tickets and tables.' },
+  private: { title: 'The Private Stay', price: '$1,250', cents: 125000, blurb: 'Your own host. Groceries stocked, fire laid, chef or massage arranged.' },
+  addon_fridge: { title: 'A stocked fridge', price: '$95 plus groceries', cents: 9500, blurb: 'Your grocery list, shopped the morning you arrive.', grants: 'groceries' },
+  addon_arrival: { title: 'Arrival setup', price: '$75', cents: 7500, blurb: 'Fire laid, wine chosen, flowers on the table.', grants: 'arrival_setup' },
+  addon_gear: { title: 'Skis or bikes, fitted and delivered', price: '$45 plus rental', cents: 4500, blurb: 'Sized to each guest and waiting in the gear room.', grants: 'gear' },
   massage: { title: 'In-home massage', price: 'Priced on request', blurb: 'A licensed therapist at the house, after a day outside.' },
   golf: { title: 'A round of golf', price: 'Priced on request', blurb: 'Tee time held, clubs and cart ready.' },
   guide: { title: 'A private guide', price: 'Priced on request', blurb: 'Fly fishing, a guided ride or a backcountry hike with a local.' },
@@ -266,4 +266,29 @@ export async function approveTrip(tripId) {
 export function isAdmin(req) {
   const pw = env('ADMIN_PASSWORD');
   return pw && (req.headers['x-admin-key'] || '') === pw;
+}
+
+// ---------- Stripe ----------
+export function nightsOf(trip) { return Math.round((new Date(trip.check_out) - new Date(trip.check_in)) / 864e5); }
+// What the guest pays today for an item, given their current package.
+export function priceFor(key, trip) {
+  const o = OFFERS[key];
+  if (!o || !o.cents) return null;
+  if (key === 'private') {
+    const extra = Math.max(0, nightsOf(trip) - 5) * 15000;
+    const credit = trip.package === 'arranged' ? OFFERS.arranged.cents : 0;
+    return { cents: o.cents + extra - credit, label: credit ? 'The Private Stay (upgrade from Arranged)' : 'The Private Stay' };
+  }
+  return { cents: o.cents, label: o.title };
+}
+export async function stripe(path, params) {
+  const key = env('STRIPE_SECRET_KEY');
+  if (!key) throw new Error('Stripe not configured');
+  const body = new URLSearchParams();
+  const add = (k, v) => { if (v === undefined || v === null) return; if (typeof v === 'object') for (const [kk, vv] of Object.entries(v)) add(`${k}[${kk}]`, vv); else body.append(k, String(v)); };
+  for (const [k, v] of Object.entries(params || {})) add(k, v);
+  const r = await fetch(`https://api.stripe.com/v1/${path}`, { method: 'POST', headers: { Authorization: `Bearer ${key}`, 'Content-Type': 'application/x-www-form-urlencoded' }, body });
+  const data = await r.json();
+  if (!r.ok) throw new Error(`Stripe ${r.status}: ${data.error?.message || 'error'}`);
+  return data;
 }

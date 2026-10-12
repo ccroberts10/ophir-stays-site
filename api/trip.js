@@ -1,5 +1,5 @@
 // Guest trip API. GET /api/trip?t=<token> returns the guest's trip; POST saves pre-trip answers and runs the AI planner.
-import { db, json, readBody, loadTrip, planTrip, PACKAGES, OFFERS, sendEmail, emailShell, esc, SITE } from './_lib.js';
+import { db, json, readBody, loadTrip, planTrip, PACKAGES, OFFERS, priceFor, sendEmail, emailShell, esc, SITE } from './_lib.js';
 
 const clip = (s, n) => (s == null ? null : String(s).trim().slice(0, n) || null);
 const num = (v, lo, hi) => { const n = parseInt(v, 10); return Number.isFinite(n) && n >= lo && n <= hi ? n : null; };
@@ -24,7 +24,7 @@ export default async function handler(req, res) {
         party: t.party.map(({ name, age_group, height_cm, weight_kg, boot_size, ski_level, bike_level, notes }) => ({ name, age_group, height_cm, weight_kg, boot_size, ski_level, bike_level, notes })),
         answers: t.answers ? { dining: (t.answers.raw && t.answers.raw.dining) || null, interests: t.answers.interests, pace: t.answers.pace, groceries: t.answers.groceries, dietary: t.answers.dietary, coffee: t.answers.coffee, arrival_time: t.answers.arrival_time, celebrations: t.answers.celebrations, notes: t.answers.notes } : null,
         itinerary: showPlan ? t.itinerary.map(({ day, start_time, title, details, kind, weather_note, partner }) => ({ day, start_time, title, details, kind, weather_note, place: partner })) : [],
-        ready_list: showPlan ? (trip.ready_list || []) : [], offers: showPlan ? (trip.offers || []) : [], weather: showPlan ? (trip.weather || []) : [],
+        ready_list: showPlan ? (trip.ready_list || []) : [], offers: showPlan ? (trip.offers || []).map((o) => { const p = priceFor(o.key, trip); return { ...o, pay_cents: p && p.cents > 0 ? p.cents : null }; }) : [], weather: showPlan ? (trip.weather || []) : [],
         host_phone: (process.env.HOST_PHONE || '').trim() || null, requested: (t.tasks || []).filter((k) => k.title.startsWith('Guest requested:')).map((k) => k.title.replace('Guest requested: ', '')),
         stay: arrived && showPlan && home ? { door_code: home.door_code, wifi_name: home.wifi_name, wifi_password: home.wifi_password } : null,
       });

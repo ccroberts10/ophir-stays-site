@@ -46,6 +46,24 @@
   .stay-box{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:24px 0}
   .stay-box div{background:var(--paper);padding:18px}
   .stay-box b{display:block;font-size:22px;font-weight:500;margin-top:4px}
+  .ready{background:var(--paper);padding:26px 28px;margin:8px 0 10px}
+  .ready ul{list-style:none;margin:12px 0 0;padding:0}
+  .ready li{position:relative;padding:8px 0 8px 26px;font-size:16px}
+  .ready li::before{content:"";position:absolute;left:0;top:15px;width:11px;height:6px;border-left:1.5px solid var(--rust);border-bottom:1.5px solid var(--rust);transform:rotate(-45deg)}
+  .actions{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin:26px 0 34px}
+  .day-head{display:flex;justify-content:space-between;align-items:baseline;gap:16px;flex-wrap:wrap;margin-bottom:10px}
+  .day-head h3{margin:0}
+  .wxs{font-size:14px;color:var(--muted);letter-spacing:.04em}
+  .wxs b{color:var(--charcoal);font-weight:500}
+  .map{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--rust);text-decoration:none;display:inline-block;margin-top:6px}
+  .offers{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:18px 0 0}
+  .offer{border:1px solid var(--line);background:#fff;padding:22px;display:flex;flex-direction:column;gap:6px}
+  .offer .why{font-family:var(--serif);font-style:italic;color:var(--rust);font-size:17px}
+  .offer h4{margin:0;font-weight:500;font-size:19px}
+  .offer p{margin:0;color:var(--muted);font-size:15px}
+  .offer .pr{font-size:14px;letter-spacing:.06em;margin-top:4px}
+  .offer .btn{margin-top:10px;align-self:flex-start;height:44px;padding:0 18px;font-size:12px}
+  @media (max-width:640px){.offers{grid-template-columns:1fr}}
   .err{color:#9B2C1C}
   .person input,.person select,.grid2 input,.grid2 textarea{width:100%;min-width:0}.hl select{min-width:0}
   @media (max-width:640px){.person{grid-template-columns:minmax(0,1fr) minmax(0,1fr);padding:16px}.person .field,.person .field.wide{grid-column:span 1}.person .field.name{grid-column:1/-1}.grid2{grid-template-columns:1fr}.item{grid-template-columns:72px 1fr}}
@@ -108,12 +126,33 @@
       catch(err){await load();app.insertAdjacentHTML('afterbegin','<p class="err" role="alert" style="text-align:center;margin-top:24px">'+esc(err.message||'Something went wrong. Please try again.')+'</p>')}};
   }
   function waiting(){app.innerHTML=hero('Thank you, '+esc(data.guest_first)+'.')+'<div class="state" style="padding-top:0"><svg aria-hidden="true"><use href="#summit"/></svg><p class="lead" style="margin:0 auto;max-width:520px">Your trip is being planned. Casey reviews every itinerary personally and will send it within a day. Reply to our email any time.</p><p style="margin-top:28px"><button class="btn" id="edit">Change my answers</button></p></div>';app.querySelector('#edit').onclick=form}
+  function ics(){
+    var lines=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Ophir Stays//Trip//EN'];
+    var pad=function(n){return(n<10?'0':'')+n};
+    data.itinerary.forEach(function(it,i){var t=(it.start_time||'9:00 AM').match(/(\d+):(\d+)\s*(AM|PM)/i)||[0,9,0,'AM'];var h=(+t[1]%12)+(/pm/i.test(t[3])?12:0);
+      var d=it.day.replace(/-/g,''),st=d+'T'+pad(h)+pad(+t[2])+'00',en=d+'T'+pad(Math.min(h+1,23))+pad(+t[2])+'00';
+      lines.push('BEGIN:VEVENT','UID:ophir-'+d+'-'+i+'@ophirstays.com','DTSTAMP:'+new Date().toISOString().replace(/[-:]/g,'').slice(0,15)+'Z','DTSTART;TZID=America/Denver:'+st,'DTEND;TZID=America/Denver:'+en,'SUMMARY:'+String(it.title).replace(/[,;]/g,' '),'DESCRIPTION:'+String(it.details||'').replace(/[,;\n]/g,' '),'LOCATION:'+(it.place?String(it.place).replace(/[,;]/g,' ')+' Durango CO':'Durango CO'),'END:VEVENT')});
+    lines.push('END:VCALENDAR');
+    var a=document.createElement('a');a.href=URL.createObjectURL(new Blob([lines.join('\r\n')],{type:'text/calendar'}));a.download='ophir-durango-trip.ics';a.click();
+  }
   function plan(){
-    var days={};data.itinerary.forEach(function(it){(days[it.day]=days[it.day]||[]).push(it)});
+    var days={},wx={};data.itinerary.forEach(function(it){(days[it.day]=days[it.day]||[]).push(it)});(data.weather||[]).forEach(function(w){wx[w.date]=w});
+    var req={};(data.requested||[]).forEach(function(x){req[x]=1});
     var stay=data.stay?'<div class="stay-box"><div><span class="eyebrow" style="margin:0">Door code</span><b>'+esc(data.stay.door_code||'Sent on arrival')+'</b></div><div><span class="eyebrow" style="margin:0">Wi-Fi</span><b>'+esc(data.stay.wifi_name||'—')+'</b><span style="color:var(--muted)">'+esc(data.stay.wifi_password||'')+'</span></div></div>':'';
-    app.innerHTML=hero('Your Durango trip',data.stay?'Welcome home. Text us anything, any time.':'Every day, planned around the forecast. We’ll move things if the weather does.')+stay+
-      Object.keys(days).sort().map(function(d){return '<section class="day"><h3>'+fmt(d)+'</h3>'+days[d].map(function(it){return '<div class="item"><span class="tm">'+esc(it.start_time||'')+'</span><div><b>'+esc(it.title)+'</b>'+(it.details?'<p>'+esc(it.details)+'</p>':'')+(it.weather_note?'<span class="wx">'+esc(it.weather_note)+'</span>':'')+'</div></div>'}).join('')+'</section>'}).join('')+
+    var ready=(data.ready_list||[]).length?'<section class="ready"><p class="eyebrow" style="margin:0">Ready when you arrive</p><ul>'+data.ready_list.map(function(x){return '<li>'+esc(x)+'</li>'}).join('')+'</ul></section>':'';
+    var acts='<div class="actions">'+(data.host_phone?'<a class="btn btn-rust" href="sms:'+esc(data.host_phone)+'">Message your host</a>':'')+'<button class="btn" id="cal" type="button">Add to calendar</button></div>';
+    var dayHtml=Object.keys(days).sort().map(function(d){var w=wx[d];
+      return '<section class="day"><div class="day-head"><h3>'+fmt(d)+'</h3>'+(w?'<span class="wxs"><b>'+esc(w.label)+'</b> · '+w.high+'° / '+w.low+'°'+(w.snow>0.2?' · '+w.snow+' in. snow':(w.precip>=30?' · '+w.precip+'% chance of rain':''))+'</span>':'')+'</div>'+
+        days[d].map(function(it){var mp=it.place&&['arrival','departure','rest'].indexOf(it.kind)<0?'<a class="map" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(it.place+', Durango, CO')+'">Map</a>':'';
+          return '<div class="item"><span class="tm">'+esc(it.start_time||'')+'</span><div><b>'+esc(it.title)+'</b>'+(it.details?'<p>'+esc(it.details)+'</p>':'')+(it.weather_note?'<span class="wx">'+esc(it.weather_note)+'</span>':'')+(mp?'<br>'+mp:'')+'</div></div>'}).join('')+'</section>'}).join('');
+    var offers=(data.offers||[]).length?'<section class="step"><p class="eyebrow">For your trip</p><h2 class="display">A few additions we’d suggest</h2><div class="offers">'+data.offers.map(function(o){var done=req[o.title];
+      return '<div class="offer">'+(o.reason?'<span class="why">'+esc(o.reason)+'</span>':'')+'<h4>'+esc(o.title)+'</h4><p>'+esc(o.blurb)+'</p><span class="pr">'+esc(o.price)+'</span><button class="btn" data-offer="'+esc(o.key)+'" '+(done?'disabled':'')+'>'+(done?'Requested':'Add to my trip')+'</button></div>'}).join('')+'</div><p class="fine">Casey confirms every request personally before anything is charged.</p></section>':'';
+    app.innerHTML=hero('Your Durango trip',data.stay?'Welcome home. Text us anything, any time.':'Every day, planned around the forecast. We’ll move things if the weather does.')+stay+ready+acts+dayHtml+offers+
       '<p class="center fine" style="padding:32px 0 64px">Questions or changes? Reply to our email and Casey will take care of it.</p>';
+    app.querySelector('#cal').onclick=ics;
+    app.querySelectorAll('[data-offer]').forEach(function(b){b.onclick=async function(){b.disabled=true;b.textContent='Sending…';
+      try{var r=await fetch('/api/trip?t='+token+'&action=request',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({key:b.dataset.offer})});if(!r.ok)throw 0;b.textContent='Requested';(data.requested=data.requested||[]).push(b.closest('.offer').querySelector('h4').textContent)}
+      catch(e){b.disabled=false;b.textContent='Try again'}}});
   }
   function render(){if(['approved','in_stay','complete'].indexOf(data.status)>=0)return plan();if(data.status==='plan_ready')return waiting();if(data.status==='cancelled'){app.innerHTML='<div class="state"><p class="lead">This trip has been cancelled.</p></div>';return}form()}
   async function load(){var r=await fetch('/api/trip?t='+token);if(!r.ok){app.innerHTML='<div class="state"><p class="lead">We couldn’t find this trip. Please use the link in your email.</p></div>';return}data=await r.json();render()}

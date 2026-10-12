@@ -118,9 +118,25 @@ export async function forecast(startDate, endDate) {
 
 // ---------- Business knowledge given to the AI ----------
 export const PACKAGES = {
-  stay: 'The Stay (included): inspected home, welcome card, house guide in app, weather-aware ideas, local host by text. Ophir does NOT book activities or shop for groceries unless an add-on is bought; suggest them instead.',
-  arranged: 'The Arranged Stay ($395): planning call, skis and boots sized to each guest and waiting in the gear room, bikes fitted and delivered, lift tickets/guides/rafting/fly fishing booked, dinner reservations held with first round on us, itinerary that moves with the weather.',
-  private: 'The Private Stay ($1,250 up to 5 nights): everything in Arranged, plus groceries shopped and fridge stocked, fire laid and wine chosen, a dedicated host on call, private chef/massage/sitter arranged, airport arrival arranged, mid-stay refresh.',
+  stay: 'The Stay (included with every booking): inspected home, hotel-grade linens, welcome card and tumblers, house guide in the app, weather-aware ideas, a local host by text.',
+  arranged: 'The Arranged Stay ($395): everything in The Stay, plus a planning call, skis and boots sized to each guest and waiting in the gear room, bikes fitted and delivered, lift tickets/guides/rafting/fly fishing booked, dinner reservations held with the first round on us, an itinerary that moves with the weather.',
+  private: 'The Private Stay ($1,250 up to 5 nights, $150 per extra night): everything in The Arranged Stay, plus groceries shopped and the fridge stocked, fire laid and wine chosen, a dedicated host on call, private chef/massage/sitter arranged, airport arrival arranged, mid-stay refresh.',
+};
+// What each package lets the team DO (used to guard AI tasks), and what can be offered.
+export const INCLUDES = {
+  stay: [],
+  arranged: ['gear', 'bookings', 'dinners'],
+  private: ['gear', 'bookings', 'dinners', 'groceries', 'arrival_setup', 'host', 'wellness'],
+};
+export const OFFERS = {
+  arranged: { title: 'The Arranged Stay', price: '$395', blurb: 'We plan and book everything: gear sized and waiting, guides, tickets and tables.' },
+  private: { title: 'The Private Stay', price: '$1,250', blurb: 'Your own host. Groceries stocked, fire laid, chef or massage arranged.' },
+  addon_fridge: { title: 'A stocked fridge', price: '$95 plus groceries', blurb: 'Your grocery list, shopped the morning you arrive.', grants: 'groceries' },
+  addon_arrival: { title: 'Arrival setup', price: '$75', blurb: 'Fire laid, wine chosen, flowers on the table.', grants: 'arrival_setup' },
+  addon_gear: { title: 'Skis or bikes, fitted and delivered', price: '$45 plus rental', blurb: 'Sized to each guest and waiting in the gear room.', grants: 'gear' },
+  massage: { title: 'In-home massage', price: 'Priced on request', blurb: 'A licensed therapist at the house, after a day outside.' },
+  golf: { title: 'A round of golf', price: 'Priced on request', blurb: 'Tee time held, clubs and cart ready.' },
+  guide: { title: 'A private guide', price: 'Priced on request', blurb: 'Fly fishing, a guided ride or a backcountry hike with a local.' },
 };
 export const TEAM = 'Team and partners (assign tasks to these names): "Casey" (owner/host, books everything), "CRC Janitorial" (cleaning and turnover), "James Hillyer" (maintenance/handyman), "Ski shop" (ski and boot rentals), "Bike shop" (bike rentals and delivery), "San Juan Angler" (fly fishing), "Grocery run" (shopping, done by Casey).';
 export const DURANGO_NOTES = 'Durango, Colorado. Purgatory Resort is about 30 minutes north (ski/ride in winter, bike park and alpine coaster in summer). Downtown Main Avenue for dining. Animas River for rafting and fly fishing. Trails: Horse Gulch, Animas Mountain, Log Chutes, Colorado Trail at Junction Creek, Hermosa Creek. Hot springs north of town. Glacier Club and Dalton Ranch for golf. Afternoon thunderstorms are common in July and August, so plan rides and hikes in the morning.';
@@ -166,41 +182,69 @@ export async function sendWelcome(trip, home) {
     `Write the welcome email for a new booking. Guest first name: ${firstName(trip.guest_name)}. Home: ${home?.name || 'your home'} (${home?.area || 'Durango'}). Dates: ${fmt(trip.check_in)} to ${fmt(trip.check_out)}. Party: ${trip.adults} adults, ${trip.children} children. Package: ${PACKAGES[trip.package]}
 The email must invite them to tell us about their trip at a private link (a button is added for you; do not include the URL). Explain in one sentence what we'll do with it (sizes for gear, groceries, the itinerary). 90 to 140 words.
 JSON: {"subject": "...", "body": "plain text, paragraphs separated by blank lines"}`, 800);
+  w.body = String(w.body || '').replace(/!+/g, '.'); w.subject = String(w.subject || 'Your Durango trip').replace(/!+/g, '');
   const html = emailShell(paras(w.body) + button(link, 'Plan your trip'));
   if (trip.guest_email) await sendEmail({ to: trip.guest_email, subject: w.subject, html, replyTo: env('OWNER_INBOX') });
   await db.insert('messages', [{ trip_id: trip.id, channel: 'email', direction: 'outbound', subject: w.subject, body: w.body, status: trip.guest_email ? 'sent' : 'draft', sent_at: trip.guest_email ? new Date().toISOString() : null }]);
+}
+
+const WX = (c) => c == null ? '' : c === 0 ? 'Sunny' : c <= 2 ? 'Partly cloudy' : c === 3 ? 'Cloudy' : c <= 48 ? 'Fog' : c <= 57 ? 'Drizzle' : c <= 67 ? 'Rain' : c <= 77 ? 'Snow' : c <= 82 ? 'Showers' : c <= 86 ? 'Snow showers' : 'Thunderstorms';
+const noBang = (t) => (t == null ? t : String(t).replace(/!+/g, '.').replace(/\.\.+/g, '.'));
+
+export async function paidAddons(tripId) {
+  const paid = await db.select('payments', `trip_id=eq.${tripId}&status=eq.paid`);
+  return paid.map((p) => p.item);
 }
 
 export async function planTrip(tripId) {
   const t = await loadTrip(`id=eq.${tripId}`);
   if (!t) throw new Error('Trip not found');
   const { trip, home, party, answers } = t;
+  const addons = await paidAddons(trip.id);
+  const granted = new Set([...(INCLUDES[trip.package] || []), ...addons.map((k) => OFFERS[k]?.grants).filter(Boolean)]);
   const weather = await forecast(trip.check_in, trip.check_out);
+  const offerKeys = Object.keys(OFFERS).filter((k) => !(k === 'arranged' && trip.package !== 'stay') && !(k === 'private' && trip.package === 'private') && !addons.includes(k)
+    && !(OFFERS[k].grants && granted.has(OFFERS[k].grants)));
   const plan = await aiJSON(
     `You are the head concierge of Ophir Stays in Durango, Colorado. You plan trips with local precision and create the behind-the-scenes task list for the team. ${DURANGO_NOTES} ${TEAM}
-Rules: Respect the guest's package: only promise and create booking tasks for what their package includes; for anything else, list it as a suggestion in the itinerary and note it is available as an upgrade. Use the forecast when given: move outdoor plans away from storms, put riding in the morning in summer, flag powder days. Keep days relaxed, 2 to 4 items per day. Arrival day: settle in. Departure day: checkout by 10am. Task due times must be before the moment they are needed, in ISO 8601 with -06:00 or -07:00 Denver offset. Every gear task must list each person's size (height, boot size, level). Never invent prices for partners.`,
-    `Trip: ${home?.name || 'Home'} (${home?.area || 'Durango'}, sleeps ${home?.sleeps || '?'}). ${trip.check_in} to ${trip.check_out}. Package: ${trip.package}: ${PACKAGES[trip.package]}
+VOICE for anything the guest reads: short, warm, certain, understated. Never use exclamation marks. Never say "luxury". Never mention packages, prices, upgrades or what is "not included" inside the itinerary.
+PACKAGE RULES (strict):
+- What Ophir will actually do for this guest: ${[...granted].join(', ') || 'nothing beyond the home and local tips'}.
+- Only promise or create tasks for those. "gear" = sizing and delivering skis/boots/bikes. "bookings" = guides, tickets, rafting, fishing, golf. "dinners" = holding tables and the first round. "groceries" = shopping and stocking the fridge. "arrival_setup" = fire, wine, flowers. "wellness" = massage, chef, sitter.
+- Anything the guest would enjoy that is NOT in that list: do not promise it and create no task for it. Put it in the itinerary as a plain idea (e.g. "Ride Horse Gulch", "Dinner on Main Avenue"), and instead add a matching offer key to "offers".
+- Allowed offer keys: ${offerKeys.join(', ') || 'none'}.
+Use the forecast when given: move outdoor plans away from storms, put riding in the morning in summer, flag powder days. If a resort or activity is closed for the season, plan around it and say why in the summary. Keep days relaxed, 2 to 4 items. Arrival day: settle in. Departure day: checkout by 10am. Task due times must be before they are needed, ISO 8601 with Denver offset. Every gear task lists each person's height, weight, boot size and level.`,
+    `Trip: ${home?.name || 'Home'} (${home?.area || 'Durango'}, sleeps ${home?.sleeps || '?'}). ${trip.check_in} to ${trip.check_out}. Package: ${trip.package}. Paid add-ons: ${addons.join(', ') || 'none'}.
 Party: ${JSON.stringify(party.map(({ name, age_group, height_cm, weight_kg, boot_size, ski_level, bike_level, notes }) => ({ name, age_group, height_cm, weight_kg, boot_size, ski_level, bike_level, notes })))}
 Answers: ${JSON.stringify(answers ? { interests: answers.interests, pace: answers.pace, groceries: answers.groceries, dietary: answers.dietary, coffee: answers.coffee, arrival_time: answers.arrival_time, celebrations: answers.celebrations, notes: answers.notes } : {})}
 Forecast (may be empty if dates are far out): ${JSON.stringify(weather)}
-Return JSON: {"summary": "2 sentences for Casey on the shape of this trip and anything to watch",
-"days": [{"date": "YYYY-MM-DD", "items": [{"time": "9:00 AM", "title": "...", "details": "1-2 sentences for the guest", "kind": "ski|bike|dine|spa|golf|river|hike|rest|arrival|departure|town", "partner": "", "weather_note": ""}]}],
-"tasks": [{"title": "...", "assignee": "one of the team names", "due_at": "ISO"}],
-"upsell": "one sentence suggesting a relevant upgrade, or empty string"}`, 6000);
+Return JSON: {"summary": "2-4 sentences for Casey: shape of the trip, anything to confirm, anything closed or risky",
+"ready_list": ["what the guest will find waiting on arrival, ONLY things Ophir will do, e.g. 'Bikes fitted for John and Loic in the gear room'; 3 to 6 short lines"],
+"days": [{"date": "YYYY-MM-DD", "items": [{"time": "9:00 AM", "title": "...", "details": "1-2 sentences for the guest", "kind": "ski|bike|dine|spa|golf|river|hike|rest|arrival|departure|town", "place": "short place name for a map search, or empty", "weather_note": ""}]}],
+"tasks": [{"title": "...", "assignee": "one of the team names", "due_at": "ISO", "needs": "one of: gear, bookings, dinners, groceries, arrival_setup, wellness, house"}],
+"offers": [{"key": "one allowed offer key", "reason": "one short sentence tied to this guest, e.g. 'For your anniversary evening'"}]}`, 6000);
+
+  // Guard: drop any task the package doesn't cover (house tasks like cleaning are always allowed).
+  const tasks = (plan.tasks || []).filter((k) => !k.needs || k.needs === 'house' || granted.has(k.needs))
+    .map((k) => ({ trip_id: trip.id, title: k.title, assignee: k.assignee || 'Casey', due_at: k.due_at || null, created_by: 'ai', approved: false }));
+  const items = (plan.days || []).flatMap((d) => (d.items || []).map((it, i) => ({ trip_id: trip.id, day: d.date, start_time: it.time || null, title: noBang(it.title),
+    details: noBang(it.details) || null, kind: it.kind || null, partner: it.place || null, weather_note: noBang(it.weather_note) || null, position: i })));
+  const offers = (plan.offers || []).filter((o) => offerKeys.includes(o.key)).filter((o, i, a) => a.findIndex((x) => x.key === o.key) === i).slice(0, 4)
+    .map((o) => ({ key: o.key, ...OFFERS[o.key], reason: noBang(o.reason || '') }));
+  const ready = (plan.ready_list || []).map(noBang).slice(0, 6);
+  const wx = weather.map((w) => ({ date: w.date, label: WX(w.code), high: w.high, low: w.low, precip: w.precip_chance, snow: w.snow_in }));
 
   await db.remove('itinerary_items', `trip_id=eq.${trip.id}`);
   await db.remove('tasks', `trip_id=eq.${trip.id}&created_by=eq.ai&approved=eq.false`);
-  const items = (plan.days || []).flatMap((d) => (d.items || []).map((it, i) => ({ trip_id: trip.id, day: d.date, start_time: it.time || null, title: it.title, details: it.details || null, kind: it.kind || null, partner: it.partner || null, weather_note: it.weather_note || null, position: i })));
   if (items.length) await db.insert('itinerary_items', items);
-  const tasks = (plan.tasks || []).map((k) => ({ trip_id: trip.id, title: k.title, assignee: k.assignee || 'Casey', due_at: k.due_at || null, created_by: 'ai', approved: false }));
   if (tasks.length) await db.insert('tasks', tasks);
-  await db.update('trips', `id=eq.${trip.id}`, { status: 'plan_ready' });
-  await db.insert('messages', [{ trip_id: trip.id, channel: 'app', direction: 'outbound', subject: 'Plan summary', body: `${plan.summary || ''}${plan.upsell ? '\n\nUpsell: ' + plan.upsell : ''}`, status: 'draft' }]);
+  await db.update('trips', `id=eq.${trip.id}`, { status: 'plan_ready', offers, ready_list: ready, weather: wx, plan_summary: plan.summary || null });
+  await db.insert('messages', [{ trip_id: trip.id, channel: 'app', direction: 'outbound', subject: 'Plan summary', body: plan.summary || '', status: 'draft' }]);
 
   const inbox = env('OWNER_INBOX');
   if (inbox) await sendEmail({ to: inbox, subject: `Plan ready to approve: ${trip.guest_name}, ${trip.check_in}`,
-    html: emailShell(`<p><strong>${esc(trip.guest_name)}</strong> · ${esc(home?.name || '')} · ${fmt(trip.check_in)} to ${fmt(trip.check_out)}</p>${paras(plan.summary || '')}<p>${items.length} itinerary items and ${tasks.length} team tasks are waiting for you.</p>${button(`${SITE}/admin`, 'Review and approve')}`) });
-  return { items: items.length, tasks: tasks.length };
+    html: emailShell(`<p><strong>${esc(trip.guest_name)}</strong> · ${esc(home?.name || '')} · ${fmt(trip.check_in)} to ${fmt(trip.check_out)}</p>${paras(plan.summary || '')}<p>${items.length} itinerary items, ${tasks.length} team tasks and ${offers.length} offers are waiting for you.</p>${button(`${SITE}/admin`, 'Review and approve')}`) });
+  return { items: items.length, tasks: tasks.length, offers: offers.length };
 }
 
 export async function approveTrip(tripId) {

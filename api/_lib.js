@@ -47,11 +47,30 @@ export async function ai(system, user, maxTokens = 4000) {
   if (!r.ok) throw new Error(`AI ${r.status}: ${JSON.stringify(data).slice(0, 300)}`);
   return (data.content || []).filter((b) => b.type === 'text').map((b) => b.text).join('');
 }
-export async function aiJSON(system, user, maxTokens) {
-  const text = await ai(system + '\n\nRespond with a single JSON object only. No prose, no code fences.', user, maxTokens);
-  const start = text.indexOf('{'), end = text.lastIndexOf('}');
-  if (start < 0 || end < 0) throw new Error('AI returned no JSON');
-  return JSON.parse(text.slice(start, end + 1));
+// Structured output: force the model to answer through a "respond" tool, so we always get a JSON object back.
+export async function aiJSON(system, user, maxTokens = 4000) {
+  const key = env('ANTHROPIC_API_KEY');
+  if (!key) throw new Error('Anthropic not configured');
+  const r = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: { 'x-api-key': key, 'anthropic-version': '2023-06-01', 'content-type': 'application/json' },
+    body: JSON.stringify({
+      model: env('ANTHROPIC_MODEL') || 'claude-sonnet-5-5', max_tokens: Math.max(maxTokens, 1500), system,
+      messages: [{ role: 'user', content: user + '\n\nGive your answer by calling the respond tool with the JSON fields described above.' }],
+      tools: [{ name: 'respond', description: 'Return the answer as structured fields.', input_schema: { type: 'object', additionalProperties: true } }],
+      tool_choice: { type: 'tool', name: 'respond' },
+    }),
+  });
+  const data = await r.json();
+  if (!r.ok) throw new Error(`AI ${r.status}: ${JSON.stringify(data).slice(0, 300)}`);
+  const tool = (data.content || []).find((b) => b.type === 'tool_use');
+  if (tool && tool.input && Object.keys(tool.input).length) return tool.input;
+  // Fallback: a JSON object written as text.
+  const text = (data.content || []).filter((b) => b.type === 'text').map((b) => b.text).join('');
+  const s = text.indexOf('{'), e = text.lastIndexOf('}');
+  if (s >= 0 && e > s) return JSON.parse(text.slice(s, e + 1));
+  console.error('AI no JSON', data.stop_reason, JSON.stringify(data.content).slice(0, 500));
+  throw new Error(`AI returned no JSON (stop: ${data.stop_reason || 'unknown'})`);
 }
 
 // ---------- Email ----------

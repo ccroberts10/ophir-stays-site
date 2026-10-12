@@ -444,14 +444,14 @@ TIERS = [
   dict(name='The Stay', price='Included', unit='with every booking', lead='A beautiful home, kept to our standard, with a local on call.',
        items=['Home inspected before every arrival', 'Hotel-grade linens, robes and toiletries', 'Welcome card and Ophir tumblers to keep',
               'Door code and house guide in the app', 'Weather-aware ideas for every day', 'A local host by text, replies within fifteen minutes']),
-  dict(name='The Arranged Stay', price='$250', unit='per stay', lead='Tell us what you love. We plan the trip around it.', feature=True,
+  dict(name='The Arranged Stay', price='$395', unit='per stay', lead='Tell us what you love. We plan the trip around it.', feature=True,
        items=['Everything in The Stay', 'A planning call before you arrive', 'Skis and boots sized to each guest, waiting in the gear room',
               'Bikes fitted to each rider and delivered', 'Lift tickets, guides, rafting and fly fishing booked',
               'Dinner reservations held, first round on us', 'Your itinerary in the app, moved when the weather moves']),
-  dict(name='The Private Stay', price='$750', unit='per stay', lead='A dedicated host. Nothing left for you to do.',
+  dict(name='The Private Stay', price='$1,250', unit='per stay, up to five nights', lead='A dedicated host. Nothing left for you to do.',
        items=['Everything in The Arranged Stay', 'Groceries shopped and the fridge stocked to your list', 'Fire laid, wine chosen, music on when you walk in',
               'Your own host, on call for the whole stay', 'Private chef, in-home massage or a sitter arranged',
-              'Airport arrival arranged', 'Mid-stay refresh: linens, towels, restock']),
+              'Airport arrival arranged', 'Mid-stay refresh: linens, towels, restock', 'Longer stays: $150 per additional night']),
 ]
 def tier_html(t):
     items=''.join(f'<li>{i}</li>' for i in t['items'])
@@ -494,6 +494,14 @@ stay_body = f'''
         <p class="lead">Every stay starts with the home. Add as much of the trip as you like, and upgrade any time before you arrive.</p>
       </div>
       <div class="tiers">{''.join(tier_html(t) for t in TIERS)}</div>
+      <div class="addons reveal">
+        <p class="eyebrow" style="text-align:center">Or add a single touch to any stay</p>
+        <div class="addon-row">
+          <div><b>Fridge stocked</b><span>$95 plus groceries</span></div>
+          <div><b>Arrival setup</b><span>Fire laid, wine chosen, flowers · $75</span></div>
+          <div><b>Skis or bikes fitted and delivered</b><span>$45 plus rental</span></div>
+        </div>
+      </div>
       <p class="fine center" style="margin-top:28px">Gear, guides, lift tickets, groceries and partner services are billed at our partners' rates, with no markup to you.</p>
     </div>
   </section>

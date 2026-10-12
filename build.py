@@ -24,7 +24,7 @@ DEFS = f'''<svg width="0" height="0" style="position:absolute" aria-hidden="true
 
 NAV = [('/', 'Home', 'welcome', 'home'),
        ('/homes', 'The Collection', 'our homes', 'homes'),
-       ('/#experiences', 'Experiences', 'ski · spa · golf · ride', 'exp'),
+       ('/stay', 'Your Stay', 'packages & details', 'stay'),
        ('/owners', 'Owners', 'apply & estimate', 'owners'),
        ('/journal', 'Journal', 'stories & guides', 'journal'),
        ('/about', 'About', 'who we are', 'about')]
@@ -74,7 +74,7 @@ FOOT = '''<footer class="site-foot">
   <div class="wrap">
     <svg role="img" aria-label="Ophir Stays seal"><use href="#seal"/></svg>
     <p style="margin:0;color:var(--muted)">A private collection of mountain homes in Durango, Colorado. Locally owned.</p>
-    <nav class="foot-links" aria-label="Footer"><a href="/#experiences">Experiences</a><a href="/owners">Owners</a><a href="/journal">Journal</a><a href="/about">About</a><a href="mailto:casey@ophirstays.com">casey@ophirstays.com</a></nav>
+    <nav class="foot-links" aria-label="Footer"><a href="/stay">Your Stay</a><a href="/owners">Owners</a><a href="/journal">Journal</a><a href="/about">About</a><a href="mailto:casey@ophirstays.com">casey@ophirstays.com</a></nav>
     <div class="foot-base"><span>© 2026 Ophir Stays</span><span>Guest booking opens 2027</span></div>
   </div>
 </footer>
@@ -95,7 +95,7 @@ def photo(name, alt, cls='photo'):
 # Add a home: copy a block, set sample=False, and save 5 photos as assets/photos/homes/<slug>-1.jpg ... -5.jpg
 # (1 = hero exterior or view, 2 = great room, 3 = kitchen, 4 = primary bedroom, 5 = hot tub / deck / view).
 # SHOW_SAMPLES must be False before launch so no sample home is ever published.
-SHOW_SAMPLES = True
+SHOW_SAMPLES = False
 HOMES = [
     dict(slug='sample-cliff-house', sample=True, name='The Cliff House', area='Glacier Club', beds=5, baths=5.5, sleeps=12,
          line='Stone, glass and a fairway view, twenty minutes from town.',
@@ -179,6 +179,26 @@ home_body = f'''
       </div>
       {collection_grid()}
       <p class="center reveal" style="margin-top:44px"><a class="link" href="/homes">View the Collection</a></p>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="center reveal" style="margin-bottom:56px">
+        <p class="eyebrow">Before you arrive</p>
+        <h2 class="display">Every detail, already done.</h2>
+        <hr class="rule">
+        <p class="lead">We plan everything. You arrive, and the trip begins.</p>
+      </div>
+      <div class="details reveal">
+        <div><span class="ital">i.</span><h3>Skis and boots, waiting</h3><p>Sized to each guest before you land, in the gear room with your name on them.</p></div>
+        <div><span class="ital">ii.</span><h3>Bikes, fitted</h3><p>The right frame for every rider, tuned and ready by the door.</p></div>
+        <div><span class="ital">iii.</span><h3>The fridge, stocked</h3><p>Your list, shopped that morning. Coffee the way you take it.</p></div>
+        <div><span class="ital">iv.</span><h3>The fire, laid</h3><p>Firewood stacked, blankets out, a bottle chosen for the first night.</p></div>
+        <div><span class="ital">v.</span><h3>Every booking, made</h3><p>Lift tickets, guides, tee times and tables, all confirmed in the app.</p></div>
+        <div><span class="ital">vi.</span><h3>The plan, flexible</h3><p>Storms after one? Your ride moves to tomorrow, and we tell you first.</p></div>
+      </div>
+      <p class="center reveal" style="margin-top:52px"><a class="btn" href="/stay">See how a stay works</a></p>
     </div>
   </section>
 
@@ -418,6 +438,97 @@ owners = page('For homeowners · Ophir Stays',
               'Apply to the Ophir Collection: twenty-five Durango homes, one standard, and a first-year income guarantee. Get a free estimate of what your home could earn.',
               '/owners', 'owners', owners_body, FORM_JS)
 
+
+# ---------------- YOUR STAY (packages) ----------------
+TIERS = [
+  dict(name='The Stay', price='Included', unit='with every booking', lead='A beautiful home, kept to our standard, with a local on call.',
+       items=['Home inspected before every arrival', 'Hotel-grade linens, robes and toiletries', 'Welcome card and Ophir tumblers to keep',
+              'Door code and house guide in the app', 'Weather-aware ideas for every day', 'A local host by text, replies within fifteen minutes']),
+  dict(name='The Arranged Stay', price='$250', unit='per stay', lead='Tell us what you love. We plan the trip around it.', feature=True,
+       items=['Everything in The Stay', 'A planning call before you arrive', 'Skis and boots sized to each guest, waiting in the gear room',
+              'Bikes fitted to each rider and delivered', 'Lift tickets, guides, rafting and fly fishing booked',
+              'Dinner reservations held, first round on us', 'Your itinerary in the app, moved when the weather moves']),
+  dict(name='The Private Stay', price='$750', unit='per stay', lead='A dedicated host. Nothing left for you to do.',
+       items=['Everything in The Arranged Stay', 'Groceries shopped and the fridge stocked to your list', 'Fire laid, wine chosen, music on when you walk in',
+              'Your own host, on call for the whole stay', 'Private chef, in-home massage or a sitter arranged',
+              'Airport arrival arranged', 'Mid-stay refresh: linens, towels, restock']),
+]
+def tier_html(t):
+    items=''.join(f'<li>{i}</li>' for i in t['items'])
+    cls=' tier-feature' if t.get('feature') else ''
+    return f'''<div class="tier{cls} reveal"><p class="eyebrow" style="margin-bottom:10px">{t['name']}</p>
+        <div class="tier-price"><b>{t['price']}</b><span>{t['unit']}</span></div><p class="tier-lead">{t['lead']}</p><ul class="tier-list">{items}</ul></div>'''
+
+TIMELINE = [('30 days before', 'Tell us what you love', 'Skiing, riding, the river, a slow morning with good coffee. A short form in the app, or a call with your host.'),
+            ('14 days before', 'Sizes and lists', 'Heights, boot sizes and riding styles for everyone in the party. Your grocery list, dietary needs and how you take your coffee.'),
+            ('7 days before', 'Your itinerary', 'Every day planned and built around the forecast: tickets, tee times, guides and tables confirmed.'),
+            ('Arrival day', 'Walk in', 'The fire is laid and the fridge is stocked. Skis, boots and bikes wait in the gear room, each labeled with a name. Your door code arrives at four.'),
+            ('During your stay', 'We adjust', 'Storms coming in? Your ride moves to tomorrow and we suggest the hot springs. Text us anything, any time.'),
+            ('After you leave', 'We remember', 'Your sizes, your coffee and your favorite table, saved for next time.')]
+timeline = ''.join(f'<li class="reveal"><span class="when">{w}</span><div><h3>{h}</h3><p>{p}</p></div></li>' for w,h,p in TIMELINE)
+
+stay_body = f'''
+  <section class="center" style="padding-bottom:56px">
+    <div class="wrap narrow reveal">
+      <p class="eyebrow">Your Stay</p>
+      <h1 class="display">We plan everything. You arrive.</h1>
+      <hr class="rule">
+      <p class="lead">Skis and boots in your size, bikes fitted, the fridge stocked and every table booked, before you land.</p>
+    </div>
+  </section>
+  <div class="wrap">{photo('hero-fireplace', 'A great room with the fire lit at dusk, ready for arrival')}</div>
+
+  <section>
+    <div class="wrap">
+      <div class="center reveal" style="margin-bottom:48px"><p class="eyebrow">The details</p><h2 class="display">How a stay unfolds</h2></div>
+      <ol class="timeline">{timeline}</ol>
+    </div>
+  </section>
+
+  <section class="tint" id="packages">
+    <div class="wrap">
+      <div class="center reveal" style="margin-bottom:52px">
+        <p class="eyebrow">Packages</p>
+        <h2 class="display">Choose how much we handle.</h2>
+        <hr class="rule">
+        <p class="lead">Every stay starts with the home. Add as much of the trip as you like, and upgrade any time before you arrive.</p>
+      </div>
+      <div class="tiers">{''.join(tier_html(t) for t in TIERS)}</div>
+      <p class="fine center" style="margin-top:28px">Gear, guides, lift tickets, groceries and partner services are billed at our partners' rates, with no markup to you.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap split">
+      <div class="reveal">{photo('ski', 'Skis and boots waiting in a gear room')}</div>
+      <div class="reveal">
+        <p class="eyebrow">Attention to detail</p>
+        <h2 class="display">The small things are the whole thing.</h2>
+        <ul class="standard" style="columns:1;margin-top:24px">
+          <li>Boots warmed in the dryer on powder mornings</li>
+          <li>Each guest's gear labeled with their name</li>
+          <li>Your coffee order, already in the kitchen</li>
+          <li>Kids' bikes and helmets in the right sizes</li>
+          <li>A trail map marked with the ride we planned for you</li>
+          <li>Every preference remembered for your next stay</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="tint center">
+    <div class="wrap narrow">
+      <p class="eyebrow reveal">Guest booking opens 2027</p>
+      <h2 class="display reveal">Be first for the best dates.</h2>
+      <p class="lead reveal">Tell us when you'd like to come, and we'll hold the first look at our homes for you.</p>
+      <p class="reveal" style="margin-top:32px"><a class="btn btn-rust" href="mailto:casey@ophirstays.com?subject=First%20dates%20at%20Ophir%20Stays">Request first dates</a></p>
+    </div>
+  </section>
+'''
+stay_page = page('Your Stay · Packages · Ophir Stays',
+                 'Skis and boots sized and waiting, bikes fitted, the fridge stocked and every table booked before you arrive. Ophir Stays packages for Durango, Colorado.',
+                 '/stay', 'stay', stay_body)
+
 # ---------------- ABOUT ----------------
 about_body = f'''
   <section class="center" style="padding-bottom:56px">
@@ -638,8 +749,8 @@ post2 = page('What a Durango vacation home earns, and what decides it · The Jou
              '/journal/durango-home-earnings', 'journal', post2_body)
 
 os.makedirs('journal', exist_ok=True); os.makedirs('homes', exist_ok=True)
-for name, html in [('index.html', home), ('owners.html', owners), ('about.html', about), ('journal.html', journal), ('journal/durango-rides.html', post), ('journal/durango-home-earnings.html', post2), ('homes.html', homes_page)] + [(f"homes/{h['slug']}.html", home_page(h)) for h in LIVE_HOMES]:
+for name, html in [('index.html', home), ('owners.html', owners), ('about.html', about), ('journal.html', journal), ('journal/durango-rides.html', post), ('journal/durango-home-earnings.html', post2), ('homes.html', homes_page), ('stay.html', stay_page)] + [(f"homes/{h['slug']}.html", home_page(h)) for h in LIVE_HOMES]:
     open(name, 'w').write(html)
 open('sitemap.xml', 'w').write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' +
-    ''.join(f'<url><loc>https://ophirstays.com{p}</loc></url>\n' for p in ['/', '/homes', '/owners', '/about', '/journal', '/journal/durango-rides', '/journal/durango-home-earnings'] + [f"/homes/{h['slug']}" for h in HOMES if not h['sample']]) + '</urlset>\n')
+    ''.join(f'<url><loc>https://ophirstays.com{p}</loc></url>\n' for p in ['/', '/stay', '/homes', '/owners', '/about', '/journal', '/journal/durango-rides', '/journal/durango-home-earnings'] + [f"/homes/{h['slug']}" for h in HOMES if not h['sample']]) + '</urlset>\n')
 print('built')

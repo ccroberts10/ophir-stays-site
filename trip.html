@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Your trip · Ophir Stays</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#FFFFFF">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;1,500&family=Jost:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/styles.css">
+<style>
+  .t-head{text-align:center;padding:36px 0 26px;border-bottom:1px solid var(--line)}
+  .t-head svg{width:56px;height:56px;margin:0 auto 12px}
+  .t-head .w{font-weight:500;letter-spacing:.5em;padding-left:.5em;font-size:22px}
+  .t-head .s{font-weight:600;letter-spacing:.6em;padding-left:.6em;font-size:10px;color:var(--rust);margin-top:6px}
+  .t-wrap{max-width:760px;margin:0 auto;padding:0 20px}
+  .t-hero{text-align:center;padding:56px 0 40px}
+  .t-meta{font-size:13px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);margin-top:14px}
+  .step{border-top:1px solid var(--line);padding:40px 0}
+  .step h2{font-size:30px;margin:6px 0 6px}
+  .step .sub{color:var(--muted);margin:0 0 24px}
+  .person{border:1px solid var(--line);background:#fff;padding:20px;margin-bottom:14px;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px}
+  .person .field{grid-column:span 2}
+  .person .field.wide{grid-column:span 3}
+  .person .rm{grid-column:1/-1;justify-self:end;background:none;border:0;color:var(--muted);font:inherit;font-size:13px;letter-spacing:.14em;text-transform:uppercase;cursor:pointer}
+  .chips{display:flex;flex-wrap:wrap;gap:10px}
+  .chip{height:46px;padding:0 18px;border:1px solid var(--line);background:#fff;font:inherit;font-size:15px;color:var(--charcoal);cursor:pointer}
+  .chip[aria-pressed=true]{background:var(--charcoal);border-color:var(--charcoal);color:#fff}
+  .grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+  .grid2 .full{grid-column:1/-1}
+  .hl{display:flex;gap:8px}.hl select{flex:1}
+  .state{text-align:center;padding:64px 0}
+  .state svg{width:64px;height:64px;margin:0 auto 22px}
+  .spin{width:36px;height:36px;border:2px solid var(--line);border-top-color:var(--rust);border-radius:50%;margin:0 auto 22px;animation:sp 1s linear infinite}
+  @keyframes sp{to{transform:rotate(360deg)}}
+  .day{border-top:1px solid var(--line);padding:30px 0}
+  .day h3{font-family:var(--serif);font-weight:500;font-size:26px;margin:0 0 14px}
+  .item{display:grid;grid-template-columns:90px 1fr;gap:16px;padding:12px 0}
+  .item .tm{font-family:var(--serif);font-style:italic;color:var(--rust);font-size:18px}
+  .item b{display:block;font-weight:500;font-size:18px}
+  .item p{margin:4px 0 0;color:var(--muted);font-size:16px}
+  .wx{display:inline-block;font-size:13px;color:var(--rust);margin-top:4px}
+  .stay-box{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:24px 0}
+  .stay-box div{background:var(--paper);padding:18px}
+  .stay-box b{display:block;font-size:22px;font-weight:500;margin-top:4px}
+  .err{color:#9B2C1C}
+  .person input,.person select,.grid2 input,.grid2 textarea{width:100%;min-width:0}.hl select{min-width:0}
+  @media (max-width:640px){.person{grid-template-columns:minmax(0,1fr) minmax(0,1fr);padding:16px}.person .field,.person .field.wide{grid-column:span 1}.person .field.name{grid-column:1/-1}.grid2{grid-template-columns:1fr}.item{grid-template-columns:72px 1fr}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><symbol id="summit" viewBox="40 40 320 320"><circle cx="200" cy="200" r="150" fill="#2A2826"/><path d="M200 88 C213 140 225 198 248 246 C260 270 284 284 312 276 C292 300 250 304 226 290 C213 282 205 268 200 250 C195 268 187 282 174 290 C150 304 108 300 88 276 C116 284 140 270 152 246 C175 198 187 140 200 88 Z" fill="#ECE4D3"/></symbol></defs></svg>
+<header class="t-head"><svg aria-hidden="true"><use href="#summit"/></svg><div class="w">OPHIR</div><div class="s">STAYS</div></header>
+<main id="main" class="t-wrap">
+  <div id="app"><div class="state"><div class="spin" aria-hidden="true"></div><p>Opening your trip…</p></div></div>
+</main>
+<script>
+(function(){
+  var token=(location.pathname.split('/trip/')[1]||'').replace(/[^a-f0-9]/g,'');
+  var app=document.getElementById('app'), data=null;
+  var INTERESTS=['Skiing','Snowboarding','Mountain biking','Hiking','Fly fishing','Rafting','Golf','Hot springs','Spa and massage','Great dinners','Coffee and town','Slow mornings','Kids’ adventures','Live music'];
+  var esc=function(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})};
+  var fmt=function(d,o){return new Date(d+'T12:00:00').toLocaleDateString('en-US',o||{weekday:'long',month:'long',day:'numeric'})};
+  function hero(title,sub){return '<section class="t-hero"><p class="eyebrow">'+esc(data.home?data.home.name+' · '+(data.home.area||'Durango'):'Durango, Colorado')+'</p><h1 class="display">'+title+'</h1><p class="t-meta">'+fmt(data.check_in,{month:'short',day:'numeric'})+' – '+fmt(data.check_out,{month:'short',day:'numeric',year:'numeric'})+' · '+(data.adults+data.children)+' guests</p>'+(sub?'<p class="lead" style="margin:22px auto 0;max-width:560px">'+sub+'</p>':'')+'</section>'}
+  function opt(list,val){return list.map(function(x){var v=Array.isArray(x)?x[0]:x,l=Array.isArray(x)?x[1]:x;return '<option value="'+esc(v)+'"'+(String(val)===String(v)?' selected':'')+'>'+esc(l)+'</option>'}).join('')}
+  function cmToFtIn(cm){if(!cm)return['',''];var t=Math.round(cm/2.54);return[Math.floor(t/12),t%12]}
+  function personRow(p,i){p=p||{};var fi=cmToFtIn(p.height_cm);
+    return '<div class="person" data-i="'+i+'">'+
+      '<div class="field name wide"><label>Name</label><input name="name" value="'+esc(p.name)+'" autocomplete="off"></div>'+
+      '<div class="field wide"><label>Age</label><select name="age_group">'+opt([['adult','Adult'],['teen','Teen (13–17)'],['child','Child (12 and under)']],p.age_group||'adult')+'</select></div>'+
+      '<div class="field"><label>Height</label><div class="hl"><select name="ft" aria-label="Feet"><option value="">ft</option>'+opt([3,4,5,6,7],fi[0])+'</select><select name="in" aria-label="Inches"><option value="">in</option>'+opt([0,1,2,3,4,5,6,7,8,9,10,11],fi[1])+'</select></div></div>'+
+      '<div class="field"><label>Boot / shoe size</label><input name="boot_size" value="'+esc(p.boot_size)+'" placeholder="US 10"></div>'+
+      '<div class="field"><label>Weight (lb)</label><input name="weight_lb" inputmode="numeric" value="'+(p.weight_kg?Math.round(p.weight_kg*2.205):'')+'" placeholder="Optional"></div>'+
+      '<div class="field wide"><label>Skiing / riding</label><select name="ski_level">'+opt([['','Not skiing'],['first time','First time'],['beginner','Beginner'],['intermediate','Intermediate'],['advanced','Advanced'],['expert','Expert'],['snowboard','Snowboard']],p.ski_level||'')+'</select></div>'+
+      '<div class="field wide"><label>Mountain biking</label><select name="bike_level">'+opt([['','Not riding'],['new','New to it'],['intermediate','Intermediate'],['advanced','Advanced']],p.bike_level||'')+'</select></div>'+
+      (i>0?'<button class="rm" type="button" data-rm="'+i+'">Remove</button>':'')+'</div>'}
+  function readParty(){return [].map.call(app.querySelectorAll('.person'),function(el){var g=function(n){var f=el.querySelector('[name='+n+']');return f?f.value.trim():''};
+    var ft=parseInt(g('ft'),10),inch=parseInt(g('in'),10)||0,lb=parseInt(g('weight_lb'),10);
+    return{name:g('name'),age_group:g('age_group'),height_cm:ft?Math.round((ft*12+inch)*2.54):null,weight_kg:lb?Math.round(lb/2.205):null,boot_size:g('boot_size'),ski_level:g('ski_level'),bike_level:g('bike_level')}})}
+  function form(){
+    var a=data.answers||{},party=data.party.length?data.party:new Array(Math.max(1,data.adults+data.children)).fill(null),picked={};(a.interests||[]).forEach(function(x){picked[x]=1});
+    app.innerHTML=hero('Welcome, '+esc(data.guest_first)+'.','Tell us about your trip. We’ll size the gear, stock the house and plan every day around the forecast.')+
+      '<form id="f" novalidate>'+
+      '<section class="step"><p class="eyebrow">One</p><h2 class="display">Who’s coming</h2><p class="sub">Heights and sizes let us have skis, boots and bikes waiting with each name on them.</p><div id="people">'+party.map(personRow).join('')+'</div><button class="btn" type="button" id="add">Add a person</button></section>'+
+      '<section class="step"><p class="eyebrow">Two</p><h2 class="display">What you love</h2><p class="sub">Choose as many as you like.</p><div class="chips">'+INTERESTS.map(function(x){return '<button type="button" class="chip" aria-pressed="'+(picked[x]?'true':'false')+'">'+x+'</button>'}).join('')+'</div>'+
+        '<div class="field" style="margin-top:24px;max-width:360px"><label for="pace">Pace</label><select id="pace" name="pace">'+opt([['','Choose'],['full','Full days, every day'],['balanced','A balance of both'],['slow','Slow and easy']],a.pace||'')+'</select></div></section>'+
+      '<section class="step"><p class="eyebrow">Three</p><h2 class="display">The house</h2><p class="sub">So everything is ready when you walk in.</p><div class="grid2">'+
+        '<div class="field"><label for="arr">Arrival time</label><input id="arr" name="arrival_time" value="'+esc(a.arrival_time)+'" placeholder="Around 4pm"></div>'+
+        '<div class="field"><label for="cof">Coffee</label><input id="cof" name="coffee" value="'+esc(a.coffee)+'" placeholder="Oat milk latte, dark roast beans"></div>'+
+        '<div class="field full"><label for="gro">Grocery list</label><textarea id="gro" name="groceries" placeholder="Breakfast for 4, fruit, a good bottle of red…">'+esc(a.groceries)+'</textarea>'+(data.package==='private'?'':'<span class="hint">Shopping is included in The Private Stay, or add a fridge stock for $95 plus groceries.</span>')+'</div>'+
+        '<div class="field full"><label for="die">Allergies or dietary needs</label><input id="die" name="dietary" value="'+esc(a.dietary)+'"></div>'+
+        '<div class="field full"><label for="cel">Celebrating anything?</label><input id="cel" name="celebrations" value="'+esc(a.celebrations)+'" placeholder="Birthday, anniversary…"></div>'+
+        '<div class="field full"><label for="nt">Anything else we should know</label><textarea id="nt" name="notes">'+esc(a.notes)+'</textarea></div>'+
+      '</div></section>'+
+      '<section class="step" style="text-align:center"><button class="btn btn-rust" type="submit">Plan my trip</button><p class="form-status" role="status" aria-live="polite" style="margin-top:16px"></p></section></form>';
+    var people=app.querySelector('#people');
+    app.querySelector('#add').onclick=function(){var n=people.querySelectorAll('.person').length;people.insertAdjacentHTML('beforeend',personRow(null,n))};
+    people.addEventListener('click',function(e){var b=e.target.closest('[data-rm]');if(b)b.closest('.person').remove()});
+    app.querySelectorAll('.chip').forEach(function(c){c.onclick=function(){c.setAttribute('aria-pressed',c.getAttribute('aria-pressed')==='true'?'false':'true')}});
+    app.querySelector('#f').onsubmit=async function(e){e.preventDefault();var f=e.target,st=f.querySelector('.form-status');
+      var party=readParty().filter(function(p){return p.name});if(!party.length){st.textContent='Please add at least one name.';st.className='form-status err';return}
+      var answers={interests:[].filter.call(app.querySelectorAll('.chip'),function(c){return c.getAttribute('aria-pressed')==='true'}).map(function(c){return c.textContent}),pace:f.pace.value,arrival_time:f.arrival_time.value,coffee:f.coffee.value,groceries:f.groceries.value,dietary:f.dietary.value,celebrations:f.celebrations.value,notes:f.notes.value};
+      app.innerHTML='<div class="state"><div class="spin" aria-hidden="true"></div><h2 class="display" style="font-size:30px">Planning your trip</h2><p class="lead">Checking the forecast and building your days. This takes about half a minute.</p></div>';window.scrollTo(0,0);
+      try{var r=await fetch('/api/trip?t='+token,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({party:party,answers:answers})});var j=await r.json();if(!r.ok)throw new Error(j.error);data.status='plan_ready';render()}
+      catch(err){await load();app.insertAdjacentHTML('afterbegin','<p class="err" role="alert" style="text-align:center;margin-top:24px">'+esc(err.message||'Something went wrong. Please try again.')+'</p>')}};
+  }
+  function waiting(){app.innerHTML=hero('Thank you, '+esc(data.guest_first)+'.')+'<div class="state" style="padding-top:0"><svg aria-hidden="true"><use href="#summit"/></svg><p class="lead" style="margin:0 auto;max-width:520px">Your trip is being planned. Casey reviews every itinerary personally and will send it within a day. Reply to our email any time.</p><p style="margin-top:28px"><button class="btn" id="edit">Change my answers</button></p></div>';app.querySelector('#edit').onclick=form}
+  function plan(){
+    var days={};data.itinerary.forEach(function(it){(days[it.day]=days[it.day]||[]).push(it)});
+    var stay=data.stay?'<div class="stay-box"><div><span class="eyebrow" style="margin:0">Door code</span><b>'+esc(data.stay.door_code||'Sent on arrival')+'</b></div><div><span class="eyebrow" style="margin:0">Wi-Fi</span><b>'+esc(data.stay.wifi_name||'—')+'</b><span style="color:var(--muted)">'+esc(data.stay.wifi_password||'')+'</span></div></div>':'';
+    app.innerHTML=hero('Your Durango trip',data.stay?'Welcome home. Text us anything, any time.':'Every day, planned around the forecast. We’ll move things if the weather does.')+stay+
+      Object.keys(days).sort().map(function(d){return '<section class="day"><h3>'+fmt(d)+'</h3>'+days[d].map(function(it){return '<div class="item"><span class="tm">'+esc(it.start_time||'')+'</span><div><b>'+esc(it.title)+'</b>'+(it.details?'<p>'+esc(it.details)+'</p>':'')+(it.weather_note?'<span class="wx">'+esc(it.weather_note)+'</span>':'')+'</div></div>'}).join('')+'</section>'}).join('')+
+      '<p class="center fine" style="padding:32px 0 64px">Questions or changes? Reply to our email and Casey will take care of it.</p>';
+  }
+  function render(){if(['approved','in_stay','complete'].indexOf(data.status)>=0)return plan();if(data.status==='plan_ready')return waiting();if(data.status==='cancelled'){app.innerHTML='<div class="state"><p class="lead">This trip has been cancelled.</p></div>';return}form()}
+  async function load(){var r=await fetch('/api/trip?t='+token);if(!r.ok){app.innerHTML='<div class="state"><p class="lead">We couldn’t find this trip. Please use the link in your email.</p></div>';return}data=await r.json();render()}
+  if(!token){app.innerHTML='<div class="state"><p class="lead">Please use the link in your email.</p></div>'}else load().catch(function(){app.innerHTML='<div class="state"><p class="lead">Something went wrong. Please refresh.</p></div>'});
+})();
+</script>
+</body>
+</html>

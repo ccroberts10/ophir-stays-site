@@ -48,3 +48,11 @@ Add a post by copying the `post_body` block in `build.py`, changing the text and
 - Replace the portrait placeholder on /about with a real photo (`assets/casey.jpg`, 1200×1500).
 - Have a lawyer confirm the guarantee summary on /owners matches the owner agreement.
 - Fonts: Holtwood One SC stands in for the Mesa wordmark font until its license is cleared.
+
+## The app (v1)
+Booking -> trip -> AI welcome email -> guest pre-trip page -> AI itinerary + team tasks -> Casey approves -> guest sees the plan.
+- Guest page: `/trip/<token>` (trip.html + api/trip.js)
+- Admin: `/admin` (admin.html + api/admin.js), password = `ADMIN_PASSWORD`
+- Hostaway webhook: `/api/hostaway?secret=<HOSTAWAY_WEBHOOK_SECRET>` (api/hostaway.js)
+- Database schema: `supabase/schema.sql`
+Env vars: SUPABASE_URL, SUPABASE_SECRET_KEY, ANTHROPIC_API_KEY, ADMIN_PASSWORD, RESEND_API_KEY, OWNER_INBOX, FROM_ADDRESS, (later) HOSTAWAY_WEBHOOK_SECRET, ANTHROPIC_MODEL.

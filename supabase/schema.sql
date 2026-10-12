@@ -130,3 +130,10 @@ alter table payments enable row level security;
 insert into homes (slug, name, area, beds, baths, sleeps, house_notes)
 values ('test-home', 'Test Home', 'Durango', 4, 3, 8, 'Simulated home for testing the trip flow.')
 on conflict (slug) do nothing;
+
+-- Server access. Needed because "automatically expose new tables" is off: grant only the secret-key role.
+grant usage on schema public to service_role;
+grant all privileges on all tables in schema public to service_role;
+grant all privileges on all sequences in schema public to service_role;
+alter default privileges in schema public grant all on tables to service_role;
+alter default privileges in schema public grant all on sequences to service_role;

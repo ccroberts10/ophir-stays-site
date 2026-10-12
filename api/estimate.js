@@ -26,21 +26,36 @@ export default async function handler(req, res) {
     ['Bedrooms', d.bedrooms], ['Rented now', d.renting], ['Last 12 months income', d.revenue], ['Notes', d.notes]]
     .map(([k, v]) => `<tr><td style="padding:6px 16px 6px 0;color:#6B645B">${k}</td><td style="padding:6px 0">${esc(v) || '—'}</td></tr>`).join('');
 
-  const r = await fetch('https://api.resend.com/emails', {
+  const key = (process.env.RESEND_API_KEY || '').trim();
+  const to = (process.env.OWNER_INBOX || '').trim();
+  if (!key || !to) {
+    console.error('Missing env vars:', { RESEND_API_KEY: !!key, OWNER_INBOX: !!to });
+    return res.status(500).json({ error: 'Server not configured' });
+  }
+
+  const message = {
+    to: [to],
+    reply_to: d.email,
+    subject: `Owner estimate request: ${d.address}`,
+    html: `<div style="font-family:Arial,sans-serif;font-size:15px;color:#2A2826"><h2 style="font-weight:500">New owner estimate request</h2><table>${rows}</table><p style="color:#6B645B">Reply to this email to answer ${esc(d.name)} directly.</p></div>`,
+  };
+  const send = (from) => fetch('https://api.resend.com/emails', {
     method: 'POST',
-    headers: { Authorization: `Bearer ${process.env.RESEND_API_KEY}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      from: process.env.FROM_ADDRESS,
-      to: [process.env.OWNER_INBOX],
-      reply_to: d.email,
-      subject: `Owner estimate request: ${d.address}`,
-      html: `<div style="font-family:Arial,sans-serif;font-size:15px;color:#2A2826"><h2 style="font-weight:500">New owner estimate request</h2><table>${rows}</table><p style="color:#6B645B">Reply to this email to answer ${esc(d.name)} directly.</p></div>`,
-    }),
+    headers: { Authorization: `Bearer ${key}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ ...message, from }),
   });
 
+  // Try the branded sender first; if the domain isn't verified yet, fall back to Resend's
+  // shared sender (it can deliver to the Resend account owner's own inbox).
+  let r = await send((process.env.FROM_ADDRESS || '').trim() || 'Ophir Stays <hello@ophirstays.com>');
   if (!r.ok) {
-    console.error('Resend error', r.status, await r.text());
-    return res.status(502).json({ error: 'Could not send' });
+    console.error('Resend error (branded sender)', r.status, await r.text());
+    r = await send('Ophir Stays <onboarding@resend.dev>');
+  }
+  if (!r.ok) {
+    const detail = await r.text();
+    console.error('Resend error (fallback sender)', r.status, detail);
+    return res.status(502).json({ error: 'Could not send', status: r.status });
   }
   return res.status(200).json({ ok: true });
 }

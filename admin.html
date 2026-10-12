@@ -67,7 +67,7 @@
         <div class="field" style="grid-column:1/-1"><label>Booking link</label><input name="booking_url"></div>
         <div class="field" style="grid-column:1/-1"><label>Notes</label><input name="notes" placeholder="Ask for the window table; owner is Mike"></div>
         <label class="task" style="border:0"><input type="checkbox" name="kid_friendly" checked><span>Kid-friendly</span></label>
-        <label class="task" style="border:0"><input type="checkbox" name="first_round"><span>First round arranged</span></label>
+        <label class="task" style="border:0"><input type="checkbox" name="first_round"><span>We keep gift cards here (first round)</span></label>
         <div style="grid-column:1/-1;display:flex;gap:10px"><button class="btn btn-rust sm">Save restaurant</button><button class="btn sm" type="reset">Clear</button></div>
         <p class="msg" id="rm" style="grid-column:1/-1"></p>
       </form></div>
@@ -108,7 +108,7 @@
     }catch(err){el.innerHTML='<p class="err">'+esc(err.message)+'</p>'}}
   function alertMsg(m){var el=document.getElementById('detail');el.insertAdjacentHTML('afterbegin','<p class="err" role="alert">'+esc(m)+'</p>')}
   var rests=[];
-  async function loadRests(){var j=await api({action:'restaurants'});rests=j.restaurants;document.getElementById('rests').innerHTML=rests.length?rests.map(function(r,i){return '<div class="row" data-r="'+i+'" style="opacity:'+(r.active?1:.45)+'"><div><b>'+esc(r.name)+'</b><br><small>'+esc([r.cuisine,r.price?'$'.repeat(r.price):'',r.vibe,r.kid_friendly?'kids ok':'adults',r.book_via,r.first_round?'first round':''].filter(Boolean).join(' · '))+'</small></div><span class="pill">'+(r.active?'edit':'off')+'</span></div>'}).join(''):'<p class="msg">Add the places you trust. Five to ten is plenty to start.</p>'}
+  async function loadRests(){var j=await api({action:'restaurants'});rests=j.restaurants;document.getElementById('rests').innerHTML=rests.length?rests.map(function(r,i){return '<div class="row" data-r="'+i+'" style="opacity:'+(r.active?1:.45)+'"><div><b>'+esc(r.name)+'</b><br><small>'+esc([r.cuisine,r.price?'$'.repeat(r.price):'',r.vibe,r.kid_friendly?'kids ok':'adults',r.book_via,r.first_round?'gift cards':''].filter(Boolean).join(' · '))+'</small></div><span class="pill">'+(r.active?'edit':'off')+'</span></div>'}).join(''):'<p class="msg">Add the places you trust. Five to ten is plenty to start.</p>'}
   document.getElementById('rests').onclick=function(e){var row=e.target.closest('[data-r]');if(!row)return;var r=rests[+row.dataset.r],f=document.getElementById('rf');['id','name','cuisine','vibe','phone','booking_url','notes'].forEach(function(k){f[k].value=r[k]||''});f.price.value=r.price||'';f.book_via.value=r.book_via||'Phone';f.kid_friendly.checked=!!r.kid_friendly;f.first_round.checked=!!r.first_round;f.scrollIntoView({behavior:'smooth'})};
   document.getElementById('rf').onsubmit=async function(e){e.preventDefault();var f=e.target,m=document.getElementById('rm');
     try{await api({action:'restaurant_save',restaurant:{id:f.id.value||undefined,name:f.name.value,cuisine:f.cuisine.value,vibe:f.vibe.value,price:f.price.value,book_via:f.book_via.value,phone:f.phone.value,booking_url:f.booking_url.value,notes:f.notes.value,kid_friendly:f.kid_friendly.checked,first_round:f.first_round.checked}});m.textContent='Saved.';f.reset();f.id.value='';loadRests()}catch(err){m.textContent=err.message}};

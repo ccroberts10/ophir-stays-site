@@ -95,7 +95,7 @@ var io='IntersectionObserver' in window?new IntersectionObserver(function(es){es
 document.querySelectorAll('.reveal').forEach(function(el){io?io.observe(el):el.classList.add('in')});})();
 (function(){var f=document.getElementById('nl-form');if(!f)return;var st=f.querySelector('.nl-status');
 f.addEventListener('submit',async function(e){e.preventDefault();
-if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(f.email.value)){st.textContent='Please check your email address.';return}
+if(!/^[^@\\s]+@[^@\\s]+\.[^@\\s]+$/.test(f.email.value)){st.textContent='Please check your email address.';return}
 var b=f.querySelector('button');b.disabled=true;
 try{var r=await fetch('/api/subscribe',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(Object.fromEntries(new FormData(f)))});if(!r.ok)throw 0;
 st.textContent='Thank you. The next note arrives with the season.';f.email.value='';}catch(_){st.textContent='Something went wrong. Please email hello@ophirstays.com.';}

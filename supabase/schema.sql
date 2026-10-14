@@ -175,3 +175,17 @@ create table if not exists subscribers (
 );
 alter table subscribers enable row level security;
 grant all on subscribers to service_role;
+
+-- v1.4 custom charges: Casey prices a partner service (bikes, skis, rafting, golf, massage) and the guest pays in the app
+create table if not exists charges (
+  id uuid primary key default gen_random_uuid(),
+  trip_id uuid references trips(id) on delete cascade,
+  title text not null,
+  note text,
+  amount_cents int not null check (amount_cents > 0),
+  status text not null default 'open' check (status in ('open','paid','void')),
+  created_at timestamptz default now(),
+  paid_at timestamptz
+);
+alter table charges enable row level security;
+grant all on charges to service_role;

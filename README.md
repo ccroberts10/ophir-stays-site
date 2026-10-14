@@ -62,3 +62,10 @@ Env vars: SUPABASE_URL, SUPABASE_SECRET_KEY, ANTHROPIC_API_KEY, ADMIN_PASSWORD, 
 - `api/stripe-webhook.js` marks the payment paid, upgrades the package, re-plans with AI and emails Casey to approve.
 - Env: `STRIPE_SECRET_KEY` (sk_test_… then sk_live_…), `STRIPE_WEBHOOK_SECRET` (whsec_…).
 - Webhook endpoint: https://ophirstays.com/api/stripe-webhook, event `checkout.session.completed`.
+
+## Charging guests for partner bookings (bikes, skis, rafting, golf, massage)
+1. Run the v1.4 `charges` block from supabase/schema.sql once.
+2. In admin, open the trip, fill in "Charge the guest": item, amount, optional note, then "Send to guest".
+3. The guest gets an email and a Confirm button on their trip page; they pay through Stripe.
+4. When they pay you get a "Paid" email and a task to confirm with the partner. Pay the partner its net rate.
+Cancel an unpaid charge with its Cancel button.

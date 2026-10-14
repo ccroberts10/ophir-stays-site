@@ -30,6 +30,16 @@ export default async function handler(req, res) {
     if (!pay || pay.status === 'paid') return json(res, 200, { ok: true, duplicate: !!pay });
     await db.update('payments', `id=eq.${pay.id}`, { status: 'paid' });
     const trip = await db.one('trips', `id=eq.${pay.trip_id}`);
+    const inbox0 = (process.env.OWNER_INBOX || '').trim();
+    const cm = pay.item.match(/^charge_([0-9a-f-]{36})$/);
+    if (cm) {
+      const [c] = await db.update('charges', `id=eq.${cm[1]}`, { status: 'paid', paid_at: new Date().toISOString() });
+      const title = c ? c.title : 'Custom item';
+      await db.insert('tasks', [{ trip_id: trip.id, title: `Paid, now confirm with the partner: ${title}`, assignee: 'Casey', due_at: new Date(Date.now() + 864e5).toISOString(), created_by: 'system', approved: true }]);
+      if (inbox0) await sendEmail({ to: inbox0, subject: `Paid: ${trip.guest_name}, ${title} ($${(pay.amount_cents / 100).toFixed(2)})`,
+        html: emailShell(`<p><strong>${esc(trip.guest_name)}</strong> paid <strong>$${(pay.amount_cents / 100).toFixed(2)}</strong> for <strong>${esc(title)}</strong>.</p><p>Confirm the booking with the partner. A task is on your list.</p><p><a href="${SITE}/admin">Open admin</a></p>`) });
+      return json(res, 200, { ok: true });
+    }
     if (pay.item === 'arranged' || pay.item === 'private') await db.update('trips', `id=eq.${trip.id}`, { package: pay.item });
     // Re-plan so the paid services become real tasks; Casey re-approves.
     let result = null;

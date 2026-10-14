@@ -1,6 +1,6 @@
 // Admin API for Casey. Every call needs header x-admin-key = ADMIN_PASSWORD.
 // POST { action: 'list' | 'detail' | 'approve' | 'replan' | 'simulate' | 'task' | 'resend_welcome', ... }
-import { db, json, readBody, isAdmin, loadTrip, createTrip, planTrip, approveTrip, sendWelcome } from './_lib.js';
+import { db, json, readBody, isAdmin, loadTrip, createTrip, planTrip, approveTrip, sendWelcome, sendEmail, emailShell, esc, SITE } from './_lib.js';
 
 const addDays = (n) => { const d = new Date(); d.setDate(d.getDate() + n); return d.toISOString().slice(0, 10); };
 const SAMPLE_NAMES = ['Taylor Brooks', 'Morgan Hale', 'Jordan Pierce', 'Avery Collins', 'Riley Dawson'];
@@ -21,7 +21,8 @@ export default async function handler(req, res) {
         if (!t) return json(res, 404, { error: 'Not found' });
         const messages = await db.select('messages', `trip_id=eq.${b.id}&order=created_at.desc&limit=20`);
         const payments = await db.select('payments', `trip_id=eq.${b.id}&order=created_at.desc`);
-        return json(res, 200, { ...t, messages, payments, link: `/trip/${t.trip.access_token}` });
+        const charges = await db.select('charges', `trip_id=eq.${b.id}&order=created_at.desc`);
+        return json(res, 200, { ...t, messages, payments, charges, link: `/trip/${t.trip.access_token}` });
       }
       case 'approve': await approveTrip(b.id); return json(res, 200, { ok: true });
       case 'replan': return json(res, 200, { ok: true, ...(await planTrip(b.id)) });
@@ -43,6 +44,21 @@ export default async function handler(req, res) {
         });
         return json(res, 200, { ok: true, id: trip.id, link: `/trip/${trip.access_token}` });
       }
+      case 'charge_create': {
+        const t = await loadTrip(`id=eq.${b.id}`);
+        if (!t) return json(res, 404, { error: 'Not found' });
+        const title = String(b.title || '').trim().slice(0, 80);
+        const cents = Math.round(parseFloat(String(b.amount || '').replace(/[$,]/g, '')) * 100);
+        if (!title || !(cents >= 100 && cents <= 2000000)) return json(res, 400, { error: 'Add an item name and an amount between $1 and $20,000.' });
+        const [c] = await db.insert('charges', [{ trip_id: t.trip.id, title, note: String(b.note || '').trim().slice(0, 300) || null, amount_cents: cents }]);
+        if (t.trip.guest_email && b.notify !== false) {
+          const link = `${SITE}/trip/${t.trip.access_token}`;
+          await sendEmail({ to: t.trip.guest_email, subject: `For your Durango trip: ${title}`,
+            html: emailShell(`<p>Hi ${esc(String(t.trip.guest_name).split(/\s+/)[0])},</p><p>${esc(title)} is arranged and held for you${c.note ? `: ${esc(c.note)}` : '.'}</p><p><strong>$${(cents / 100).toFixed(2)}</strong>. Confirm it on your trip page and it's done.</p><p><a href="${link}">Open your trip</a></p>`) });
+        }
+        return json(res, 200, { ok: true, charge: c });
+      }
+      case 'charge_void': await db.update('charges', `id=eq.${b.charge_id}&status=eq.open`, { status: 'void' }); return json(res, 200, { ok: true });
       case 'restaurants': return json(res, 200, { restaurants: await db.select('restaurants', 'order=active.desc,name') });
       case 'restaurant_save': {
         const r = b.restaurant || {};

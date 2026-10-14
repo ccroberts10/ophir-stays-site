@@ -9,9 +9,19 @@ export default async function handler(req, res) {
     const trip = await db.one('trips', `access_token=eq.${token}`);
     if (!trip || trip.status === 'cancelled') return json(res, 404, { error: 'Trip not found' });
     const key = String(readBody(req).key || '');
-    if (!(trip.offers || []).some((o) => o.key === key)) return json(res, 400, { error: 'This addition is not available for your trip.' });
-    const price = priceFor(key, trip);
-    if (!price || price.cents <= 0) return json(res, 400, { error: 'This addition is priced on request.' });
+    let price, blurb;
+    const cm = key.match(/^charge_([0-9a-f-]{36})$/);
+    if (cm) {
+      const c = await db.one('charges', `id=eq.${cm[1]}&trip_id=eq.${trip.id}`);
+      if (!c || c.status === 'void') return json(res, 400, { error: 'This item is no longer available.' });
+      if (c.status === 'paid') return json(res, 409, { error: 'Already paid. Thank you.' });
+      price = { cents: c.amount_cents, label: c.title }; blurb = c.note || 'Arranged by Ophir Stays for your trip.';
+    } else {
+      if (!(trip.offers || []).some((o) => o.key === key)) return json(res, 400, { error: 'This addition is not available for your trip.' });
+      price = priceFor(key, trip);
+      if (!price || price.cents <= 0) return json(res, 400, { error: 'This addition is priced on request.' });
+      blurb = OFFERS[key].blurb;
+    }
     const already = await db.select('payments', `trip_id=eq.${trip.id}&item=eq.${key}&status=eq.paid`);
     if (already.length) return json(res, 409, { error: 'Already added to your trip.' });
 
@@ -24,7 +34,7 @@ export default async function handler(req, res) {
       'line_items[0][price_data][currency]': 'usd',
       'line_items[0][price_data][unit_amount]': price.cents,
       'line_items[0][price_data][product_data][name]': `${price.label} · Ophir Stays`,
-      'line_items[0][price_data][product_data][description]': `${OFFERS[key].blurb} ${trip.check_in} to ${trip.check_out}.`,
+      'line_items[0][price_data][product_data][description]': `${blurb} ${trip.check_in} to ${trip.check_out}.`,
       metadata: { trip_id: trip.id, item: key },
       payment_intent_data: { metadata: { trip_id: trip.id, item: key }, statement_descriptor_suffix: 'OPHIR STAYS' },
     });

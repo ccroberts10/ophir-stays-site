@@ -26,6 +26,7 @@ export default async function handler(req, res) {
         itinerary: showPlan ? t.itinerary.map(({ day, start_time, title, details, kind, weather_note, partner }) => ({ day, start_time, title, details, kind, weather_note, place: partner })) : [],
         ready_list: showPlan ? (trip.ready_list || []) : [], offers: showPlan ? (trip.offers || []).map((o) => { const p = priceFor(o.key, trip); return { ...o, pay_cents: p && p.cents > 0 ? p.cents : null }; }) : [], weather: showPlan ? (trip.weather || []) : [],
         host_phone: (process.env.HOST_PHONE || '').trim() || null, requested: (t.tasks || []).filter((k) => k.title.startsWith('Guest requested:')).map((k) => k.title.replace('Guest requested: ', '')),
+        charges: (await db.select('charges', `trip_id=eq.${trip.id}&status=neq.void&order=created_at.asc`)).map((c) => ({ key: `charge_${c.id}`, title: c.title, note: c.note, cents: c.amount_cents, status: c.status })),
         stay: arrived && showPlan && home ? { door_code: home.door_code, wifi_name: home.wifi_name, wifi_password: home.wifi_password } : null,
       });
     }

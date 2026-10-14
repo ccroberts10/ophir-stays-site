@@ -159,20 +159,24 @@
       var money=o.pay_cents?'$'+(o.pay_cents/100).toLocaleString('en-US',{minimumFractionDigits:0}):null;
       return '<div class="offer">'+(o.reason?'<span class="why">'+esc(o.reason)+'</span>':'')+'<h4>'+esc(o.title)+'</h4><p>'+esc(o.blurb)+'</p><span class="pr">'+esc(money&&o.key==='private'&&o.pay_cents!==125000?money+' to upgrade':o.price)+'</span>'+
         (o.pay_cents?'<button class="btn btn-rust" data-pay="'+esc(o.key)+'">Add · '+money+'</button>':'<button class="btn" data-offer="'+esc(o.key)+'" '+(done?'disabled':'')+'>'+(done?'Requested':'Request')+'</button>')+'</div>'}).join('')+'</div><p class="fine">Secure payment by Stripe. Items priced on request are confirmed by Casey before anything is charged.</p></section>':'';
-    app.innerHTML=hero('Your Durango trip',data.stay?'Welcome home. Text us anything, any time.':'Every day, planned around the forecast. We’ll move things if the weather does.')+stay+ready+acts+dayHtml+offers+
+    app.innerHTML=hero('Your Durango trip',data.stay?'Welcome home. Text us anything, any time.':'Every day, planned around the forecast. We’ll move things if the weather does.')+stay+ready+acts+dayHtml+chargesHtml()+offers+
       '<p class="center fine" style="padding:32px 0 64px">Questions or changes? Reply to our email and Casey will take care of it.</p>';
     app.querySelector('#cal').onclick=ics;
-    app.querySelectorAll('[data-pay]').forEach(function(b){b.onclick=async function(){var lbl=b.textContent;b.disabled=true;b.textContent='Opening secure checkout…';
-      try{var r=await fetch('/api/checkout?t='+token,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({key:b.dataset.pay})});var j=await r.json();if(!r.ok||!j.url)throw new Error(j.error);location.href=j.url}
-      catch(e){b.disabled=false;b.textContent=lbl;alertBox(e.message||'Payment could not start.')}}});
+    bindPay();
     app.querySelectorAll('[data-offer]').forEach(function(b){b.onclick=async function(){b.disabled=true;b.textContent='Sending…';
       try{var r=await fetch('/api/trip?t='+token+'&action=request',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({key:b.dataset.offer})});if(!r.ok)throw 0;b.textContent='Requested';(data.requested=data.requested||[]).push(b.closest('.offer').querySelector('h4').textContent)}
       catch(e){b.disabled=false;b.textContent='Try again'}}});
   }
+  function chargesHtml(){var cs=data.charges||[];if(!cs.length)return '';
+    return '<section class="step"><p class="eyebrow">Arranged for you</p><h2 class="display">Confirm your bookings</h2><div class="offers">'+cs.map(function(c){var money='$'+(c.cents/100).toLocaleString('en-US',{minimumFractionDigits:c.cents%100?2:0});
+      return '<div class="offer"><h4>'+esc(c.title)+'</h4>'+(c.note?'<p>'+esc(c.note)+'</p>':'')+'<span class="pr">'+money+'</span>'+(c.status==='paid'?'<button class="btn" disabled>Confirmed</button>':'<button class="btn btn-rust" data-pay="'+esc(c.key)+'">Confirm · '+money+'</button>')+'</div>'}).join('')+'</div><p class="fine">Secure payment by Stripe. We pay the shop or guide for you, so there is nothing to settle when you arrive.</p></section>'}
+  function bindPay(){app.querySelectorAll('[data-pay]').forEach(function(b){if(b.dataset.bound)return;b.dataset.bound=1;b.onclick=async function(){var lbl=b.textContent;b.disabled=true;b.textContent='Opening secure checkout…';
+      try{var r=await fetch('/api/checkout?t='+token,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({key:b.dataset.pay})});var j=await r.json();if(!r.ok||!j.url)throw new Error(j.error);location.href=j.url}
+      catch(e){b.disabled=false;b.textContent=lbl;alertBox(e.message||'Payment could not start.')}}})}
   function alertBox(m){app.insertAdjacentHTML('afterbegin','<p class="err" role="alert" style="text-align:center;margin-top:20px">'+esc(m)+'</p>')}
   function paidBanner(){var k=new URLSearchParams(location.search).get('paid');if(!k)return;history.replaceState(null,'',location.pathname);
     app.insertAdjacentHTML('afterbegin','<div class="ready" role="status" style="margin-top:28px;text-align:center"><p class="eyebrow" style="margin:0 0 6px">Thank you</p><p style="margin:0">Your addition is confirmed. Casey is updating your trip and will send the new plan shortly.</p></div>')}
-  function render(){if(['approved','in_stay','complete'].indexOf(data.status)>=0)return plan();if(data.status==='plan_ready')return waiting();if(data.status==='cancelled'){app.innerHTML='<div class="state"><p class="lead">This trip has been cancelled.</p></div>';return}form()}
+  function render(){if(['approved','in_stay','complete'].indexOf(data.status)>=0)return plan();if(data.status==='plan_ready'){waiting();var ch=chargesHtml();if(ch){app.insertAdjacentHTML('beforeend',ch);bindPay()}return}if(data.status==='cancelled'){app.innerHTML='<div class="state"><p class="lead">This trip has been cancelled.</p></div>';return}form()}
   async function load(){var r=await fetch('/api/trip?t='+token);if(!r.ok){app.innerHTML='<div class="state"><p class="lead">We couldn’t find this trip. Please use the link in your email.</p></div>';return}data=await r.json();render();paidBanner()}
   if(!token){app.innerHTML='<div class="state"><p class="lead">Please use the link in your email.</p></div>'}else load().catch(function(){app.innerHTML='<div class="state"><p class="lead">Something went wrong. Please refresh.</p></div>'});
 })();

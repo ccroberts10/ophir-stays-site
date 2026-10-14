@@ -74,6 +74,17 @@ FOOT = '''<footer class="site-foot">
   <div class="wrap">
     <svg role="img" aria-label="Ophir Stays seal"><use href="#seal"/></svg>
     <p style="margin:0;color:var(--muted)">A private collection of mountain homes in Durango, Colorado. Locally owned.</p>
+    <form class="nl" id="nl-form" novalidate>
+      <p class="nl-title">Durango, four times a year.</p>
+      <p class="nl-sub">A short note each season: what's running, what's open, one great dinner. For owners, a quarterly letter from Casey.</p>
+      <div class="nl-row">
+        <label class="sr" for="nl-email">Email</label><input id="nl-email" name="email" type="email" autocomplete="email" placeholder="Your email" required>
+        <label class="sr" for="nl-list">I am</label><select id="nl-list" name="list"><option value="guest">A traveler</option><option value="owner">A homeowner</option></select>
+        <button class="btn" type="submit">Subscribe</button>
+      </div>
+      <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+      <p class="nl-status" role="status" aria-live="polite"></p>
+    </form>
     <nav class="foot-links" aria-label="Footer"><a href="/stay">Your Stay</a><a href="/owners">Owners</a><a href="/journal">Journal</a><a href="/about">About</a><a href="mailto:casey@ophirstays.com">casey@ophirstays.com</a></nav>
     <div class="foot-base"><span>© 2026 Ophir Stays</span><span>Guest booking opens 2027</span></div>
   </div>
@@ -82,6 +93,13 @@ FOOT = '''<footer class="site-foot">
 (function(){var b=document.querySelector('.menu-btn'),l=document.getElementById('navlist');b.addEventListener('click',function(){var o=l.classList.toggle('open');b.setAttribute('aria-expanded',o)});
 var io='IntersectionObserver' in window?new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.1}):null;
 document.querySelectorAll('.reveal').forEach(function(el){io?io.observe(el):el.classList.add('in')});})();
+(function(){var f=document.getElementById('nl-form');if(!f)return;var st=f.querySelector('.nl-status');
+f.addEventListener('submit',async function(e){e.preventDefault();
+if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(f.email.value)){st.textContent='Please check your email address.';return}
+var b=f.querySelector('button');b.disabled=true;
+try{var r=await fetch('/api/subscribe',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(Object.fromEntries(new FormData(f)))});if(!r.ok)throw 0;
+st.textContent='Thank you. The next note arrives with the season.';f.email.value='';}catch(_){st.textContent='Something went wrong. Please email hello@ophirstays.com.';}
+b.disabled=false;});})();
 </script>'''
 
 def page(title, desc, path, current, body, extra_js=''):
@@ -322,6 +340,18 @@ owners_body = f'''
   </section>
 
   <section>
+    <div class="wrap">
+      <div class="reveal"><p class="eyebrow">Our promises</p><h2 class="display">What we put in writing.</h2></div>
+      <div class="details four reveal">
+        <div><span class="ital">i.</span><h3>Damage, covered</h3><p>Every guest pays a damage waiver. It covers your home up to $2,500 a stay, and you never file a claim.</p></div>
+        <div><span class="ital">ii.</span><h3>Small fixes, included</h3><p>Bulbs, batteries, filters, a loose handle: fixed and never billed. Bigger repairs are billed at cost plus 10%, with photos, and nothing over $300 happens without your yes.</p></div>
+        <div><span class="ital">iii.</span><h3>Fifteen minutes</h3><p>Guests and owners hear back within fifteen minutes, 7am to 10pm. Someone is at your house within thirty minutes, any hour.</p></div>
+        <div><span class="ital">iv.</span><h3>Priced every day</h3><p>Nightly rates move daily with the season, events and demand, set by live Durango data and checked by someone who lives here.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
     <div class="wrap split top">
       <div class="reveal">
         <p class="eyebrow">The standard</p>
@@ -405,7 +435,7 @@ owners_body = f'''
         <details><summary>I already have a manager. Can I switch?</summary><p>Yes. Most agreements need thirty to sixty days' notice. We handle the handover and move your future bookings across.</p></details>
         <details><summary>Can I still use my home?</summary><p>Of course. Block your dates in the app any time. Your own nights simply lower the guarantee baseline, so the comparison stays fair.</p></details>
         <details><summary>Where do you list my home?</summary><p>On Airbnb and VRBO, and on ophirstays.com, where returning guests book direct. Direct bookings skip platform fees, which means more for you.</p></details>
-        <details><summary>Who cleans and maintains it?</summary><p>Local crews we've known for years, inspected after every clean. Repairs over an amount you set always need your approval first.</p></details>
+        <details><summary>Who cleans and maintains it?</summary><p>Local crews we've known for years, inspected after every clean. Small fixes are included. Nothing over $300 happens without your approval.</p></details>
         <details><summary>Why only twenty-five homes?</summary><p>Because the service only works if we know every home personally. When the Collection is full, new owners join a waiting list.</p></details>
       </div>
     </div>

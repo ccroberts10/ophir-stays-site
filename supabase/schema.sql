@@ -162,3 +162,16 @@ create table if not exists restaurants (
 );
 alter table restaurants enable row level security;
 grant all privileges on restaurants to service_role;
+
+-- v1.3 newsletter subscribers
+create table if not exists subscribers (
+  id uuid primary key default gen_random_uuid(),
+  email text not null,
+  list text not null check (list in ('guest','owner')),
+  source text,
+  unsubscribed boolean not null default false,
+  created_at timestamptz not null default now(),
+  unique (email, list)
+);
+alter table subscribers enable row level security;
+grant all on subscribers to service_role;

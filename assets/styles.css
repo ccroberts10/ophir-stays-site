@@ -297,3 +297,19 @@ table.data thead th:first-child{text-align:left}
   .kpis{grid-template-columns:1fr 1fr}
 }
 .card .post-meta{font-size:12px;margin:14px 0 0}
+
+/* owner promises: 2x2 */
+.details.four{grid-template-columns:repeat(2,minmax(0,1fr))}
+.details.four>div{border-left:0}
+.details.four>div:nth-child(2n){border-left:1px solid var(--line)}
+@media (max-width:720px){.details.four{grid-template-columns:1fr}.details.four>div:nth-child(2n){border-left:0}}
+/* newsletter */
+.nl{max-width:560px;margin:8px auto 28px;text-align:center}
+.nl-title{font-family:var(--serif);font-style:italic;font-size:24px;margin:0}
+.nl-sub{color:var(--muted);font-size:15px;margin:8px 0 16px}
+.nl-row{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.nl-row input,.nl-row select{font:inherit;font-size:16px;height:48px;padding:0 14px;border:1px solid var(--line);background:#fff;color:var(--charcoal);border-radius:0;min-width:0}
+.nl-row input{flex:1 1 220px}
+.nl-row .btn{height:48px}
+.nl-status{min-height:20px;font-size:14px;color:var(--muted);margin:10px 0 0}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}

@@ -121,6 +121,17 @@
   <div class="wrap">
     <svg role="img" aria-label="Ophir Stays seal"><use href="#seal"/></svg>
     <p style="margin:0;color:var(--muted)">A private collection of mountain homes in Durango, Colorado. Locally owned.</p>
+    <form class="nl" id="nl-form" novalidate>
+      <p class="nl-title">Durango, four times a year.</p>
+      <p class="nl-sub">A short note each season: what's running, what's open, one great dinner. For owners, a quarterly letter from Casey.</p>
+      <div class="nl-row">
+        <label class="sr" for="nl-email">Email</label><input id="nl-email" name="email" type="email" autocomplete="email" placeholder="Your email" required>
+        <label class="sr" for="nl-list">I am</label><select id="nl-list" name="list"><option value="guest">A traveler</option><option value="owner">A homeowner</option></select>
+        <button class="btn" type="submit">Subscribe</button>
+      </div>
+      <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+      <p class="nl-status" role="status" aria-live="polite"></p>
+    </form>
     <nav class="foot-links" aria-label="Footer"><a href="/stay">Your Stay</a><a href="/owners">Owners</a><a href="/journal">Journal</a><a href="/about">About</a><a href="mailto:casey@ophirstays.com">casey@ophirstays.com</a></nav>
     <div class="foot-base"><span>© 2026 Ophir Stays</span><span>Guest booking opens 2027</span></div>
   </div>
@@ -129,6 +140,13 @@
 (function(){var b=document.querySelector('.menu-btn'),l=document.getElementById('navlist');b.addEventListener('click',function(){var o=l.classList.toggle('open');b.setAttribute('aria-expanded',o)});
 var io='IntersectionObserver' in window?new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.1}):null;
 document.querySelectorAll('.reveal').forEach(function(el){io?io.observe(el):el.classList.add('in')});})();
+(function(){var f=document.getElementById('nl-form');if(!f)return;var st=f.querySelector('.nl-status');
+f.addEventListener('submit',async function(e){e.preventDefault();
+if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(f.email.value)){st.textContent='Please check your email address.';return}
+var b=f.querySelector('button');b.disabled=true;
+try{var r=await fetch('/api/subscribe',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(Object.fromEntries(new FormData(f)))});if(!r.ok)throw 0;
+st.textContent='Thank you. The next note arrives with the season.';f.email.value='';}catch(_){st.textContent='Something went wrong. Please email hello@ophirstays.com.';}
+b.disabled=false;});})();
 </script>
 </body>
 </html>

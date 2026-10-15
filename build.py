@@ -633,7 +633,7 @@ post_body = f'''
     <div class="wrap narrow center reveal">
       <p class="eyebrow">Ride</p>
       <h1 class="display">Five rides that show you Durango</h1>
-      <p class="post-meta">By Casey Roberts · Draft</p>
+      <p class="post-meta">By Casey Roberts</p>
     </div>
   </section>
   <div class="wrap">{photo('rides', 'Riders resting on a sandstone point above Durango at dusk')}</div>

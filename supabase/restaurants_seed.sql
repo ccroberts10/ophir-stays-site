@@ -1,0 +1,20 @@
+-- Ophir Stays restaurant list, researched Oct 15 2026. Review, then paste into Supabase > SQL Editor > Run.
+-- Safe to run twice: skips any name already in the table.
+-- first_round is false for all. Flip it in admin only after a restaurant agrees to the first-round card.
+insert into restaurants (name, cuisine, vibe, price, kid_friendly, book_via, phone, booking_url, first_round, notes, active)
+select * from (values
+  ('Eolus Bar & Dining', 'New American, local sourcing', 'special occasion, quiet and romantic', 4, false, 'phone', '(970) 259-2898', 'https://www.eolusdurango.com/visit', false, '919 Main Ave. Covered rooftop with mountain views. Book ahead; confirm open nights.', true),
+  ('East by Southwest', 'Sushi and Pan-Asian', 'lively, special occasion', 3, true, 'OpenTable', '(970) 247-5533', 'https://www.opentable.com/east-by-southwest', false, '160 E College Dr. Sushi bar and sake lounge. Strong vegetarian and vegan options.', true),
+  ('Carver Brewing Co.', 'Brewpub, American', 'casual, family-friendly', 2, true, 'walk-in', '(970) 259-2545', 'https://www.carverbrewing.com', false, '1022 Main Ave. Durango''s original brewery (1988). Beer garden, easy with kids and groups. Breakfast through dinner.', true),
+  ('El Moro Spirits & Tavern', 'Gastropub and craft cocktails', 'lively, quiet and romantic', 3, false, 'Toast Tables online or phone', '(970) 259-5555', 'https://tables.toasttab.com/restaurants/8304254d-108e-4f2b-957c-d358a6e32743/findTime', false, '945 Main Ave. Cocktail-forward, historic saloon building. Book weekends. Brunch Sat-Sun 9-2.', true),
+  ('Steamworks Brewing Co.', 'Brewpub, pizza, Southwestern', 'lively, casual, family-friendly', 2, true, 'walk-in', '(970) 259-9200', 'https://www.steamworksbrewing.com', false, '801 E 2nd Ave. Big and loud, patio, handles large groups and kids.', true),
+  ('636 Main Ave', 'Contemporary American bistro', 'lively, special occasion', 3, true, 'Tock', '(970) 385-1810', 'https://www.exploretock.com/636-main-ave-durango', false, '636 Main Ave (formerly Ken & Sue''s). Dinner only, patio. Tock up to 16; call for larger.', true),
+  ('Serafina''s Steakhouse', 'Steak and seafood', 'special occasion, quiet and romantic', 4, false, 'phone', '(970) 403-3122', 'https://www.serafinassteakhouse.com/', false, '144 E 9th St. Fine dining from Chimayo''s owners. Player piano, intimate bar. Thu-Mon 4-9pm.', true),
+  ('Perbacco Cucina Italiana', 'Italian', 'quiet and romantic, special occasion', 3, true, 'OpenTable', '(970) 403-3092', 'https://www.opentable.com/r/perbacco-cucina-italiana-durango', false, '505 Main Ave. Classic pasta and risotto. Date night or groups. Dinner daily 4:30-9.', true),
+  ('Chimayo Stone Fired Kitchen', 'Southwestern and Mediterranean', 'lively, casual', 3, true, 'Resy or phone', '(970) 259-2749', 'https://resy.com/cities/durango-co/venues/chimayo-stone-fire-kitchen', false, '862 Main Ave. Stone-fired ovens, long bar, patio, chef''s counter.', true),
+  ('PRIMI Pasta & Wine Bar', 'Italian, handmade pasta', 'casual, quiet and romantic', 2, true, 'phone', '(970) 764-4138', 'https://www.primidurango.com/', false, '1201 Main Ave #102. Small, handmade pasta, Italian wine, patio. Closed Sun, confirm Mon.', true),
+  ('Zia Taqueria', 'Mexican, burritos and tacos', 'casual, family-friendly', 1, true, 'walk-in', '(970) 247-3355', 'https://ziataqueria.com/', false, '2977 Main Ave (also 400 S Camino del Rio). Counter service, fast and cheap, kids menu. Lunch or an easy dinner.', true),
+  ('Fired Up Pizzeria', 'Wood-fired Neapolitan pizza', 'casual, family-friendly, lively', 2, true, 'walk-in', '(970) 247-0264', 'http://www.fireduppizzeria.com', false, '735 Main Ave. Rooftop patio in summer. Good for groups and kids.', true),
+  ('RGP''s Flame Grilled Wraps', 'Flame-grilled wraps', 'casual', 1, true, 'walk-in', '(970) 382-9868', 'https://rgpswraps.com/', false, '835 Main Ave #107B. Weekday lunch only, about 11-3:30. Never book for dinner.', true)
+) as v(name, cuisine, vibe, price, kid_friendly, book_via, phone, booking_url, first_round, notes, active)
+where not exists (select 1 from restaurants r where r.name = v.name);

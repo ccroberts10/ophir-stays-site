@@ -68,6 +68,22 @@
   .err{color:#9B2C1C}
   .person input,.person select,.grid2 input,.grid2 textarea{width:100%;min-width:0}.hl select{min-width:0}
   @media (max-width:640px){.person{grid-template-columns:minmax(0,1fr) minmax(0,1fr);padding:16px}.person .field,.person .field.wide{grid-column:span 1}.person .field.name{grid-column:1/-1}.grid2{grid-template-columns:1fr}.item{grid-template-columns:72px 1fr}}
+  .ask{border-top:1px solid var(--line);padding:40px 0}
+  .ask h2{font-size:30px;margin:6px 0 6px}
+  .ask .sub{color:var(--muted);margin:0 0 20px}
+  .ask-log{display:flex;flex-direction:column;gap:12px;margin:0 0 18px}
+  .ask-log:empty{display:none}
+  .bub{max-width:85%;padding:14px 18px;font-size:16px;line-height:1.5;white-space:pre-wrap}
+  .bub.g{align-self:flex-end;background:var(--charcoal);color:#fff}
+  .bub.o{align-self:flex-start;background:var(--paper)}
+  .bub.o.wait{color:var(--muted);font-style:italic}
+  .ask-form{display:flex;gap:10px}
+  .ask-form input{flex:1;min-width:0;height:52px;padding:0 16px;border:1px solid var(--line);background:#fff;font:inherit;font-size:16px;color:var(--charcoal);border-radius:0}
+  .ask-form input:focus{outline:none;border-color:var(--charcoal)}
+  .ask-form .btn{height:auto;min-height:48px}
+  .ask-tips{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 16px}
+  .ask-tips button{background:none;border:1px solid var(--line);padding:8px 14px;font:inherit;font-size:14px;color:var(--charcoal);cursor:pointer}
+  @media (max-width:640px){.ask-form{flex-direction:column}.ask-form input{flex:none}.bub{max-width:95%}}
 </style>
 </head>
 <body>
@@ -160,13 +176,29 @@
       return '<div class="offer">'+(o.reason?'<span class="why">'+esc(o.reason)+'</span>':'')+'<h4>'+esc(o.title)+'</h4><p>'+esc(o.blurb)+'</p><span class="pr">'+esc(money&&o.key==='private'&&o.pay_cents!==125000?money+' to upgrade':o.price)+'</span>'+
         (o.pay_cents?'<button class="btn btn-rust" data-pay="'+esc(o.key)+'">Add · '+money+'</button>':'<button class="btn" data-offer="'+esc(o.key)+'" '+(done?'disabled':'')+'>'+(done?'Requested':'Request')+'</button>')+'</div>'}).join('')+'</div><p class="fine">Secure payment by Stripe. Items priced on request are confirmed by Casey before anything is charged.</p></section>':'';
     app.innerHTML=hero('Your Durango trip',data.stay?'Welcome home. Text us anything, any time.':'Every day, planned around the forecast. We’ll move things if the weather does.')+stay+ready+acts+dayHtml+chargesHtml()+offers+
-      '<p class="center fine" style="padding:32px 0 64px">Questions or changes? Reply to our email and Casey will take care of it.</p>';
+      askHtml()+'<p class="center fine" style="padding:32px 0 64px">Questions or changes? Reply to our email and Casey will take care of it.</p>';
     app.querySelector('#cal').onclick=ics;
-    bindPay();
+    bindPay();bindAsk();
     app.querySelectorAll('[data-offer]').forEach(function(b){b.onclick=async function(){b.disabled=true;b.textContent='Sending…';
       try{var r=await fetch('/api/trip?t='+token+'&action=request',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({key:b.dataset.offer})});if(!r.ok)throw 0;b.textContent='Requested';(data.requested=data.requested||[]).push(b.closest('.offer').querySelector('h4').textContent)}
       catch(e){b.disabled=false;b.textContent='Try again'}}});
   }
+  var TIPS=['How does the hot tub work?','Where should we eat tonight?','What should we pack?','Good easy hike nearby?'];
+  function askHtml(){var log=(data.ask||[]).map(function(m){return '<div class="bub '+(m.from==='guest'?'g':'o')+'">'+esc(m.body)+'</div>'}).join('');
+    return '<section class="ask" id="ask"><p class="eyebrow">Ask Ophir</p><h2 class="display">Anything about your stay</h2><p class="sub">The house, the town, where to eat, what to pack. Answers come right away, and anything that needs a person goes straight to Casey.</p>'+
+      (log?'':'<div class="ask-tips">'+TIPS.map(function(t){return '<button type="button" data-tip>'+esc(t)+'</button>'}).join('')+'</div>')+
+      '<div class="ask-log" role="log" aria-live="polite">'+log+'</div>'+
+      '<form class="ask-form" novalidate><label class="sr" for="askq">Your question</label><input id="askq" name="q" maxlength="500" autocomplete="off" placeholder="Ask about the house or Durango"><button class="btn btn-rust" type="submit">Ask</button></form>'+
+      '<p class="fine" style="margin-top:12px">For an emergency, call 911.'+(data.host_phone?' For anything urgent, <a href="sms:'+esc(data.host_phone)+'">text your host</a>.':'')+'</p></section>'}
+  function bindAsk(){var box=app.querySelector('#ask');if(!box)return;var f=box.querySelector('form'),inp=f.q,log=box.querySelector('.ask-log'),btn=f.querySelector('button');
+    box.querySelectorAll('[data-tip]').forEach(function(b){b.onclick=function(){inp.value=b.textContent;f.requestSubmit?f.requestSubmit():f.onsubmit(new Event('submit'))}});
+    f.onsubmit=async function(e){if(e&&e.preventDefault)e.preventDefault();var q=inp.value.trim();if(!q||btn.disabled)return;
+      var tips=box.querySelector('.ask-tips');if(tips)tips.remove();
+      log.insertAdjacentHTML('beforeend','<div class="bub g">'+esc(q)+'</div><div class="bub o wait">Thinking\u2026</div>');var w=log.lastElementChild;inp.value='';btn.disabled=true;
+      try{var r=await fetch('/api/trip?t='+token+'&action=ask',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({question:q})});var j=await r.json();if(!r.ok)throw new Error(j.error);
+        w.className='bub o';w.textContent=j.answer+(j.notified?'\n\nCasey has your question and will follow up.':'');(data.ask=data.ask||[]).push({from:'guest',body:q},{from:'ophir',body:j.answer})}
+      catch(err){w.className='bub o';w.textContent=err.message||'Something went wrong. Please try again, or text your host.'}
+      btn.disabled=false;inp.focus()}}
   function chargesHtml(){var cs=data.charges||[];if(!cs.length)return '';
     return '<section class="step"><p class="eyebrow">Arranged for you</p><h2 class="display">Confirm your bookings</h2><div class="offers">'+cs.map(function(c){var money='$'+(c.cents/100).toLocaleString('en-US',{minimumFractionDigits:c.cents%100?2:0});
       return '<div class="offer"><h4>'+esc(c.title)+'</h4>'+(c.note?'<p>'+esc(c.note)+'</p>':'')+'<span class="pr">'+money+'</span>'+(c.status==='paid'?'<button class="btn" disabled>Confirmed</button>':'<button class="btn btn-rust" data-pay="'+esc(c.key)+'">Confirm · '+money+'</button>')+'</div>'}).join('')+'</div><p class="fine">Secure payment by Stripe. We pay the shop or guide for you, so there is nothing to settle when you arrive.</p></section>'}
@@ -176,7 +208,7 @@
   function alertBox(m){app.insertAdjacentHTML('afterbegin','<p class="err" role="alert" style="text-align:center;margin-top:20px">'+esc(m)+'</p>')}
   function paidBanner(){var k=new URLSearchParams(location.search).get('paid');if(!k)return;history.replaceState(null,'',location.pathname);
     app.insertAdjacentHTML('afterbegin','<div class="ready" role="status" style="margin-top:28px;text-align:center"><p class="eyebrow" style="margin:0 0 6px">Thank you</p><p style="margin:0">Your addition is confirmed. Casey is updating your trip and will send the new plan shortly.</p></div>')}
-  function render(){if(['approved','in_stay','complete'].indexOf(data.status)>=0)return plan();if(data.status==='plan_ready'){waiting();var ch=chargesHtml();if(ch){app.insertAdjacentHTML('beforeend',ch);bindPay()}return}if(data.status==='cancelled'){app.innerHTML='<div class="state"><p class="lead">This trip has been cancelled.</p></div>';return}form()}
+  function render(){if(['approved','in_stay','complete'].indexOf(data.status)>=0)return plan();if(data.status==='plan_ready'){waiting();var ch=chargesHtml();if(ch){app.insertAdjacentHTML('beforeend',ch);bindPay()}app.insertAdjacentHTML('beforeend',askHtml());bindAsk();return}if(data.status==='cancelled'){app.innerHTML='<div class="state"><p class="lead">This trip has been cancelled.</p></div>';return}form()}
   async function load(){var r=await fetch('/api/trip?t='+token);if(!r.ok){app.innerHTML='<div class="state"><p class="lead">We couldn’t find this trip. Please use the link in your email.</p></div>';return}data=await r.json();render();paidBanner()}
   if(!token){app.innerHTML='<div class="state"><p class="lead">Please use the link in your email.</p></div>'}else load().catch(function(){app.innerHTML='<div class="state"><p class="lead">Something went wrong. Please refresh.</p></div>'});
 })();

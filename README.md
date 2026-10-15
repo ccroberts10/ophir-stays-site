@@ -69,3 +69,12 @@ Env vars: SUPABASE_URL, SUPABASE_SECRET_KEY, ANTHROPIC_API_KEY, ADMIN_PASSWORD, 
 3. The guest gets an email and a Confirm button on their trip page; they pay through Stripe.
 4. When they pay you get a "Paid" email and a task to confirm with the partner. Pay the partner its net rate.
 Cancel an unpaid charge with its Cancel button.
+
+## Ask Ophir (guest Q&A)
+
+The guest trip page has an "Ask Ophir" box once the trip is planned. It answers from the home's `house_notes`, the itinerary, the forecast, your restaurant list and stable Durango knowledge. Door code and Wi-Fi are only available to it from arrival day.
+
+- Anything it can't answer from the data (house details not in `house_notes`, bookings, changes, refunds) or anything urgent (no heat, a leak, a lockout, an alarm) creates a task for Casey and emails `OWNER_INBOX`. Urgent ones are marked URGENT and due in 15 minutes.
+- The limit is 20 questions per trip per day. Every question and answer is saved in `messages` with subject "Ask Ophir" and shows in the admin trip detail.
+- Answers are only as good as `house_notes`. Fill it in for every home: hot tub, thermostat, trash day, parking, checkout steps.
+- No new SQL or env vars are needed.

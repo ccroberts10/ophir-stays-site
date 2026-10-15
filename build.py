@@ -141,6 +141,7 @@ def collection_grid():
 
 # ---------------- HOME ----------------
 SLIDES = [('hero-ski', 'Winter', 'First chair, fresh snow, home by the fire.', 'Purgatory village at night beneath snow-covered peaks'),
+          ('hero-bike', 'Summer', 'High passes, big days, home for dinner.', 'A mountain biker climbing a high pass in the San Juan Mountains'),
           ('hero-golf', 'Play', 'Tee times held, clubs waiting.', 'An aerial view of a mountain golf course and lake in autumn'),
           ('hero-fireplace', 'Evenings', 'The fire is lit before you arrive.', 'A great room with a stone fireplace lit at dusk'),
           ('hero-spa', 'Restore', 'A hot tub, a view and nowhere to be.', 'A steaming wood-fired hot tub on a deck at sunset'),
@@ -262,7 +263,7 @@ home_body = f'''
         <h2 class="display">Notes from Durango</h2>
       </div>
       <div class="grid3">
-        <a class="card reveal" href="/journal/durango-rides">{photo('journal-1', 'Singletrack through ponderosa pines', 'ph')}<p class="post-meta">Ride</p><h3>Five rides that show you Durango</h3><span class="link">Read</span></a>
+        <a class="card reveal" href="/journal/durango-rides">{photo('journal-1', 'Singletrack below Engineer Mountain', 'ph')}<p class="post-meta">Ride</p><h3>Five rides that show you Durango</h3><span class="link">Read</span></a>
         <a class="card reveal" href="/journal">{photo('journal-2', 'Fly fishing a quiet river in autumn', 'ph')}<p class="post-meta">Coming soon</p><h3>A slow day on the Animas</h3></a>
         <a class="card reveal" href="/journal/durango-home-earnings">{photo('journal-3', 'Gold aspens below Mount Sneffels', 'ph')}<p class="post-meta">Owners</p><h3>What a Durango vacation home earns</h3><span class="link">Read</span></a>
       </div>
@@ -619,7 +620,7 @@ journal_body = f'''
   </section>
   <section style="padding-top:0">
     <div class="wrap grid3">
-      <a class="card reveal" href="/journal/durango-rides">{photo('journal-1', 'Singletrack through ponderosa pines', 'ph')}<p class="post-meta">Ride</p><h3>Five rides that show you Durango</h3><p>From a first lap at Horse Gulch to a long day on Hermosa Creek.</p><span class="link">Read</span></a>
+      <a class="card reveal" href="/journal/durango-rides">{photo('journal-1', 'Singletrack below Engineer Mountain', 'ph')}<p class="post-meta">Ride</p><h3>Five rides that show you Durango</h3><p>From a first lap at Horse Gulch to a long day on Hermosa Creek.</p><span class="link">Read</span></a>
       <div class="card reveal">{photo('journal-2', 'Fly fishing a quiet river in autumn', 'ph')}<p class="post-meta">Coming soon</p><h3>A slow day on the Animas</h3></div>
       <a class="card reveal" href="/journal/durango-home-earnings">{photo('journal-3', 'Gold aspens below Mount Sneffels', 'ph')}<p class="post-meta">Owners</p><h3>What a Durango vacation home earns, and what decides it</h3><p>Three data firms, three answers. What the numbers say, and the five things that separate the top homes.</p><span class="link">Read</span></a>
     </div>
@@ -635,7 +636,7 @@ post_body = f'''
       <p class="post-meta">By Casey Roberts · Draft</p>
     </div>
   </section>
-  <div class="wrap">{photo('journal-1', 'Singletrack through ponderosa pines above Durango')}</div>
+  <div class="wrap">{photo('journal-1', 'A young rider on singletrack below Engineer Mountain')}</div>
   <section style="padding-top:56px">
     <div class="wrap narrow article">
       <p>Durango has more good singletrack within a few minutes of town than most places have in a whole county. These are the five rides we send guests on first, from an easy shakeout to a full day out.</p>

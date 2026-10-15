@@ -141,7 +141,6 @@ def collection_grid():
 
 # ---------------- HOME ----------------
 SLIDES = [('hero-ski', 'Winter', 'First chair, fresh snow, home by the fire.', 'Purgatory village at night beneath snow-covered peaks'),
-          ('hero-bike', 'Autumn', 'Singletrack through the gold.', 'Mountain biker riding through golden aspens above Durango'),
           ('hero-golf', 'Play', 'Tee times held, clubs waiting.', 'An aerial view of a mountain golf course and lake in autumn'),
           ('hero-fireplace', 'Evenings', 'The fire is lit before you arrive.', 'A great room with a stone fireplace lit at dusk'),
           ('hero-spa', 'Restore', 'A hot tub, a view and nowhere to be.', 'A steaming wood-fired hot tub on a deck at sunset'),

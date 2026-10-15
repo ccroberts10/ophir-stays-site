@@ -590,7 +590,7 @@ about_body = f'''
   </section>
   <section style="padding-top:0">
     <div class="wrap split">
-      <div class="reveal">{photo('casey', 'Casey Roberts, founder of Ophir Stays', 'photo tall')}</div>
+      <div class="reveal">{photo('casey', 'Casey Roberts, founder of Ophir Stays, holding a brown trout on a drift boat', 'photo tall')}</div>
       <div class="reveal">
         <p class="eyebrow">The founder</p>
         <h2 class="display">Casey Roberts</h2>

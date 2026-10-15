@@ -636,7 +636,7 @@ post_body = f'''
       <p class="post-meta">By Casey Roberts · Draft</p>
     </div>
   </section>
-  <div class="wrap">{photo('journal-1', 'A young rider on singletrack below Engineer Mountain')}</div>
+  <div class="wrap">{photo('rides', 'Riders resting on a sandstone point above Durango at dusk')}</div>
   <section style="padding-top:56px">
     <div class="wrap narrow article">
       <p>Durango has more good singletrack within a few minutes of town than most places have in a whole county. These are the five rides we send guests on first, from an easy shakeout to a full day out.</p>

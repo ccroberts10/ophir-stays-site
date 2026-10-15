@@ -95,7 +95,7 @@ var io='IntersectionObserver' in window?new IntersectionObserver(function(es){es
 document.querySelectorAll('.reveal').forEach(function(el){io?io.observe(el):el.classList.add('in')});})();
 (function(){var f=document.getElementById('nl-form');if(!f)return;var st=f.querySelector('.nl-status');
 f.addEventListener('submit',async function(e){e.preventDefault();
-if(!/^[^@\\s]+@[^@\\s]+\.[^@\\s]+$/.test(f.email.value)){st.textContent='Please check your email address.';return}
+if(!/^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$/.test(f.email.value)){st.textContent='Please check your email address.';return}
 var b=f.querySelector('button');b.disabled=true;
 try{var r=await fetch('/api/subscribe',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(Object.fromEntries(new FormData(f)))});if(!r.ok)throw 0;
 st.textContent='Thank you. The next note arrives with the season.';f.email.value='';}catch(_){st.textContent='Something went wrong. Please email hello@ophirstays.com.';}
@@ -144,8 +144,8 @@ SLIDES = [('hero-ski', 'Winter', 'First chair, fresh snow, home by the fire.', '
           ('hero-bike', 'Autumn', 'Singletrack through the gold.', 'Mountain biker riding through golden aspens above Durango'),
           ('hero-golf', 'Play', 'Tee times held, clubs waiting.', 'An aerial view of a mountain golf course and lake in autumn'),
           ('hero-fireplace', 'Evenings', 'The fire is lit before you arrive.', 'A great room with a stone fireplace lit at dusk'),
-          ('hero-spa', 'Restore', 'A hot tub, a view and nowhere to be.', 'Steaming hot tub on a deck facing the mountains'),
-          ('hero-coffee', 'Mornings', 'Your coffee order, already known.', 'A barista pouring coffee in a Durango café')]
+          ('hero-spa', 'Restore', 'A hot tub, a view and nowhere to be.', 'Snow on the high peaks of the San Juan Mountains'),
+          ('hero-coffee', 'Mornings', 'Your coffee order, already known.', 'A latte and pastry by the fire in a mountain café')]
 
 slides = ''.join(f'''<figure class="slide{' on' if i == 0 else ''}" aria-roledescription="slide" aria-label="{i+1} of {len(SLIDES)}">
       <img src="/assets/photos/{n}.jpg" alt="{alt}"{' fetchpriority="high"' if i == 0 else ' loading="lazy"'}>
@@ -246,7 +246,7 @@ home_body = f'''
 
   <section class="tint">
     <div class="wrap split">
-      <div class="reveal">{photo('ophir', 'The town of Ophir beneath the peaks of the San Juan Mountains')}</div>
+      <div class="reveal">{photo('ophir', 'Ice Lake Basin in the San Juan Mountains near Ophir')}</div>
       <div class="reveal">
         <p class="eyebrow">The name</p>
         <h2 class="display">Why Ophir</h2>
@@ -264,8 +264,8 @@ home_body = f'''
       </div>
       <div class="grid3">
         <a class="card reveal" href="/journal/durango-rides">{photo('journal-1', 'Singletrack through ponderosa pines', 'ph')}<p class="post-meta">Ride</p><h3>Five rides that show you Durango</h3><span class="link">Read</span></a>
-        <a class="card reveal" href="/journal">{photo('journal-2', 'The Animas River in morning light', 'ph')}<p class="post-meta">Coming soon</p><h3>A slow day on the Animas</h3></a>
-        <a class="card reveal" href="/journal/durango-home-earnings">{photo('journal-3', 'A mountain home at dusk', 'ph')}<p class="post-meta">Owners</p><h3>What a Durango vacation home earns</h3><span class="link">Read</span></a>
+        <a class="card reveal" href="/journal">{photo('journal-2', 'Fly fishing a quiet river in autumn', 'ph')}<p class="post-meta">Coming soon</p><h3>A slow day on the Animas</h3></a>
+        <a class="card reveal" href="/journal/durango-home-earnings">{photo('journal-3', 'Gold aspens below Mount Sneffels', 'ph')}<p class="post-meta">Owners</p><h3>What a Durango vacation home earns</h3><span class="link">Read</span></a>
       </div>
     </div>
   </section>
@@ -538,7 +538,7 @@ stay_body = f'''
 
   <section>
     <div class="wrap split">
-      <div class="reveal">{photo('ski', 'Skis and boots waiting in a gear room')}</div>
+      <div class="reveal">{photo('ski', 'Wooden skis against a cabin wall')}</div>
       <div class="reveal">
         <p class="eyebrow">Attention to detail</p>
         <h2 class="display">The small things are the whole thing.</h2>
@@ -595,7 +595,7 @@ about_body = f'''
         <h2 class="display">Why Ophir</h2>
         <p class="lead">Ophir was the legendary land of gold. Miners carried the name into the San Juans and gave it to a town and a high pass between the peaks. They came looking for riches and found something better. We named our homes for that feeling.</p>
       </div>
-      <div class="reveal">{photo('ophir', 'Ophir beneath the San Juan peaks')}</div>
+      <div class="reveal">{photo('ophir', 'Ice Lake Basin in the San Juans near Ophir')}</div>
     </div>
   </section>
   <section class="center">
@@ -621,8 +621,8 @@ journal_body = f'''
   <section style="padding-top:0">
     <div class="wrap grid3">
       <a class="card reveal" href="/journal/durango-rides">{photo('journal-1', 'Singletrack through ponderosa pines', 'ph')}<p class="post-meta">Ride</p><h3>Five rides that show you Durango</h3><p>From a first lap at Horse Gulch to a long day on Hermosa Creek.</p><span class="link">Read</span></a>
-      <div class="card reveal">{photo('journal-2', 'The Animas River in morning light', 'ph')}<p class="post-meta">Coming soon</p><h3>A slow day on the Animas</h3></div>
-      <a class="card reveal" href="/journal/durango-home-earnings">{photo('journal-3', 'A mountain home at dusk', 'ph')}<p class="post-meta">Owners</p><h3>What a Durango vacation home earns, and what decides it</h3><p>Three data firms, three answers. What the numbers say, and the five things that separate the top homes.</p><span class="link">Read</span></a>
+      <div class="card reveal">{photo('journal-2', 'Fly fishing a quiet river in autumn', 'ph')}<p class="post-meta">Coming soon</p><h3>A slow day on the Animas</h3></div>
+      <a class="card reveal" href="/journal/durango-home-earnings">{photo('journal-3', 'Gold aspens below Mount Sneffels', 'ph')}<p class="post-meta">Owners</p><h3>What a Durango vacation home earns, and what decides it</h3><p>Three data firms, three answers. What the numbers say, and the five things that separate the top homes.</p><span class="link">Read</span></a>
     </div>
   </section>
 '''
@@ -720,7 +720,7 @@ post2_body = f'''
       <p class="post-meta">By Casey Roberts · October 2026</p>
     </div>
   </section>
-  <div class="wrap">{photo('journal-3', 'A mountain home above Durango at dusk')}</div>
+  <div class="wrap">{photo('journal-3', 'Gold aspens below Mount Sneffels in autumn')}</div>
   <section style="padding-top:56px">
     <div class="wrap narrow article">
       <p><strong>A typical Durango short-term rental earns somewhere between $41,000 and $55,000 a year, depending on whose data you trust. The top homes earn roughly double that, and almost everything that separates them is in the owner's control.</strong></p>

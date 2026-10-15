@@ -29,6 +29,17 @@ NAV = [('/', 'Home', 'welcome', 'home'),
        ('/journal', 'Journal', 'stories & guides', 'journal'),
        ('/about', 'About', 'who we are', 'about')]
 
+import json as _json
+LD = '<script type="application/ld+json">' + _json.dumps({
+  "@context": "https://schema.org", "@type": "LodgingBusiness", "name": "Ophir Stays",
+  "description": "Locally owned vacation rental management and trip planning for a private collection of 25 homes in Durango, Colorado.",
+  "url": "https://ophirstays.com", "logo": "https://ophirstays.com/assets/email-mark.png", "image": "https://ophirstays.com/assets/og.png",
+  "email": "casey@ophirstays.com", "founder": {"@type": "Person", "name": "Casey Roberts"},
+  "address": {"@type": "PostalAddress", "addressLocality": "Durango", "addressRegion": "CO", "postalCode": "81301", "addressCountry": "US"},
+  "areaServed": [{"@type": "City", "name": "Durango, Colorado"}, {"@type": "Place", "name": "Purgatory, Colorado"}, {"@type": "Place", "name": "Vallecito Lake, Colorado"}, {"@type": "AdministrativeArea", "name": "La Plata County, Colorado"}],
+  "knowsAbout": ["vacation rental management", "short-term rental management", "Durango trip planning"]
+}) + '</script>'
+
 def head(title, desc, path, image='/assets/og.png'):
     return f'''<!doctype html>
 <html lang="en">
@@ -38,6 +49,7 @@ def head(title, desc, path, image='/assets/og.png'):
 <title>{title}</title>
 <meta name="description" content="{desc}">
 <link rel="canonical" href="https://ophirstays.com{path}">
+{LD if path == "/" else ""}
 <meta property="og:title" content="{title}">
 <meta property="og:description" content="{desc}">
 <meta property="og:image" content="https://ophirstays.com{image}">
@@ -464,7 +476,7 @@ FORM_JS = '''
 })();
 </script>'''
 
-owners = page('For homeowners · Ophir Stays',
+owners = page('Durango Vacation Rental Management · Ophir Stays',
               'Apply to the Ophir Collection: twenty-five Durango homes, one standard, and a first-year income guarantee. Get a free estimate of what your home could earn.',
               '/owners', 'owners', owners_body, FORM_JS)
 

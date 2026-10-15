@@ -322,7 +322,7 @@ owners_body = f'''
       <div class="reveal">
         <p class="eyebrow">The guarantee</p>
         <h2 class="display">We beat your last year, or we refund the difference.</h2>
-        <p class="lead">If your home earns less in its first twelve months with Ophir than in the twelve months before, we refund our management fee on the difference, up to the full fee we earned.</p>
+        <p class="lead">If your home earns less in its first twelve months with Ophir than in the twelve months before, we refund the difference, up to the full management fee we earned that year.</p>
       </div>
       <div class="reveal">
         <table class="terms">

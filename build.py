@@ -276,7 +276,7 @@ home_body = f'''
       </div>
       <div class="grid3">
         <a class="card reveal" href="/journal/durango-rides">{photo('journal-1', 'Singletrack below Engineer Mountain', 'ph')}<p class="post-meta">Ride</p><h3>Five rides that show you Durango</h3><span class="link">Read</span></a>
-        <a class="card reveal" href="/journal">{photo('journal-2', 'Fly fishing a quiet river in autumn', 'ph')}<p class="post-meta">Coming soon</p><h3>A slow day on the Animas</h3></a>
+        <a class="card reveal" href="/journal/where-to-eat-durango">{photo('coffee', 'A latte at a Durango café table', 'ph')}<p class="post-meta">Eat</p><h3>Where to eat in Durango, from a local</h3><span class="link">Read</span></a>
         <a class="card reveal" href="/journal/durango-home-earnings">{photo('journal-3', 'Gold aspens below Mount Sneffels', 'ph')}<p class="post-meta">Owners</p><h3>What a Durango vacation home earns</h3><span class="link">Read</span></a>
       </div>
     </div>
@@ -634,7 +634,7 @@ journal_body = f'''
   <section style="padding-top:0">
     <div class="wrap grid3">
       <a class="card reveal" href="/journal/durango-rides">{photo('journal-1', 'Singletrack below Engineer Mountain', 'ph')}<p class="post-meta">Ride</p><h3>Five rides that show you Durango</h3><p>From a first lap at Horse Gulch to a long day on Hermosa Creek.</p><span class="link">Read</span></a>
-      <div class="card reveal">{photo('journal-2', 'Fly fishing a quiet river in autumn', 'ph')}<p class="post-meta">Coming soon</p><h3>A slow day on the Animas</h3></div>
+      <a class="card reveal" href="/journal/where-to-eat-durango">{photo('coffee', 'A latte at a Durango café table', 'ph')}<p class="post-meta">Eat</p><h3>Where to eat in Durango, from a local</h3><p>Thirteen places, sorted by the night you're having: a special dinner, a date, friends, kids, or lunch on the run.</p><span class="link">Read</span></a>
       <a class="card reveal" href="/journal/durango-home-earnings">{photo('journal-3', 'Gold aspens below Mount Sneffels', 'ph')}<p class="post-meta">Owners</p><h3>What a Durango vacation home earns, and what decides it</h3><p>Three data firms, three answers. What the numbers say, and the five things that separate the top homes.</p><span class="link">Read</span></a>
     </div>
   </section>
@@ -671,6 +671,49 @@ post = page('Five rides that show you Durango · The Journal · Ophir Stays',
             'The five Durango mountain bike rides we send guests on first: Horse Gulch, Animas Mountain, Log Chutes, the Colorado Trail and Hermosa Creek.',
             '/journal/durango-rides', 'journal', post_body)
 
+
+
+post3_body = f'''
+  <section style="padding-bottom:40px">
+    <div class="wrap narrow center reveal">
+      <p class="eyebrow">Eat</p>
+      <h1 class="display">Where to eat in Durango, from a local</h1>
+      <p class="post-meta">By Casey Roberts · October 2026</p>
+    </div>
+  </section>
+  <div class="wrap">{photo('hero-coffee', 'A latte and pastry by the fire in a mountain café')}</div>
+  <section style="padding-top:56px">
+    <div class="wrap narrow article">
+      <p><strong>I bartended at some of Durango’s best restaurants before PA school, and I’ve spent twenty-three years eating my way down Main Avenue. These are the thirteen places I send friends, sorted by the night you’re having.</strong></p>
+      <p>A note on timing: summer weekends and Christmas week fill early everywhere on this list. Book a week or more ahead, or ask us and we’ll hold the table.</p>
+      <h2>A night to remember</h2>
+      <p><strong><a href="https://www.eolusdurango.com/" rel="noopener">Eolus Bar &amp; Dining</a></strong> <span class="fine">· 919 Main Ave</span><br>New American cooking and one of the few covered rooftops downtown, with the mountains in view. The pick for an anniversary. Book ahead.</p>
+      <p><strong><a href="https://www.serafinassteakhouse.com/" rel="noopener">Serafina&#x27;s Steakhouse</a></strong> <span class="fine">· 144 E 9th St</span><br>The newest serious steakhouse in town, from the people behind Chimayo. A player piano, an intimate bar, and steak and seafood done properly. Open Thursday to Monday; reserve by phone.</p>
+      <p><strong><a href="https://636mainave.com/" rel="noopener">636 Main Ave</a></strong> <span class="fine">· 636 Main Ave</span><br>The old Ken &amp; Sue&#x27;s, still one of the most reliable dinners on Main. Contemporary American with Asian touches and a good patio. Dinner only; book on Tock.</p>
+      <h2>Date night</h2>
+      <p><strong><a href="https://www.perbaccodurango.com/" rel="noopener">Perbacco Cucina Italiana</a></strong> <span class="fine">· 505 Main Ave</span><br>Classic pastas and risotto in a warm room on lower Main. Quiet enough to talk, good enough to come back. Reserve on OpenTable.</p>
+      <p><strong><a href="https://www.primidurango.com/" rel="noopener">PRIMI Pasta &amp; Wine Bar</a></strong> <span class="fine">· 1201 Main Ave</span><br>Small, handmade pasta and an Italian wine list on north Main, with a patio when it’s warm. Call ahead; it fills up.</p>
+      <p><strong><a href="https://elmorotavern.com/" rel="noopener">El Moro Spirits &amp; Tavern</a></strong> <span class="fine">· 945 Main Ave</span><br>Serious cocktails in a historic saloon building, with a gastropub menu to match. Book on weekends. Weekend brunch is worth knowing about.</p>
+      <h2>Out with friends</h2>
+      <p><strong><a href="https://eastbysouthwest.com/" rel="noopener">East by Southwest</a></strong> <span class="fine">· 160 E College Dr</span><br>Sushi and Pan-Asian plates, a sake lounge and a strong happy hour. The best option in town when someone at the table eats vegetarian or vegan.</p>
+      <p><strong><a href="https://www.chimayodurango.com/" rel="noopener">Chimayo Stone Fired Kitchen</a></strong> <span class="fine">· 862 Main Ave</span><br>Stone-fired ovens, a long bar, a patio and a chef’s counter if you like to watch the kitchen. Lively without being loud.</p>
+      <h2>With kids</h2>
+      <p><strong><a href="http://www.fireduppizzeria.com" rel="noopener">Fired Up Pizzeria</a></strong> <span class="fine">· 735 Main Ave</span><br>Wood-fired Neapolitan pizza in a big room that handles families easily, with a rooftop patio in summer. Lunch is the calm time.</p>
+      <p><strong><a href="https://www.carverbrewing.com" rel="noopener">Carver Brewing Co.</a></strong> <span class="fine">· 1022 Main Ave</span><br>Durango’s original brewery, pouring since 1988. Beer garden, a menu for everyone, open from breakfast to dinner. Walk in.</p>
+      <p><strong><a href="https://www.steamworksbrewing.com" rel="noopener">Steamworks Brewing Co.</a></strong> <span class="fine">· 801 E 2nd Ave</span><br>Big, busy and happy to seat a group of twelve with three kids under ten. Brewpub food, a patio and parking.</p>
+      <h2>Quick and good</h2>
+      <p><strong><a href="https://ziataqueria.com/" rel="noopener">Zia Taqueria</a></strong> <span class="fine">· 2977 Main Ave and 400 S Camino del Rio</span><br>Counter service, burritos and tacos made from scratch, fast and cheap. A kids’ menu and two locations.</p>
+      <p><strong><a href="https://rgpswraps.com/" rel="noopener">RGP&#x27;s Flame Grilled Wraps</a></strong> <span class="fine">· 835 Main Ave</span><br>Flame-grilled wraps at a weekday lunch counter downtown. Closed weekends, and not a dinner spot, but a great lunch.</p>
+      <h2>Staying with Ophir?</h2>
+      <p>Tell us what you’re in the mood for before you arrive. We book the tables, match them to your days, and at some of these places the first round is on us.</p>
+      <p style="margin-top:32px"><a class="btn btn-rust" href="/stay">See how a stay works</a></p>
+      <p class="fine" style="margin-top:40px">Details checked October 2026. Hours change with the season, so check with the restaurant before you go. No restaurant paid to be on this list.</p>
+    </div>
+  </section>
+'''
+post3 = page('Where to eat in Durango, from a local · The Journal · Ophir Stays',
+             'Thirteen Durango restaurants a local recommends, by occasion: special dinners at Eolus and Serafina\u2019s, date night at Perbacco, pizza with kids at Fired Up, and fast burritos at Zia.',
+             '/journal/where-to-eat-durango', 'journal', post3_body)
 
 # ---------------- HOMES PAGES ----------------
 homes_body = f'''
@@ -799,8 +842,8 @@ post2 = page('What a Durango vacation home earns, and what decides it · The Jou
              '/journal/durango-home-earnings', 'journal', post2_body)
 
 os.makedirs('journal', exist_ok=True); os.makedirs('homes', exist_ok=True)
-for name, html in [('index.html', home), ('owners.html', owners), ('about.html', about), ('journal.html', journal), ('journal/durango-rides.html', post), ('journal/durango-home-earnings.html', post2), ('homes.html', homes_page), ('stay.html', stay_page)] + [(f"homes/{h['slug']}.html", home_page(h)) for h in LIVE_HOMES]:
+for name, html in [('index.html', home), ('owners.html', owners), ('about.html', about), ('journal.html', journal), ('journal/durango-rides.html', post), ('journal/durango-home-earnings.html', post2), ('journal/where-to-eat-durango.html', post3), ('homes.html', homes_page), ('stay.html', stay_page)] + [(f"homes/{h['slug']}.html", home_page(h)) for h in LIVE_HOMES]:
     open(name, 'w').write(html)
 open('sitemap.xml', 'w').write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' +
-    ''.join(f'<url><loc>https://ophirstays.com{p}</loc></url>\n' for p in ['/', '/stay', '/homes', '/owners', '/about', '/journal', '/journal/durango-rides', '/journal/durango-home-earnings'] + [f"/homes/{h['slug']}" for h in HOMES if not h['sample']]) + '</urlset>\n')
+    ''.join(f'<url><loc>https://ophirstays.com{p}</loc></url>\n' for p in ['/', '/stay', '/homes', '/owners', '/about', '/journal', '/journal/durango-rides', '/journal/durango-home-earnings', '/journal/where-to-eat-durango'] + [f"/homes/{h['slug']}" for h in HOMES if not h['sample']]) + '</urlset>\n')
 print('built')

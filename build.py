@@ -636,6 +636,7 @@ journal_body = f'''
       <a class="card reveal" href="/journal/durango-rides">{photo('journal-1', 'Singletrack below Engineer Mountain', 'ph')}<p class="post-meta">Ride</p><h3>Five rides that show you Durango</h3><p>From a first lap at Horse Gulch to a long day on Hermosa Creek.</p><span class="link">Read</span></a>
       <a class="card reveal" href="/journal/where-to-eat-durango">{photo('coffee', 'A latte at a Durango café table', 'ph')}<p class="post-meta">Eat</p><h3>Where to eat in Durango, from a local</h3><p>Thirteen places, sorted by the night you're having: a special dinner, a date, friends, kids, or lunch on the run.</p><span class="link">Read</span></a>
       <a class="card reveal" href="/journal/durango-home-earnings">{photo('journal-3', 'Gold aspens below Mount Sneffels', 'ph')}<p class="post-meta">Owners</p><h3>What a Durango vacation home earns, and what decides it</h3><p>Three data firms, three answers. What the numbers say, and the five things that separate the top homes.</p><span class="link">Read</span></a>
+      <a class="card reveal" href="/journal/durango-short-term-rental-rules">{photo('ophir', 'Ice Lake Basin in the San Juans near Ophir', 'ph')}<p class="post-meta">Owners</p><h3>Can you rent your Durango home short-term?</h3><p>City permits, county taxes and the HOA question, in plain English.</p><span class="link">Read</span></a>
     </div>
   </section>
 '''
@@ -714,6 +715,78 @@ post3_body = f'''
 post3 = page('Where to eat in Durango, from a local · The Journal · Ophir Stays',
              'Thirteen Durango restaurants a local recommends, by occasion: special dinners at Eolus and Serafina\u2019s, date night at Perbacco, pizza with kids at Fired Up, and fast burritos at Zia.',
              '/journal/where-to-eat-durango', 'journal', post3_body)
+
+
+post4_body = f"""
+  <section style="padding-bottom:40px">
+    <div class="wrap narrow center reveal">
+      <p class="eyebrow">Owners</p>
+      <h1 class="display">Can you rent your Durango home short-term? The rules, city and county</h1>
+      <p class="post-meta">By Casey Roberts · October 2026</p>
+    </div>
+  </section>
+  <div class="wrap">{photo('ophir', 'Ice Lake Basin in the San Juan Mountains near Ophir')}</div>
+  <section style="padding-top:56px">
+    <div class="wrap narrow article">
+      <p><strong>It depends on one line on a map. Inside Durango city limits, short-term rentals need a city permit, and in the main residential zones those permits are capped and full. In unincorporated La Plata County, there is no county rental permit: you register to collect taxes, follow the county's good-neighbor guidelines, and check your HOA.</strong></p>
+      <p>Here is what each side requires as of October 2026, and the questions to answer before you list.</p>
+
+      <h2>Inside Durango city limits</h2>
+      <p>The city regulates any stay of 1 to 29 nights. You need a Limited Use Permit before you advertise, plus a city business license, and you collect and remit the city's lodgers' and sales taxes.</p>
+      <div class="table-wrap"><table class="data">
+        <thead><tr><th scope="col">Zone</th><th scope="col">Permits allowed</th><th scope="col">Active</th><th scope="col">Waitlist</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">EN-1 (established neighborhood)</th><td>22</td><td>21</td><td>26</td></tr>
+          <tr><th scope="row">EN-2 (established neighborhood)</th><td>17</td><td>17</td><td>11</td></tr>
+          <tr><th scope="row">Central Business, Mixed-Use, some Planned Developments</th><td>Set per development</td><td>87</td><td>Not published</td></tr>
+        </tbody>
+      </table></div>
+      <p class="fine">Source: City of Durango, Vacation Rental Information, checked October 2026. About 125 permits are active citywide.</p>
+      <p>Three things catch owners out. Permits don't transfer: a sale automatically ends the permit, so a buyer starts at the back of the line. In the EN zones, a second rental on the same block face needs Planning Commission approval and a third isn't allowed. And stays of 30 nights or more aren't regulated by the city at all, which is why some in-town owners rent by the month instead.</p>
+
+      <h2>In unincorporated La Plata County</h2>
+      <p>Most of the area's best rental homes sit outside city limits: Durango Mountain and Purgatory, the Animas Valley, Hermosa, Hesperus and Vallecito. Here the county does not issue a short-term rental permit or license. What it does require is taxes.</p>
+      <p><strong>Required:</strong> collect and remit the county's 2% lodging tax and 2% county sales tax, plus state sales tax, on every stay. That means a Colorado sales tax license unless a manager handles collection for you. Booking platforms collect some of these taxes on their bookings; check which ones, and remit the rest.</p>
+      <p><strong>Recommended by the county:</strong></p>
+      <ul>
+        <li>A local contact who can deal with problems, with that number shared with your neighbors.</li>
+        <li>No more than two guests per bedroom, plus one.</li>
+        <li>Enough parking on the property, and no campers or trailers unless there's room for them.</li>
+        <li>A trash schedule that keeps up with turnovers.</li>
+        <li>On a septic system, a check with La Plata County Public Health (970-247-5702) that it can handle rental use.</li>
+      </ul>
+      <p>The county has discussed regulating short-term rentals, but as of October 2026 it has not adopted a licensing program or a cap. That could change, so it's worth checking again before you buy a home on the strength of its rental income.</p>
+
+      <h2>Then check your HOA. It's often the real answer.</h2>
+      <p>County rules are light, but many subdivisions are not. Covenants can ban rentals shorter than 30 days, or six months, or set their own registration and fees. Read your declaration and any amendments, and ask the HOA in writing. Some neighborhoods inside the city also restrict rentals through their own development documents, even in zones where the city allows them.</p>
+
+      <h2>Before you list: a short checklist</h2>
+      <ul>
+        <li>City or county? Look up your parcel on the county's map.</li>
+        <li>In the city: do you hold a permit, or are you on the waitlist?</li>
+        <li>HOA: written confirmation that short stays are allowed.</li>
+        <li>Taxes: a sales tax license, or a manager who collects and remits for you.</li>
+        <li>Insurance: a policy that covers short-term rental use. Most standard homeowner's policies don't.</li>
+        <li>Septic: a capacity check if you're not on sewer.</li>
+      </ul>
+
+      <h2>How Ophir handles it</h2>
+      <p>Before we sign a home, we check its zoning and HOA documents with the owner. Once it's live, we register for and remit taxes on direct bookings, act as the local contact, and keep occupancy and parking inside the county's guidelines. If you're not sure where your home stands, we'll look it up for you.</p>
+      <p style="margin-top:32px"><a class="btn btn-rust" href="/owners#estimate">Get your free estimate</a></p>
+
+      <h2 style="font-size:20px;margin-top:56px">Sources</h2>
+      <p class="fine" style="margin:0">
+        <a href="https://www.durangoco.gov/800/Vacation-Rental-Information" rel="noopener">City of Durango: Vacation Rental Information</a> (checked October 2026)<br>
+        <a href="https://www.lpcgov.org/departments/finance___procurement/lodging_tax_information/be_a_good_neighbor_(vacation_rental).php" rel="noopener">La Plata County: Be a Good Neighbor (vacation rental)</a> (checked October 2026)<br>
+        <a href="https://www.durangoherald.com/articles/voters-overwhelmingly-approve-la-plata-county-lodgers-tax-reallocation/" rel="noopener">Durango Herald: county lodgers tax capped at 2% by state law</a> (November 2024)<br>
+        This is a plain-English summary, not legal advice. Rules change; confirm with the city, the county and your HOA before you rent.
+      </p>
+    </div>
+  </section>
+"""
+post4 = page('Can you rent your Durango home short-term? City and county rules · Ophir Stays',
+             'Durango short-term rental rules for 2026: city permits are capped and waitlisted in EN-1 and EN-2; unincorporated La Plata County has no rental permit but requires 2% lodging and 2% sales tax. What owners need before listing.',
+             '/journal/durango-short-term-rental-rules', 'journal', post4_body)
 
 # ---------------- HOMES PAGES ----------------
 homes_body = f'''
@@ -842,8 +915,8 @@ post2 = page('What a Durango vacation home earns, and what decides it · The Jou
              '/journal/durango-home-earnings', 'journal', post2_body)
 
 os.makedirs('journal', exist_ok=True); os.makedirs('homes', exist_ok=True)
-for name, html in [('index.html', home), ('owners.html', owners), ('about.html', about), ('journal.html', journal), ('journal/durango-rides.html', post), ('journal/durango-home-earnings.html', post2), ('journal/where-to-eat-durango.html', post3), ('homes.html', homes_page), ('stay.html', stay_page)] + [(f"homes/{h['slug']}.html", home_page(h)) for h in LIVE_HOMES]:
+for name, html in [('index.html', home), ('owners.html', owners), ('about.html', about), ('journal.html', journal), ('journal/durango-rides.html', post), ('journal/durango-home-earnings.html', post2), ('journal/where-to-eat-durango.html', post3), ('journal/durango-short-term-rental-rules.html', post4), ('homes.html', homes_page), ('stay.html', stay_page)] + [(f"homes/{h['slug']}.html", home_page(h)) for h in LIVE_HOMES]:
     open(name, 'w').write(html)
 open('sitemap.xml', 'w').write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' +
-    ''.join(f'<url><loc>https://ophirstays.com{p}</loc></url>\n' for p in ['/', '/stay', '/homes', '/owners', '/about', '/journal', '/journal/durango-rides', '/journal/durango-home-earnings', '/journal/where-to-eat-durango'] + [f"/homes/{h['slug']}" for h in HOMES if not h['sample']]) + '</urlset>\n')
+    ''.join(f'<url><loc>https://ophirstays.com{p}</loc></url>\n' for p in ['/', '/stay', '/homes', '/owners', '/about', '/journal', '/journal/durango-rides', '/journal/durango-home-earnings', '/journal/where-to-eat-durango', '/journal/durango-short-term-rental-rules'] + [f"/homes/{h['slug']}" for h in HOMES if not h['sample']]) + '</urlset>\n')
 print('built')

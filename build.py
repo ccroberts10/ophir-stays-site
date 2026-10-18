@@ -659,6 +659,7 @@ post_body = f'''
   <section style="padding-top:56px">
     <div class="wrap narrow article">
       <p>Durango has more good singletrack within a few minutes of town than most places have in a whole county. These are the five rides we send guests on first, from an easy shakeout to a full day out.</p>
+      <figure style="margin:32px 0"><a href="/trail-map"><img src="/assets/trail-map-web.jpg" alt="Ride Durango: an Ophir Stays map of the trail systems around Durango, Colorado" loading="lazy" style="width:100%;height:auto;display:block;border:1px solid var(--line)"></a><figcaption class="fine" style="margin-top:10px">Our trail map of Durango. <a href="/trail-map">Open the full-size map</a>.</figcaption></figure>
       <h2>1. Horse Gulch</h2>
       <p>Minutes from Main Avenue, a web of flowing trails through piñon and juniper. The right first ride: short loops, big views back over town, and easy to extend when your legs feel good.</p>
       <h2>2. Animas Mountain</h2>
@@ -793,6 +794,29 @@ post4 = page('Can you rent your Durango home short-term? City and county rules �
              'Durango short-term rental rules for 2026: city permits are capped and waitlisted; La Plata County has no rental permit but requires lodging and sales tax.',
              '/journal/durango-short-term-rental-rules', 'journal', post4_body)
 
+
+trailmap_body = f"""
+  <section style="padding-bottom:32px">
+    <div class="wrap narrow center reveal">
+      <p class="eyebrow">Ride</p>
+      <h1 class="display">Durango trail map</h1>
+      <p class="lead">The singletrack around town, and where to start: Horse Gulch, Raider Ridge, Animas Mountain, Overend, Twin Buttes, the Colorado Trail, Log Chutes and Carbon Junction.</p>
+      <p style="margin-top:20px"><a class="btn" href="/assets/trail-map.jpg" download>Download full size</a></p>
+    </div>
+  </section>
+  <section style="padding-top:0">
+    <div class="wrap" style="max-width:1000px"><img src="/assets/trail-map-web.jpg" alt="Ride Durango: an Ophir Stays map of the trail systems around Durango, Colorado" style="width:100%;height:auto;display:block;border:1px solid var(--line)"></div>
+    <div class="wrap narrow article" style="margin-top:32px">
+      <p>Staying with Ophir? Bikes are sized to each rider and delivered to the house, and we'll match the ride to the weather and your legs. For turn-by-turn navigation on the trail, use Trailforks or MTB Project, and stay off trails when they're muddy.</p>
+      <p><a href="/journal/durango-rides">Read: five rides that show you Durango</a></p>
+      <p class="fine">Trail data © OpenStreetMap contributors.</p>
+    </div>
+  </section>
+"""
+trailmap = page('Durango Mountain Bike Trail Map · Ophir Stays',
+                'A Durango mountain bike trail map: Horse Gulch, Raider Ridge, Animas Mountain, Overend, Twin Buttes, the Colorado Trail, Log Chutes and Carbon Junction.',
+                '/trail-map', 'journal', trailmap_body)
+
 # ---------------- HOMES PAGES ----------------
 homes_body = f'''
   <section class="center" style="padding-bottom:56px">
@@ -920,8 +944,8 @@ post2 = page('What a Durango vacation home earns, and what decides it · The Jou
              '/journal/durango-home-earnings', 'journal', post2_body)
 
 os.makedirs('journal', exist_ok=True); os.makedirs('homes', exist_ok=True)
-for name, html in [('index.html', home), ('owners.html', owners), ('about.html', about), ('journal.html', journal), ('journal/durango-rides.html', post), ('journal/durango-home-earnings.html', post2), ('journal/where-to-eat-durango.html', post3), ('journal/durango-short-term-rental-rules.html', post4), ('homes.html', homes_page), ('stay.html', stay_page)] + [(f"homes/{h['slug']}.html", home_page(h)) for h in LIVE_HOMES]:
+for name, html in [('index.html', home), ('owners.html', owners), ('about.html', about), ('journal.html', journal), ('journal/durango-rides.html', post), ('journal/durango-home-earnings.html', post2), ('journal/where-to-eat-durango.html', post3), ('journal/durango-short-term-rental-rules.html', post4), ('trail-map.html', trailmap), ('homes.html', homes_page), ('stay.html', stay_page)] + [(f"homes/{h['slug']}.html", home_page(h)) for h in LIVE_HOMES]:
     open(name, 'w').write(html)
 open('sitemap.xml', 'w').write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' +
-    ''.join(f'<url><loc>https://ophirstays.com{p}</loc><lastmod>2026-10-17</lastmod></url>\n' for p in ['/', '/stay', '/homes', '/owners', '/about', '/journal', '/journal/durango-rides', '/journal/durango-home-earnings', '/journal/where-to-eat-durango', '/journal/durango-short-term-rental-rules'] + [f"/homes/{h['slug']}" for h in HOMES if not h['sample']]) + '</urlset>\n')
+    ''.join(f'<url><loc>https://ophirstays.com{p}</loc><lastmod>2026-10-17</lastmod></url>\n' for p in ['/', '/stay', '/homes', '/owners', '/about', '/journal', '/journal/durango-rides', '/journal/durango-home-earnings', '/journal/where-to-eat-durango', '/journal/durango-short-term-rental-rules', '/trail-map'] + [f"/homes/{h['slug']}" for h in HOMES if not h['sample']]) + '</urlset>\n')
 print('built')

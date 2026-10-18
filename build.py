@@ -42,6 +42,8 @@ LD = '<script type="application/ld+json">' + _json.dumps({
 
 POST_LD = {p: '<script type="application/ld+json">' + _json.dumps({'@context':'https://schema.org','@type':'BlogPosting','headline':h,'image':f'https://ophirstays.com/assets/photos/{img}.jpg','datePublished':'2026-10-15','dateModified':'2026-10-17','author':{'@type':'Person','name':'Casey Roberts','url':'https://ophirstays.com/about'},'publisher':{'@type':'Organization','name':'Ophir Stays','logo':{'@type':'ImageObject','url':'https://ophirstays.com/assets/email-mark.png'}},'mainEntityOfPage':'https://ophirstays.com'+p}) + '</script>' for p,(h,img) in {'/journal/durango-rides': ('Five rides that show you Durango', 'rides'), '/journal/durango-home-earnings': ('What a Durango vacation home earns, and what decides it', 'journal-3'), '/journal/where-to-eat-durango': ('Where to eat in Durango, from a local', 'hero-coffee'), '/journal/durango-short-term-rental-rules': ('Can you rent your Durango home short-term? The rules, city and county', 'ophir')}.items()}
 
+TRAIL_LD = '<script type="application/ld+json">' + _json.dumps({'@context': 'https://schema.org', '@graph': [{'@type': 'Map', '@id': 'https://ophirstays.com/trail-map#map', 'name': 'Ride Durango: Durango mountain bike trail map', 'mapType': 'https://schema.org/VenueMap', 'url': 'https://ophirstays.com/trail-map', 'image': 'https://ophirstays.com/assets/ophir-durango-trail-map.jpg', 'description': 'Free printable map of the mountain bike trail systems around Durango, Colorado, with trailheads, summits and contours.', 'about': {'@type': 'Place', 'name': 'Durango, Colorado', 'geo': {'@type': 'GeoCoordinates', 'latitude': 37.2753, 'longitude': -107.8801}}, 'spatialCoverage': {'@type': 'Place', 'name': 'Durango, Colorado'}, 'author': {'@type': 'Person', 'name': 'Casey Roberts', 'url': 'https://ophirstays.com/about'}, 'publisher': {'@type': 'Organization', 'name': 'Ophir Stays', 'url': 'https://ophirstays.com'}, 'datePublished': '2026-10-17', 'isAccessibleForFree': True, 'encoding': [{'@type': 'MediaObject', 'contentUrl': 'https://ophirstays.com/assets/ophir-durango-trail-map.pdf', 'encodingFormat': 'application/pdf'}, {'@type': 'MediaObject', 'contentUrl': 'https://ophirstays.com/assets/ophir-durango-trail-map.jpg', 'encodingFormat': 'image/jpeg'}]}, {'@type': 'ImageObject', 'contentUrl': 'https://ophirstays.com/assets/ophir-durango-trail-map.jpg', 'name': 'Durango mountain bike trail map', 'creator': {'@type': 'Organization', 'name': 'Ophir Stays'}, 'creditText': 'Ophir Stays. Trail data © OpenStreetMap contributors.', 'copyrightNotice': 'Ophir Stays', 'acquireLicensePage': 'https://ophirstays.com/trail-map'}, {'@type': 'BreadcrumbList', 'itemListElement': [{'@type': 'ListItem', 'position': 1, 'name': 'Ophir Stays', 'item': 'https://ophirstays.com/'}, {'@type': 'ListItem', 'position': 2, 'name': 'Journal', 'item': 'https://ophirstays.com/journal'}, {'@type': 'ListItem', 'position': 3, 'name': 'Durango trail map', 'item': 'https://ophirstays.com/trail-map'}]}]}) + '</script>'
+
 def head(title, desc, path, image='/assets/og.jpg'):
     return f'''<!doctype html>
 <html lang="en">
@@ -51,7 +53,7 @@ def head(title, desc, path, image='/assets/og.jpg'):
 <title>{title}</title>
 <meta name="description" content="{desc}">
 <link rel="canonical" href="https://ophirstays.com{path}">
-{LD if path == "/" else POST_LD.get(path, "")}
+{LD if path == "/" else POST_LD.get(path, "")}{TRAIL_LD if path == "/trail-map" else ""}
 <meta property="og:title" content="{title}">
 <meta property="og:description" content="{desc}">
 <meta property="og:image" content="https://ophirstays.com{image}">
@@ -101,7 +103,7 @@ FOOT = '''<footer class="site-foot">
       <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
       <p class="nl-status" role="status" aria-live="polite"></p>
     </form>
-    <nav class="foot-links" aria-label="Footer"><a href="/stay">Your Stay</a><a href="/owners">Owners</a><a href="/journal">Journal</a><a href="/about">About</a><a href="mailto:casey@ophirstays.com">casey@ophirstays.com</a></nav>
+    <nav class="foot-links" aria-label="Footer"><a href="/stay">Your Stay</a><a href="/owners">Owners</a><a href="/journal">Journal</a><a href="/trail-map">Trail Map</a><a href="/about">About</a><a href="mailto:casey@ophirstays.com">casey@ophirstays.com</a></nav>
     <div class="foot-base"><span>© 2026 Ophir Stays</span><span>Guest booking opens 2027</span></div>
   </div>
 </footer>
@@ -118,8 +120,8 @@ st.textContent='Thank you. The next note arrives with the season.';f.email.value
 b.disabled=false;});})();
 </script>'''
 
-def page(title, desc, path, current, body, extra_js=''):
-    return head(title, desc, path) + masthead(current) + '\n<main id="main">\n' + body + '\n</main>\n' + FOOT + extra_js + '\n</body>\n</html>\n'
+def page(title, desc, path, current, body, extra_js='', image='/assets/og.jpg'):
+    return head(title, desc, path, image) + masthead(current) + '\n<main id="main">\n' + body + '\n</main>\n' + FOOT + extra_js + '\n</body>\n</html>\n'
 
 def photo(name, alt, cls='photo'):
     return f'<div class="{cls}"><img src="/assets/photos/{name}.jpg" alt="{alt}" loading="lazy"></div>'
@@ -564,7 +566,7 @@ stay_body = f'''
           <li>Each guest's gear labeled with their name</li>
           <li>Your coffee order, already in the kitchen</li>
           <li>Kids' bikes and helmets in the right sizes</li>
-          <li>A trail map marked with the ride we planned for you</li>
+          <li>A <a href="/trail-map">trail map</a> marked with the ride we planned for you</li>
           <li>Every preference remembered for your next stay</li>
         </ul>
       </div>
@@ -795,28 +797,48 @@ post4 = page('Can you rent your Durango home short-term? City and county rules �
              '/journal/durango-short-term-rental-rules', 'journal', post4_body)
 
 
+TRAILS = [
+ ('Horse Gulch', 'East of downtown, minutes from Main Avenue. A big web of rolling singletrack through piñon and juniper, with easy and intermediate loops near the trailhead and harder lines farther out. The best first ride in Durango.', 'Horse Gulch trailhead, at the end of Horse Gulch Road, east of downtown.'),
+ ('Raider Ridge', 'The rocky spine above Fort Lewis College. Technical and exposed in places, with views over town and the La Platas the whole way. Best linked with Horse Gulch.', 'Ride up from Horse Gulch or from the college.'),
+ ('Animas Mountain', 'The mountain that looks down on north Durango. A steep, rocky climb to big views of the Animas Valley, and a technical descent. It closes each winter for wildlife, so check the dates before you go.', 'Animas Mountain trailhead, at the north end of West 4th Avenue.'),
+ ('Overend and Perins', 'Short, punchy trails on the west side of town in Overend Mountain Park, with rock gardens and quick loops. Easy to fit in before dinner.', 'Overend Mountain Park, west of downtown.'),
+ ('Twin Buttes', 'Newer, flowing singletrack west of town below the Twin Buttes, built for riding. A good intermediate day.', 'Off US 160 west of town.'),
+ ('Colorado Trail', 'The start, or the finish, of the 500-mile trail to Denver. A long, steady climb up Junction Creek through forest, then back down the same way. As big a day as you want.', 'Junction Creek trailhead, northwest of town on Junction Creek Road.'),
+ ('Log Chutes', 'Forested loops off Junction Creek Road, higher and cooler than town in summer. Intermediate climbing and a fun, fast descent.', 'Off Junction Creek Road, past the Colorado Trail trailhead.'),
+ ('Carbon Junction', 'A steep climb out of the river corridor south of town that ties into Horse Gulch. Great for a big loop starting from the Animas River Trail.', 'South of town near the US 160 and US 550 junction, off the Animas River Trail.'),
+]
+trails_html = ''.join(f'''
+      <h3 id="{n.lower().replace(' and ','-').replace(' ','-')}"><span class="tm-num">{i}</span> {n}</h3>
+      <p>{d}</p>
+      <p class="fine">Start: {s}</p>''' for i,(n,d,s) in enumerate(TRAILS,1))
+
 trailmap_body = f"""
   <section style="padding-bottom:32px">
     <div class="wrap narrow center reveal">
       <p class="eyebrow">Ride</p>
-      <h1 class="display">Durango trail map</h1>
-      <p class="lead">The singletrack around town, and where to start: Horse Gulch, Raider Ridge, Animas Mountain, Overend, Twin Buttes, the Colorado Trail, Log Chutes and Carbon Junction.</p>
+      <h1 class="display">Durango mountain bike trail map</h1>
+      <p class="lead">A free, printable map of the singletrack around Durango, Colorado, and where to start: Horse Gulch, Raider Ridge, Animas Mountain, Overend, Twin Buttes, the Colorado Trail, Log Chutes and Carbon Junction.</p>
       <p style="margin-top:20px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap"><a class="btn" href="/assets/ophir-durango-trail-map.jpg" download>Download image</a> <a class="btn" href="/assets/ophir-durango-trail-map.pdf" download>Download PDF to print</a></p>
       <p class="fine" style="margin-top:10px">Free to download, print and share. The PDF prints sharp at 12 by 16 inches.</p>
     </div>
   </section>
   <section style="padding-top:0">
-    <div class="wrap" style="max-width:1000px"><img src="/assets/trail-map-web.jpg?v=2" alt="Ride Durango: an Ophir Stays map of the trail systems around Durango, Colorado" style="width:100%;height:auto;display:block;border:1px solid var(--line)"></div>
-    <div class="wrap narrow article" style="margin-top:32px">
-      <p>Staying with Ophir? Bikes are sized to each rider and delivered to the house, and we'll match the ride to the weather and your legs. For turn-by-turn navigation on the trail, use Trailforks or MTB Project, and stay off trails when they're muddy.</p>
+    <figure class="wrap" style="max-width:1000px;margin:0 auto"><img src="/assets/trail-map-web.jpg?v=2" width="1200" height="1600" alt="Durango mountain bike trail map showing Horse Gulch, Raider Ridge, Animas Mountain, Overend, Twin Buttes, the Colorado Trail, Log Chutes and Carbon Junction, with trailheads and shaded terrain" style="width:100%;height:auto;display:block;border:1px solid var(--line)"></figure>
+    <div class="wrap narrow article" style="margin-top:40px">
+      <h2>The trail systems on the map</h2>
+      <p>Durango is one of the few towns where you can ride singletrack from your front door. Each number on the map is a trail system, and each P is a trailhead with parking.</p>{trails_html}
+      <h2>Before you ride</h2>
+      <p>Stay off trails when they're muddy: ruts last all season. Summer afternoons bring lightning, so start early. Town sits at 6,500 feet and the high points on this map are near 9,000, so drink more than you think and go easy the first day. For turn-by-turn navigation on the trail, use Trailforks or MTB Project.</p>
+      <h2>Staying with Ophir?</h2>
+      <p>Bikes are sized to each rider and delivered to the house, and we'll match the ride to the weather and your legs. <a href="/stay">See how a stay works</a>.</p>
       <p><a href="/journal/durango-rides">Read: five rides that show you Durango</a></p>
-      <p class="fine">Trail data © OpenStreetMap contributors. Elevation from USGS via Mapzen Terrain Tiles.</p>
+      <p class="fine">Trail data © OpenStreetMap contributors. Elevation from USGS via Mapzen Terrain Tiles. Trail conditions and closures change; check with the City of Durango and the San Juan National Forest before you ride.</p>
     </div>
   </section>
 """
-trailmap = page('Durango Mountain Bike Trail Map · Ophir Stays',
-                'A Durango mountain bike trail map: Horse Gulch, Raider Ridge, Animas Mountain, Overend, Twin Buttes, the Colorado Trail, Log Chutes and Carbon Junction.',
-                '/trail-map', 'journal', trailmap_body)
+trailmap = page('Durango Mountain Bike Trail Map (Free PDF) · Ophir Stays',
+                'Free printable Durango mountain bike trail map: Horse Gulch, Raider Ridge, Animas Mountain, Overend, Twin Buttes, the Colorado Trail, Log Chutes and Carbon Junction, with trailheads.',
+                '/trail-map', 'journal', trailmap_body, image='/assets/og-trail-map.jpg')
 
 # ---------------- HOMES PAGES ----------------
 homes_body = f'''
@@ -947,6 +969,6 @@ post2 = page('What a Durango vacation home earns, and what decides it · The Jou
 os.makedirs('journal', exist_ok=True); os.makedirs('homes', exist_ok=True)
 for name, html in [('index.html', home), ('owners.html', owners), ('about.html', about), ('journal.html', journal), ('journal/durango-rides.html', post), ('journal/durango-home-earnings.html', post2), ('journal/where-to-eat-durango.html', post3), ('journal/durango-short-term-rental-rules.html', post4), ('trail-map.html', trailmap), ('homes.html', homes_page), ('stay.html', stay_page)] + [(f"homes/{h['slug']}.html", home_page(h)) for h in LIVE_HOMES]:
     open(name, 'w').write(html)
-open('sitemap.xml', 'w').write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' +
-    ''.join(f'<url><loc>https://ophirstays.com{p}</loc><lastmod>2026-10-17</lastmod></url>\n' for p in ['/', '/stay', '/homes', '/owners', '/about', '/journal', '/journal/durango-rides', '/journal/durango-home-earnings', '/journal/where-to-eat-durango', '/journal/durango-short-term-rental-rules', '/trail-map'] + [f"/homes/{h['slug']}" for h in HOMES if not h['sample']]) + '</urlset>\n')
+open('sitemap.xml', 'w').write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">\n' +
+    ''.join(f'<url><loc>https://ophirstays.com{p}</loc><lastmod>2026-10-17</lastmod>' + ('<image:image><image:loc>https://ophirstays.com/assets/ophir-durango-trail-map.jpg</image:loc></image:image>' if p == '/trail-map' else '') + '</url>\n' for p in ['/', '/stay', '/homes', '/owners', '/about', '/journal', '/journal/durango-rides', '/journal/durango-home-earnings', '/journal/where-to-eat-durango', '/journal/durango-short-term-rental-rules', '/trail-map'] + [f"/homes/{h['slug']}" for h in HOMES if not h['sample']]) + '</urlset>\n')
 print('built')

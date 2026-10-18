@@ -314,3 +314,4 @@ table.data thead th:first-child{text-align:left}
 .nl-row .btn{height:48px}
 .nl-status{min-height:20px;font-size:14px;color:var(--muted);margin:10px 0 0}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.article .tm-num{display:inline-flex;align-items:center;justify-content:center;width:1.6em;height:1.6em;border-radius:50%;background:var(--charcoal,#2A2826);color:#ECE4D3;font-size:.75em;margin-right:8px;vertical-align:.1em}

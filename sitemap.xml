@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
 <url><loc>https://ophirstays.com/</loc><lastmod>2026-10-17</lastmod></url>
 <url><loc>https://ophirstays.com/stay</loc><lastmod>2026-10-17</lastmod></url>
 <url><loc>https://ophirstays.com/homes</loc><lastmod>2026-10-17</lastmod></url>
@@ -10,5 +10,5 @@
 <url><loc>https://ophirstays.com/journal/durango-home-earnings</loc><lastmod>2026-10-17</lastmod></url>
 <url><loc>https://ophirstays.com/journal/where-to-eat-durango</loc><lastmod>2026-10-17</lastmod></url>
 <url><loc>https://ophirstays.com/journal/durango-short-term-rental-rules</loc><lastmod>2026-10-17</lastmod></url>
-<url><loc>https://ophirstays.com/trail-map</loc><lastmod>2026-10-17</lastmod></url>
+<url><loc>https://ophirstays.com/trail-map</loc><lastmod>2026-10-17</lastmod><image:image><image:loc>https://ophirstays.com/assets/ophir-durango-trail-map.jpg</image:loc></image:image></url>
 </urlset>

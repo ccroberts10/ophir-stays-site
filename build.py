@@ -33,14 +33,16 @@ import json as _json
 LD = '<script type="application/ld+json">' + _json.dumps({
   "@context": "https://schema.org", "@type": "LodgingBusiness", "name": "Ophir Stays",
   "description": "Locally owned vacation rental management and trip planning for a private collection of 25 homes in Durango, Colorado.",
-  "url": "https://ophirstays.com", "logo": "https://ophirstays.com/assets/email-mark.png", "image": "https://ophirstays.com/assets/og.png",
+  "url": "https://ophirstays.com", "logo": "https://ophirstays.com/assets/email-mark.png", "image": "https://ophirstays.com/assets/og.jpg",
   "email": "casey@ophirstays.com", "founder": {"@type": "Person", "name": "Casey Roberts"},
   "address": {"@type": "PostalAddress", "addressLocality": "Durango", "addressRegion": "CO", "postalCode": "81301", "addressCountry": "US"},
   "areaServed": [{"@type": "City", "name": "Durango, Colorado"}, {"@type": "Place", "name": "Purgatory, Colorado"}, {"@type": "Place", "name": "Vallecito Lake, Colorado"}, {"@type": "AdministrativeArea", "name": "La Plata County, Colorado"}],
   "knowsAbout": ["vacation rental management", "short-term rental management", "Durango trip planning"]
 }) + '</script>'
 
-def head(title, desc, path, image='/assets/og.png'):
+POST_LD = {p: '<script type="application/ld+json">' + _json.dumps({'@context':'https://schema.org','@type':'BlogPosting','headline':h,'image':f'https://ophirstays.com/assets/photos/{img}.jpg','datePublished':'2026-10-15','dateModified':'2026-10-17','author':{'@type':'Person','name':'Casey Roberts','url':'https://ophirstays.com/about'},'publisher':{'@type':'Organization','name':'Ophir Stays','logo':{'@type':'ImageObject','url':'https://ophirstays.com/assets/email-mark.png'}},'mainEntityOfPage':'https://ophirstays.com'+p}) + '</script>' for p,(h,img) in {'/journal/durango-rides': ('Five rides that show you Durango', 'rides'), '/journal/durango-home-earnings': ('What a Durango vacation home earns, and what decides it', 'journal-3'), '/journal/where-to-eat-durango': ('Where to eat in Durango, from a local', 'hero-coffee'), '/journal/durango-short-term-rental-rules': ('Can you rent your Durango home short-term? The rules, city and county', 'ophir')}.items()}
+
+def head(title, desc, path, image='/assets/og.jpg'):
     return f'''<!doctype html>
 <html lang="en">
 <head>
@@ -49,11 +51,13 @@ def head(title, desc, path, image='/assets/og.png'):
 <title>{title}</title>
 <meta name="description" content="{desc}">
 <link rel="canonical" href="https://ophirstays.com{path}">
-{LD if path == "/" else ""}
+{LD if path == "/" else POST_LD.get(path, "")}
 <meta property="og:title" content="{title}">
 <meta property="og:description" content="{desc}">
 <meta property="og:image" content="https://ophirstays.com{image}">
 <meta property="og:type" content="website">
+<meta property="og:site_name" content="Ophir Stays">
+<meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#FFFFFF">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -162,7 +166,7 @@ SLIDES = [('hero-ski', 'Winter', 'First chair, fresh snow, home by the fire.', '
 slides = ''.join(f'''<figure class="slide{' on' if i == 0 else ''}" aria-roledescription="slide" aria-label="{i+1} of {len(SLIDES)}">
       <img src="/assets/photos/{n}.jpg" alt="{alt}"{' fetchpriority="high"' if i == 0 else ' loading="lazy"'}>
       <figcaption class="cap"><span>{k}</span><p>{c}</p></figcaption></figure>''' for i, (n, k, c, alt) in enumerate(SLIDES))
-thumbs = ''.join(f'<button type="button" aria-label="Show slide {i+1}: {k}"{" aria-current=\"true\"" if i == 0 else ""}><img src="/assets/photos/{n}.jpg" alt="" loading="lazy"></button>' for i, (n, k, c, a) in enumerate(SLIDES))
+thumbs = ''.join(f'<button type="button" aria-label="Show slide {i+1}: {k}"{" aria-current=\"true\"" if i == 0 else ""}><img src="/assets/photos/t/{n}.jpg" alt="" loading="lazy"></button>' for i, (n, k, c, a) in enumerate(SLIDES))
 
 EXPS = [('ski', 'Ski', 'Purgatory is thirty minutes up the valley. Rentals fitted at the house, lift tickets waiting, boots warm in the dryer.'),
         ('spa', 'Spa', 'Hot springs, in-home massage and a hot tub at every home. We book the treatments; you choose the hour.'),
@@ -300,7 +304,7 @@ SLIDE_JS = '''
 })();
 </script>'''
 
-home = page('Ophir Stays · A private collection of mountain homes in Durango, Colorado',
+home = page('Ophir Stays · Durango Vacation Rentals, Every Trip Planned',
             'Twenty-five homes in Durango, Colorado, each kept to one standard, each stay with the whole trip handled: ski, spa, golf and mountain biking. Locally owned.',
             '/', 'home', home_body, SLIDE_JS)
 
@@ -419,6 +423,7 @@ owners_body = f'''
         <h2 class="display">What could your home earn?</h2>
         <p class="lead">Tell us about your home. Casey will send you a personal estimate within two business days, with no obligation.</p>
         <p class="fine" style="margin-top:28px">Prefer to talk? <a href="mailto:casey@ophirstays.com">casey@ophirstays.com</a></p>
+        <p class="fine" style="margin-top:12px">Before you apply: <a href="/journal/durango-home-earnings">what a Durango vacation home earns</a> and <a href="/journal/durango-short-term-rental-rules">the city and county rental rules</a>.</p>
       </div>
       <div class="reveal" id="estimate-box">
         <form class="form" id="estimate-form" novalidate>
@@ -575,7 +580,7 @@ stay_body = f'''
     </div>
   </section>
 '''
-stay_page = page('Your Stay · Packages · Ophir Stays',
+stay_page = page('Durango Trip Planning, Ski and Bike Concierge · Ophir Stays',
                  'Skis and boots sized and waiting, bikes fitted, the fridge stocked and every table booked before you arrive. Ophir Stays packages for Durango, Colorado.',
                  '/stay', 'stay', stay_body)
 
@@ -619,7 +624,7 @@ about_body = f'''
     </div>
   </section>
 '''
-about = page('About · Ophir Stays', 'Ophir Stays is locally owned and run from Durango, Colorado, by Casey Roberts, a Durango local of twenty-three years.', '/about', 'about', about_body)
+about = page('About Casey Roberts, Durango Local · Ophir Stays', 'Ophir Stays is locally owned and run from Durango, Colorado, by Casey Roberts, a Durango local of twenty-three years.', '/about', 'about', about_body)
 
 # ---------------- JOURNAL ----------------
 journal_body = f'''
@@ -640,7 +645,7 @@ journal_body = f'''
     </div>
   </section>
 '''
-journal = page('The Journal · Ophir Stays', 'Guides to riding, skiing, eating and slowing down in Durango, Colorado, plus notes for mountain-home owners.', '/journal', 'journal', journal_body)
+journal = page('Durango Guides and Owner Notes · The Journal · Ophir Stays', 'Guides to riding, skiing, eating and slowing down in Durango, Colorado, plus notes for mountain-home owners.', '/journal', 'journal', journal_body)
 
 post_body = f'''
   <section style="padding-bottom:40px">
@@ -785,7 +790,7 @@ post4_body = f"""
   </section>
 """
 post4 = page('Can you rent your Durango home short-term? City and county rules · Ophir Stays',
-             'Durango short-term rental rules for 2026: city permits are capped and waitlisted in EN-1 and EN-2; unincorporated La Plata County has no rental permit but requires 2% lodging and 2% sales tax. What owners need before listing.',
+             'Durango short-term rental rules for 2026: city permits are capped and waitlisted; La Plata County has no rental permit but requires lodging and sales tax.',
              '/journal/durango-short-term-rental-rules', 'journal', post4_body)
 
 # ---------------- HOMES PAGES ----------------
@@ -800,7 +805,7 @@ homes_body = f'''
   </section>
   <section style="padding-top:0"><div class="wrap">{collection_grid()}</div></section>
 '''
-homes_page = page('The Collection · Ophir Stays', 'Luxury vacation homes in Durango, Colorado, each kept to one standard, each stay with the trip handled.', '/homes', 'homes', homes_body)
+homes_page = page('Durango Vacation Homes · The Collection · Ophir Stays', 'Luxury vacation homes in Durango, Colorado, each kept to one standard, each stay with the trip handled.', '/homes', 'homes', homes_body)
 
 def home_page(h):
     slug = h['slug']
@@ -918,5 +923,5 @@ os.makedirs('journal', exist_ok=True); os.makedirs('homes', exist_ok=True)
 for name, html in [('index.html', home), ('owners.html', owners), ('about.html', about), ('journal.html', journal), ('journal/durango-rides.html', post), ('journal/durango-home-earnings.html', post2), ('journal/where-to-eat-durango.html', post3), ('journal/durango-short-term-rental-rules.html', post4), ('homes.html', homes_page), ('stay.html', stay_page)] + [(f"homes/{h['slug']}.html", home_page(h)) for h in LIVE_HOMES]:
     open(name, 'w').write(html)
 open('sitemap.xml', 'w').write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' +
-    ''.join(f'<url><loc>https://ophirstays.com{p}</loc></url>\n' for p in ['/', '/stay', '/homes', '/owners', '/about', '/journal', '/journal/durango-rides', '/journal/durango-home-earnings', '/journal/where-to-eat-durango', '/journal/durango-short-term-rental-rules'] + [f"/homes/{h['slug']}" for h in HOMES if not h['sample']]) + '</urlset>\n')
+    ''.join(f'<url><loc>https://ophirstays.com{p}</loc><lastmod>2026-10-17</lastmod></url>\n' for p in ['/', '/stay', '/homes', '/owners', '/about', '/journal', '/journal/durango-rides', '/journal/durango-home-earnings', '/journal/where-to-eat-durango', '/journal/durango-short-term-rental-rules'] + [f"/homes/{h['slug']}" for h in HOMES if not h['sample']]) + '</urlset>\n')
 print('built')

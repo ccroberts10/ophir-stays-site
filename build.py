@@ -659,7 +659,7 @@ post_body = f'''
   <section style="padding-top:56px">
     <div class="wrap narrow article">
       <p>Durango has more good singletrack within a few minutes of town than most places have in a whole county. These are the five rides we send guests on first, from an easy shakeout to a full day out.</p>
-      <figure style="margin:32px 0"><a href="/trail-map"><img src="/assets/trail-map-web.jpg" alt="Ride Durango: an Ophir Stays map of the trail systems around Durango, Colorado" loading="lazy" style="width:100%;height:auto;display:block;border:1px solid var(--line)"></a><figcaption class="fine" style="margin-top:10px">Our trail map of Durango. <a href="/trail-map">Open the full-size map</a>.</figcaption></figure>
+      <figure style="margin:32px 0"><a href="/trail-map"><img src="/assets/trail-map-web.jpg?v=2" alt="Ride Durango: an Ophir Stays map of the trail systems around Durango, Colorado" loading="lazy" style="width:100%;height:auto;display:block;border:1px solid var(--line)"></a><figcaption class="fine" style="margin-top:10px">Our trail map of Durango. <a href="/trail-map">Open the full-size map</a> or <a href="/assets/ophir-durango-trail-map.pdf" download>download the PDF</a>.</figcaption></figure>
       <h2>1. Horse Gulch</h2>
       <p>Minutes from Main Avenue, a web of flowing trails through piñon and juniper. The right first ride: short loops, big views back over town, and easy to extend when your legs feel good.</p>
       <h2>2. Animas Mountain</h2>
@@ -801,11 +801,12 @@ trailmap_body = f"""
       <p class="eyebrow">Ride</p>
       <h1 class="display">Durango trail map</h1>
       <p class="lead">The singletrack around town, and where to start: Horse Gulch, Raider Ridge, Animas Mountain, Overend, Twin Buttes, the Colorado Trail, Log Chutes and Carbon Junction.</p>
-      <p style="margin-top:20px"><a class="btn" href="/assets/trail-map.jpg" download>Download full size</a></p>
+      <p style="margin-top:20px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap"><a class="btn" href="/assets/ophir-durango-trail-map.jpg" download>Download image</a> <a class="btn" href="/assets/ophir-durango-trail-map.pdf" download>Download PDF to print</a></p>
+      <p class="fine" style="margin-top:10px">Free to download, print and share. The PDF prints sharp at 12 by 16 inches.</p>
     </div>
   </section>
   <section style="padding-top:0">
-    <div class="wrap" style="max-width:1000px"><img src="/assets/trail-map-web.jpg" alt="Ride Durango: an Ophir Stays map of the trail systems around Durango, Colorado" style="width:100%;height:auto;display:block;border:1px solid var(--line)"></div>
+    <div class="wrap" style="max-width:1000px"><img src="/assets/trail-map-web.jpg?v=2" alt="Ride Durango: an Ophir Stays map of the trail systems around Durango, Colorado" style="width:100%;height:auto;display:block;border:1px solid var(--line)"></div>
     <div class="wrap narrow article" style="margin-top:32px">
       <p>Staying with Ophir? Bikes are sized to each rider and delivered to the house, and we'll match the ride to the weather and your legs. For turn-by-turn navigation on the trail, use Trailforks or MTB Project, and stay off trails when they're muddy.</p>
       <p><a href="/journal/durango-rides">Read: five rides that show you Durango</a></p>

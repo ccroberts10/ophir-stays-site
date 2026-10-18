@@ -492,19 +492,19 @@ TIERS = [
        items=['Home inspected before every arrival', 'Hotel-grade linens, robes and toiletries', 'Welcome card and Ophir tumblers to keep',
               'Door code and house guide in the app', 'Weather-aware ideas for every day', 'A local host by text, replies within fifteen minutes']),
   dict(name='The Arranged Stay', price='$395', unit='per stay', lead='Tell us what you love. We plan the trip around it.', feature=True,
-       items=['Everything in The Stay', 'A planning call before you arrive', 'Skis and boots sized to each guest, waiting in the gear room',
-              'Bikes fitted to each rider and delivered', 'Lift tickets, guides, rafting and fly fishing booked',
-              'Dinner reservations held, first round on us', 'Your itinerary in the app, moved when the weather moves']),
+       items=['Everything in The Stay', 'A planning call before you arrive', 'Skis and boots sized to each guest and waiting in the gear room (rental extra)',
+              'Bikes fitted to each rider and delivered (rental extra)', 'Lift tickets, guides, rafting and fly fishing booked (paid at partner rates)',
+              'Dinner reservations held, first round on us', 'Your itinerary in the app, moved when the weather moves'], note='The planning fee covers our work. Rentals, tickets and guides are paid separately, at our partners\u2019 rates.'),
   dict(name='The Private Stay', price='$1,250', unit='per stay, up to five nights', lead='A dedicated host. Nothing left for you to do.',
-       items=['Everything in The Arranged Stay', 'Groceries shopped and the fridge stocked to your list', 'Fire laid, wine chosen, music on when you walk in',
-              'Your own host, on call for the whole stay', 'Private chef, in-home massage or a sitter arranged',
-              'Airport arrival arranged', 'Mid-stay refresh: linens, towels, restock', 'Longer stays: $150 per additional night']),
+       items=['Everything in The Arranged Stay', 'Groceries shopped and the fridge stocked to your list (groceries at cost)', 'Fire laid, wine chosen, music on when you walk in',
+              'Your own host, on call for the whole stay', 'Private chef, in-home massage or a sitter booked for you (their fee extra)',
+              'Airport transfer booked (fare extra)', 'Mid-stay refresh: linens, towels, restock', 'Longer stays: $150 per additional night'], note='We book everything. You pay the chef, therapist, sitter, driver, rentals and groceries directly at their rates, in the app.'),
 ]
 def tier_html(t):
     items=''.join(f'<li>{i}</li>' for i in t['items'])
     cls=' tier-feature' if t.get('feature') else ''
     return f'''<div class="tier{cls} reveal"><p class="eyebrow" style="margin-bottom:10px">{t['name']}</p>
-        <div class="tier-price"><b>{t['price']}</b><span>{t['unit']}</span></div><p class="tier-lead">{t['lead']}</p><ul class="tier-list">{items}</ul></div>'''
+        <div class="tier-price"><b>{t['price']}</b><span>{t['unit']}</span></div><p class="tier-lead">{t['lead']}</p><ul class="tier-list">{items}</ul>{f'<p class="tier-note">{t["note"]}</p>' if t.get('note') else ''}</div>'''
 
 TIMELINE = [('30 days before', 'Tell us what you love', 'Skiing, riding, the river, a slow morning with good coffee. A short form in the app, or a call with your host.'),
             ('14 days before', 'Sizes and lists', 'Heights, boot sizes and riding styles for everyone in the party. Your grocery list, dietary needs and how you take your coffee.'),
@@ -549,7 +549,7 @@ stay_body = f'''
           <div><b>Skis or bikes fitted and delivered</b><span>$45 plus rental</span></div>
         </div>
       </div>
-      <p class="fine center" style="margin-top:28px">Gear, guides, lift tickets, groceries and partner services are billed at our partners' rates, with no markup to you.</p>
+      <p class="fine center" style="margin-top:28px"><b>How it works:</b> package prices cover our planning, booking and hosting. Rentals, lift tickets, guides, chefs, massage, transport and groceries are paid separately at our partners' rates, with no markup to you. You see every price and confirm it in the app before anything is charged.</p>
     </div>
   </section>
 

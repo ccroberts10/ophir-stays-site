@@ -1000,6 +1000,27 @@ def profile_svg(r, w=1000, h=220):
     return (f'<svg class="profile" viewBox="0 0 {w} {h}" role="img" aria-label="Elevation profile: {r["climb"]:,} feet of climbing, high point {r["high"]:,} feet" style="width:100%;height:auto;font-family:var(--sans);font-size:13px;fill:#6F685F">'
             f'{ticks}<path d="{area}" fill="#ECE4D3"/><path d="{line}" fill="none" stroke="#B4572B" stroke-width="2.5" stroke-linejoin="round"/>{xt}</svg>')
 
+
+def profile_line(r, w=600, h=130):
+    p = r['profile']; n = len(p)
+    sm = [sum(p[max(0, i-2):i+3]) / len(p[max(0, i-2):i+3]) for i in range(n)]
+    lo, hi = min(sm), max(sm); rng = max(hi - lo, 1)
+    band = h * min(1.0, max(0.38, rng / 1500))
+    X = lambda i: 4 + (w - 8) * i / (n - 1)
+    Y = lambda e: h - 6 - band * (e - lo) / rng
+    return 'M' + 'L'.join(f'{X(i):.1f} {Y(e):.1f}' for i, e in enumerate(sm))
+
+def ptile(r, big=False, link=True):
+    tag = 'a' if link else 'div'
+    href = f' href="/trails/{r["slug"]}"' if link else ''
+    w, h = (1000, 170) if big else (600, 130)
+    return (f'<{tag} class="ptile{" ptile-big" if big else ""}"{href}>'
+            f'<svg viewBox="0 0 {w} {h}" preserveAspectRatio="none" aria-hidden="true"><path d="{profile_line(r, w, h)}" fill="none" stroke="#ECE4D3" stroke-width="{3 if big else 2.4}" stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke"/></svg>'
+            f'<div class="pt-head"><b>{r["name"]}</b><span>{r["miles"]} mi</span></div>'
+            f'<div class="pt-row"><span>Elevation</span><span>↑ {r["climb"]:,} ft &nbsp;↓ {r["descent"]:,} ft</span></div>'
+            f'<div class="pt-row"><span>Difficulty</span><span>{r["difficulty"]}</span></div>'
+            f'<div class="pt-row"><span>Area</span><span>{r["area"]}</span></div></{tag}>')
+
 def route_stats(r):
     return (f'<div class="rstats"><div><span>Distance</span><b>{r["miles"]} mi</b></div><div><span>Climbing</span><b>{r["climb"]:,} ft</b></div>'
             f'<div><span>High point</span><b>{r["high"]:,} ft</b></div><div><span>Difficulty</span><b>{r["difficulty"]}</b></div></div>')
@@ -1022,7 +1043,7 @@ def route_page(r):
   <section style="padding-top:0">
     <div class="wrap" style="max-width:1000px">
       <img src="/assets/routes/{r['slug']}.jpg" width="1600" height="1024" alt="Map of the {r['name']} mountain bike route in {r['area']}, Durango, Colorado" style="width:100%;height:auto;border:1px solid var(--line)">
-      <div style="margin-top:28px">{profile_svg(r)}</div>
+      <div style="margin-top:20px">{ptile(r, big=True, link=False)}</div>
       <p style="margin-top:20px;display:flex;gap:12px;flex-wrap:wrap"><a class="btn" href="/assets/routes/{r['slug']}.gpx" download>Download GPX</a> <a class="btn" href="https://www.google.com/maps/dir/?api=1&destination={la:.5f},{lo:.5f}" target="_blank" rel="noopener">Directions to the start</a></p>
     </div>
     <div class="wrap narrow article" style="margin-top:24px">
@@ -1067,7 +1088,7 @@ trails_index_body = f"""
     </div>
   </section>
   <section style="padding-top:0">
-    <div class="wrap"><div class="grid3">{''.join(route_card(r) for r in sorted(ROUTES, key=lambda r: (DIFF_ORDER[r['difficulty']], r['miles'])))}</div></div>
+    <div class="wrap"><div class="pgrid">{''.join(ptile(r) for r in sorted(ROUTES, key=lambda r: (DIFF_ORDER[r['difficulty']], r['miles'])))}</div></div>
     <div class="wrap narrow article" style="margin-top:48px">
       <p>New to Durango? Start with the Meadow Loop to get used to the altitude, then work up to Telegraph and Sidewinder. Save Raider Ridge and Animas Mountain for when your legs and lungs have caught up.</p>
       <p class="fine">Routes from OpenStreetMap trail data, elevation from USGS. Trails and closures change; check current conditions before you ride.</p>

@@ -119,8 +119,8 @@ export async function forecast(startDate, endDate) {
 // ---------- Business knowledge given to the AI ----------
 export const PACKAGES = {
   stay: 'The Stay (included with every booking): inspected home, hotel-grade linens, welcome card and tumblers, house guide in the app, weather-aware ideas, a local host by text.',
-  arranged: 'The Arranged Stay ($395): everything in The Stay, plus a planning call, skis and boots sized to each guest and waiting in the gear room, bikes fitted and delivered, lift tickets/guides/rafting/fly fishing booked, dinner reservations held with the first round on us (a gift card in the welcome packet, only at restaurants where we keep cards), an itinerary that moves with the weather.',
-  private: 'The Private Stay ($1,250 up to 5 nights, $150 per extra night): everything in The Arranged Stay, plus groceries shopped and the fridge stocked, fire laid and wine chosen, a dedicated host on call, private chef/massage/sitter arranged, airport arrival arranged, mid-stay refresh.',
+  arranged: 'The Arranged Stay ($395): everything in The Stay, plus a planning call, skis and boots sized to each guest and waiting in the gear room, bikes fitted and delivered, lift tickets/guides/rafting/fly fishing booked, dinner reservations held with the first round on us (a gift card in the welcome packet, only at restaurants where we keep cards), an itinerary that moves with the weather. The $395 covers planning and booking only: ski and bike rentals, lift tickets, guides, rafting and fly fishing are paid separately at partner rates.',
+  private: 'The Private Stay ($1,250 up to 5 nights, $150 per extra night): everything in The Arranged Stay, plus groceries shopped and the fridge stocked, fire laid and wine chosen, a dedicated host on call, private chef/massage/sitter booked, airport transfer booked, mid-stay refresh. The package fee covers planning, booking and hosting only: groceries (at cost), the chef, therapist, sitter, driver and rentals are paid separately at their own rates.',
 };
 // What each package lets the team DO (used to guard AI tasks), and what can be offered.
 export const INCLUDES = {

@@ -807,10 +807,11 @@ TRAILS = [
  ('Log Chutes', 'Forested loops off Junction Creek Road, higher and cooler than town in summer. Intermediate climbing and a fun, fast descent.', 'Off Junction Creek Road, past the Colorado Trail trailhead.'),
  ('Carbon Junction', 'A steep climb out of the river corridor south of town that ties into Horse Gulch. Great for a big loop starting from the Animas River Trail.', 'South of town near the US 160 and US 550 junction, off the Animas River Trail.'),
 ]
+TRAIL_RIDES = {'Horse Gulch': '<p class="fine">Ride it: ' + ' · '.join(['<a href="/trails/meadow-loop">Meadow Loop</a>', '<a href="/trails/telegraph-sidewinder">Telegraph and Sidewinder</a>']) + '</p>', 'Raider Ridge': '<p class="fine">Ride it: ' + ' · '.join(['<a href="/trails/raider-ridge">Raider Ridge</a>']) + '</p>', 'Animas Mountain': '<p class="fine">Ride it: ' + ' · '.join(['<a href="/trails/animas-mountain-loop">Animas Mountain Loop</a>']) + '</p>', 'Overend and Perins': '<p class="fine">Ride it: ' + ' · '.join(['<a href="/trails/star-wars-8-bells">Star Wars and 8 Bells</a>', '<a href="/trails/star-wars-spirit">Star Wars and Spirit</a>']) + '</p>', 'Twin Buttes': '<p class="fine">Ride it: ' + ' · '.join(['<a href="/trails/twin-buttes-loop">Twin Buttes Loop</a>']) + '</p>', 'Log Chutes': '<p class="fine">Ride it: ' + ' · '.join(['<a href="/trails/log-chutes">Log Chutes</a>']) + '</p>', 'Carbon Junction': '<p class="fine">Ride it: ' + ' · '.join(['<a href="/trails/carbon-junction-skull-rock">Carbon Junction and Skull Rock</a>', '<a href="/trails/sale-barn-skull-rock">Sale Barn and Skull Rock</a>']) + '</p>'}
 trails_html = ''.join(f'''
       <h3 id="{n.lower().replace(' and ','-').replace(' ','-')}"><span class="tm-num">{i}</span> {n}</h3>
       <p>{d}</p>
-      <p class="fine">Start: {s}</p>''' for i,(n,d,s) in enumerate(TRAILS,1))
+      <p class="fine">Start: {s}</p>{TRAIL_RIDES.get(n,'')}''' for i,(n,d,s) in enumerate(TRAILS,1))
 
 trailmap_body = f"""
   <section style="padding-bottom:32px">
@@ -831,6 +832,7 @@ trailmap_body = f"""
       <p>Stay off trails when they're muddy: ruts last all season. Summer afternoons bring lightning, so start early. Town sits at 6,500 feet and the high points on this map are near 9,000, so drink more than you think and go easy the first day. For turn-by-turn navigation on the trail, use Trailforks or MTB Project.</p>
       <h2>Staying with Ophir?</h2>
       <p>Bikes are sized to each rider and delivered to the house, and we'll match the ride to the weather and your legs. <a href="/stay">See how a stay works</a>.</p>
+      <p><a href="/trails"><b>Ten routes with maps, elevation profiles and GPX</b></a></p>
       <p><a href="/journal/durango-rides">Read: five rides that show you Durango</a></p>
       <p class="fine">Trail data © OpenStreetMap contributors. Elevation from USGS via Mapzen Terrain Tiles. Trail conditions and closures change; check with the City of Durango and the San Juan National Forest before you ride.</p>
     </div>
@@ -966,9 +968,119 @@ post2 = page('What a Durango vacation home earns, and what decides it · The Jou
              'Durango short-term rentals earn about $41,000 to $55,000 a year on average; top homes earn roughly double. Revenue by bedroom count, seasonality, and the five things that separate the best homes.',
              '/journal/durango-home-earnings', 'journal', post2_body)
 
-os.makedirs('journal', exist_ok=True); os.makedirs('homes', exist_ok=True)
-for name, html in [('index.html', home), ('owners.html', owners), ('about.html', about), ('journal.html', journal), ('journal/durango-rides.html', post), ('journal/durango-home-earnings.html', post2), ('journal/where-to-eat-durango.html', post3), ('journal/durango-short-term-rental-rules.html', post4), ('trail-map.html', trailmap), ('homes.html', homes_page), ('stay.html', stay_page)] + [(f"homes/{h['slug']}.html", home_page(h)) for h in LIVE_HOMES]:
+
+# ---------------- ROUTES ----------------
+ROUTES = _json.load(open('data/routes.json'))
+ROUTE_COPY = {
+ 'meadow-loop': (['Horse Gulch Road', 'Meadow Loop', 'Cuchillo', 'Drop Over'], 'The right first ride in Durango. Climb Horse Gulch Road out of town, circle the open meadow on smooth, rolling singletrack, and roll back down with town below you. Short enough for kids and a first day at altitude.'),
+ 'telegraph-sidewinder': (['Telegraph', 'Sidewinder', 'Manilla Vanilla', 'Mesa Connector', 'Horse Gulch Road'], 'The classic Horse Gulch loop. A long, steady climb on Telegraph, then Sidewinder and the mesa trails back toward town. Flowing, fast, and the ride most locals do after work.'),
+ 'raider-ridge': (['Half Ridge', 'Extended Ridge', 'Hyper-Extended Ridge', 'Sugar', 'Horse Gulch Road'], 'The rocky spine above Fort Lewis College. Steep, technical and exposed in places, with views over town and the La Platas the whole way out. Strong riders only.'),
+ 'animas-mountain-loop': (['Animas Mountain Trail', 'Animas Mountain Upper'], 'A steep, rocky climb to the overlook above the Animas Valley, then a technical descent back to the trailhead. The view from the top is the best in town. Closed each winter for wildlife, so check the dates before you go.'),
+ 'star-wars-8-bells': (['Star Wars', '8 Bells', 'Spirit', 'Perins Gulch', "Ned's Hill", 'Ella Vita'], 'A short, punchy loop in Overend Mountain Park, a few minutes from downtown. Quick climbs, rock gardens and tight turns. Easy to fit in before dinner.'),
+ 'star-wars-spirit': (['Spirit', 'Star Wars', 'Perins Gulch', "Ned's Hill", 'Ella Vita', 'Tech Cutoff'], 'The longer Overend loop. Spirit adds more climbing and more of the park, with the same rocky, playful riding as Star Wars.'),
+ 'twin-buttes-loop': (['Twin Buttes', 'Upper Twin Buttes', 'Upper Ed & Flo', 'Ed & Flo', 'Lightner Creek'], 'Purpose-built flow trails below the Twin Buttes, west of town. Smooth climbing, berms on the way down, and big views of Perins Peak.'),
+ 'log-chutes': (['Log Chutes 1', 'Log Chutes 2'], 'Forested loops off Junction Creek Road, a thousand feet higher and cooler than town. Pine needles, steady climbing and a fast descent. The pick for a hot summer afternoon.'),
+ 'carbon-junction-skull-rock': (['Carbon Junction', 'Skull Rock', 'Big Canyon', 'Sidewinder', 'Cowboy Upper'], 'A steep climb out of the river corridor south of town that ties into Skull Rock and the Horse Gulch network. A big, hilly loop with views back up the Animas Valley.'),
+ 'sale-barn-skull-rock': (['Sale Barn', 'Skull Rock', 'South Rim', 'Big Canyon', 'Cowboy Upper'], 'Rolling mesa riding south of town, with long views and fewer people than Horse Gulch. Dry early in spring when higher trails are still snowed in.'),
+}
+DIFF_ORDER = {'Easy': 0, 'Intermediate': 1, 'Advanced': 2}
+
+def profile_svg(r, w=1000, h=220):
+    p = r['profile']; n = len(p); lo = min(p); hi = max(p)
+    span = max(hi - lo, 300); lo2 = lo - span * 0.12; hi2 = lo2 + span * 1.25
+    pl, pr, pt, pb = 72, 8, 12, 34
+    X = lambda i: pl + (w - pl - pr) * i / (n - 1)
+    Y = lambda e: pt + (h - pt - pb) * (1 - (e - lo2) / (hi2 - lo2))
+    line = 'M' + 'L'.join(f'{X(i):.1f} {Y(e):.1f}' for i, e in enumerate(p))
+    area = line + f'L{X(n-1):.1f} {h-pb}L{X(0):.1f} {h-pb}Z'
+    step = 100 if span < 600 else 250 if span < 1500 else 500
+    ticks = ''.join(f'<line x1="{pl}" x2="{w-pr}" y1="{Y(t):.1f}" y2="{Y(t):.1f}" stroke="#E7E1D6"/><text x="{pl-8}" y="{Y(t)+4:.1f}" text-anchor="end">{t:,}</text>' for t in range(int(lo2 // step + 1) * step, int(hi2), step))
+    mi = r['miles']; mstep = 1 if mi < 9 else 2
+    xt = ''.join(f'<text x="{pl + (w-pl-pr)*m/mi:.1f}" y="{h-6}" text-anchor="middle">{m} mi</text>' for m in range(0, int(mi) + 1, mstep))
+    return (f'<svg class="profile" viewBox="0 0 {w} {h}" role="img" aria-label="Elevation profile: {r["climb"]:,} feet of climbing, high point {r["high"]:,} feet" style="width:100%;height:auto;font-family:var(--sans);font-size:13px;fill:#6F685F">'
+            f'{ticks}<path d="{area}" fill="#ECE4D3"/><path d="{line}" fill="none" stroke="#B4572B" stroke-width="2.5" stroke-linejoin="round"/>{xt}</svg>')
+
+def route_stats(r):
+    return (f'<div class="rstats"><div><span>Distance</span><b>{r["miles"]} mi</b></div><div><span>Climbing</span><b>{r["climb"]:,} ft</b></div>'
+            f'<div><span>High point</span><b>{r["high"]:,} ft</b></div><div><span>Difficulty</span><b>{r["difficulty"]}</b></div></div>')
+
+def route_page(r):
+    trails, blurb = ROUTE_COPY[r['slug']]
+    la, lo = r['start']
+    others = [o for o in ROUTES if o['slug'] != r['slug']][:0]
+    same = [o for o in ROUTES if o['area'] == r['area'] and o['slug'] != r['slug']] + [o for o in ROUTES if o['area'] != r['area'] and o['slug'] != r['slug']]
+    more = ''.join(f'<li><a href="/trails/{o["slug"]}">{o["name"]}</a> · {o["miles"]} mi · {o["difficulty"]}</li>' for o in same[:4])
+    body = f"""
+  <section style="padding-bottom:24px">
+    <div class="wrap narrow reveal">
+      <p class="eyebrow"><a href="/trails" style="text-decoration:none">Durango routes</a> · {r['area']}</p>
+      <h1 class="display">{r['name']}</h1>
+      <p class="lead">{blurb}</p>
+      {route_stats(r)}
+    </div>
+  </section>
+  <section style="padding-top:0">
+    <div class="wrap" style="max-width:1000px">
+      <img src="/assets/routes/{r['slug']}.jpg" width="1600" height="1024" alt="Map of the {r['name']} mountain bike route in {r['area']}, Durango, Colorado" style="width:100%;height:auto;border:1px solid var(--line)">
+      <div style="margin-top:28px">{profile_svg(r)}</div>
+      <p style="margin-top:20px;display:flex;gap:12px;flex-wrap:wrap"><a class="btn" href="/assets/routes/{r['slug']}.gpx" download>Download GPX</a> <a class="btn" href="https://www.google.com/maps/dir/?api=1&destination={la:.5f},{lo:.5f}" target="_blank" rel="noopener">Directions to the start</a></p>
+    </div>
+    <div class="wrap narrow article" style="margin-top:24px">
+      <h2>The route</h2>
+      <p>Start at {r['trailhead']}. The loop links {', '.join(trails[:-1])} and {trails[-1]}, {r['miles']} miles with about {r['climb']:,} feet of climbing, topping out near {r['high']:,} feet.</p>
+      <p>Load the GPX into Trailforks, Strava or your bike computer to follow it turn by turn. Stay off the trails when they're muddy, and start early in summer to beat the afternoon storms.</p>
+      <h2>More Durango rides</h2>
+      <ul>{more}</ul>
+      <p><a href="/trail-map">See every trail system on our Durango trail map</a></p>
+      <h2>Staying with Ophir?</h2>
+      <p>We'll pick the ride for the day, size and deliver the bikes to the house, and set up a shuttle when the ride calls for one. <a href="/stay">See how a stay works</a>.</p>
+      <p class="fine">Route from OpenStreetMap trail data, elevation from USGS. Trails and closures change; check current conditions before you ride.</p>
+    </div>
+  </section>
+"""
+    ld = {'@context': 'https://schema.org', '@graph': [
+        {'@type': 'TouristAttraction', 'name': r['name'] + ' mountain bike route', 'description': blurb,
+         'url': 'https://ophirstays.com/trails/' + r['slug'], 'image': 'https://ophirstays.com/assets/routes/' + r['slug'] + '.jpg',
+         'touristType': 'Mountain biking', 'isAccessibleForFree': True,
+         'geo': {'@type': 'GeoCoordinates', 'latitude': round(la, 5), 'longitude': round(lo, 5)},
+         'containedInPlace': {'@type': 'City', 'name': 'Durango, Colorado'}},
+        {'@type': 'BreadcrumbList', 'itemListElement': [
+            {'@type': 'ListItem', 'position': 1, 'name': 'Ophir Stays', 'item': 'https://ophirstays.com/'},
+            {'@type': 'ListItem', 'position': 2, 'name': 'Durango routes', 'item': 'https://ophirstays.com/trails'},
+            {'@type': 'ListItem', 'position': 3, 'name': r['name'], 'item': 'https://ophirstays.com/trails/' + r['slug']}]}]}
+    html = page(f"{r['name']} · Durango Mountain Bike Route, Map and GPX · Ophir Stays",
+                f"{r['name']} in {r['area']}, Durango: {r['miles']} miles, {r['climb']:,} ft of climbing, {r['difficulty'].lower()}. Free route map, elevation profile and GPX download.",
+                '/trails/' + r['slug'], 'journal', body, image='/assets/routes/' + r['slug'] + '.jpg')
+    return html.replace('</head>', '<script type="application/ld+json">' + _json.dumps(ld) + '</script>\n</head>', 1)
+
+def route_card(r):
+    return (f'<a class="rcard reveal" href="/trails/{r["slug"]}"><div class="ph"><img src="/assets/routes/{r["slug"]}.jpg" alt="Map of {r["name"]}, Durango" loading="lazy" width="1600" height="1024"></div>'
+            f'<p class="post-meta">{r["area"]} · {r["difficulty"]}</p><h3>{r["name"]}</h3><p>{r["miles"]} mi · {r["climb"]:,} ft climbing</p></a>')
+
+trails_index_body = f"""
+  <section style="padding-bottom:32px">
+    <div class="wrap narrow center reveal">
+      <p class="eyebrow">Ride</p>
+      <h1 class="display">Durango mountain bike routes</h1>
+      <p class="lead">Ten rides from town, easy to advanced, each with a map, elevation profile and free GPX download. Every one starts within ten minutes of Main Avenue.</p>
+      <p style="margin-top:20px"><a class="btn" href="/trail-map">See the full trail map</a></p>
+    </div>
+  </section>
+  <section style="padding-top:0">
+    <div class="wrap"><div class="grid3">{''.join(route_card(r) for r in sorted(ROUTES, key=lambda r: (DIFF_ORDER[r['difficulty']], r['miles'])))}</div></div>
+    <div class="wrap narrow article" style="margin-top:48px">
+      <p>New to Durango? Start with the Meadow Loop to get used to the altitude, then work up to Telegraph and Sidewinder. Save Raider Ridge and Animas Mountain for when your legs and lungs have caught up.</p>
+      <p class="fine">Routes from OpenStreetMap trail data, elevation from USGS. Trails and closures change; check current conditions before you ride.</p>
+    </div>
+  </section>
+"""
+trails_index = page('Durango Mountain Bike Routes: Maps, Elevation and GPX · Ophir Stays',
+                    'Ten Durango mountain bike routes from town, easy to advanced: Horse Gulch, Raider Ridge, Animas Mountain, Overend, Twin Buttes, Log Chutes and more. Free maps, elevation profiles and GPX.',
+                    '/trails', 'journal', trails_index_body, image='/assets/routes/telegraph-sidewinder.jpg')
+
+os.makedirs('journal', exist_ok=True); os.makedirs('homes', exist_ok=True); os.makedirs('trails', exist_ok=True)
+for name, html in [('index.html', home), ('owners.html', owners), ('about.html', about), ('journal.html', journal), ('journal/durango-rides.html', post), ('journal/durango-home-earnings.html', post2), ('journal/where-to-eat-durango.html', post3), ('journal/durango-short-term-rental-rules.html', post4), ('trail-map.html', trailmap), ('trails.html', trails_index), ('homes.html', homes_page), ('stay.html', stay_page)] + [(f"homes/{h['slug']}.html", home_page(h)) for h in LIVE_HOMES] + [(f"trails/{r['slug']}.html", route_page(r)) for r in ROUTES]:
     open(name, 'w').write(html)
 open('sitemap.xml', 'w').write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">\n' +
-    ''.join(f'<url><loc>https://ophirstays.com{p}</loc><lastmod>2026-10-17</lastmod>' + ('<image:image><image:loc>https://ophirstays.com/assets/ophir-durango-trail-map.jpg</image:loc></image:image>' if p == '/trail-map' else '') + '</url>\n' for p in ['/', '/stay', '/homes', '/owners', '/about', '/journal', '/journal/durango-rides', '/journal/durango-home-earnings', '/journal/where-to-eat-durango', '/journal/durango-short-term-rental-rules', '/trail-map'] + [f"/homes/{h['slug']}" for h in HOMES if not h['sample']]) + '</urlset>\n')
+    ''.join(f'<url><loc>https://ophirstays.com{p}</loc><lastmod>2026-10-17</lastmod>' + ('<image:image><image:loc>https://ophirstays.com/assets/ophir-durango-trail-map.jpg</image:loc></image:image>' if p == '/trail-map' else '') + '</url>\n' for p in ['/', '/stay', '/homes', '/owners', '/about', '/journal', '/journal/durango-rides', '/journal/durango-home-earnings', '/journal/where-to-eat-durango', '/journal/durango-short-term-rental-rules', '/trail-map', '/trails'] + [f"/trails/{r['slug']}" for r in ROUTES] + [f"/homes/{h['slug']}" for h in HOMES if not h['sample']]) + '</urlset>\n')
 print('built')

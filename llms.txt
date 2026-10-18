@@ -1,0 +1,20 @@
+# Ophir Stays
+
+> Locally owned vacation rental management and trip planning for a private collection of homes in Durango, Colorado. Founded by Casey Roberts, a Durango local of 23 years.
+
+## Guests
+- [Your Stay](https://ophirstays.com/stay): how a stay works, trip planning packages, ski and bike concierge
+- [The Collection](https://ophirstays.com/homes): the homes
+
+## Ride Durango
+- [Durango mountain bike routes](https://ophirstays.com/trails): ten rides from town with maps, elevation profiles and free GPX
+- [Durango trail map](https://ophirstays.com/trail-map): free printable map of the trail systems around Durango
+- [Five rides that show you Durango](https://ophirstays.com/journal/durango-rides)
+
+## Guides
+- [Where to eat in Durango](https://ophirstays.com/journal/where-to-eat-durango)
+
+## Owners
+- [Owners](https://ophirstays.com/owners): management, fees and how to apply
+- [What a Durango vacation home earns](https://ophirstays.com/journal/durango-home-earnings)
+- [Durango short-term rental rules](https://ophirstays.com/journal/durango-short-term-rental-rules)

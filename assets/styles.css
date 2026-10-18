@@ -344,3 +344,8 @@ a.ptile:hover{background:#1E1C1A}
 .ptile-big .pt-head b{font-size:20px}
 @media (max-width:960px){.pgrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (max-width:600px){.pgrid{grid-template-columns:1fr}.ptile-big{padding:24px 20px}.ptile-big svg{height:110px}}
+.pgrid-2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.pgrid-1{grid-template-columns:1fr}
+.article .ptile,.article a.ptile{color:var(--bone)!important;text-decoration:none}
+.article .faq-q{font-family:var(--sans);font-size:18px;font-weight:500;margin:22px 0 6px}
+@media (max-width:600px){.pgrid-2{grid-template-columns:1fr}}

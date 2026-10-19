@@ -1127,9 +1127,29 @@ trails_index = page('Durango Mountain Bike Routes: Maps, Elevation and GPX · Op
                     'Ten Durango mountain bike routes from town, easy to advanced: Horse Gulch, Raider Ridge, Animas Mountain, Overend, Twin Buttes, Log Chutes and more. Free maps, elevation profiles and GPX.',
                     '/trails', 'journal', trails_index_body, image='/assets/routes/telegraph-sidewinder-card.jpg').replace('</head>', '<script type="application/ld+json">' + _json.dumps({'@context': 'https://schema.org', '@type': 'ItemList', 'name': 'Durango mountain bike routes', 'itemListElement': [{'@type': 'ListItem', 'position': i + 1, 'url': 'https://ophirstays.com/trails/' + r['slug'], 'name': r['name']} for i, r in enumerate(sorted(ROUTES, key=lambda r: (DIFF_ORDER[r['difficulty']], r['miles'])))]}) + '</script>\n</head>', 1)
 
+
+# ---------------- GUEST APP PREVIEW ----------------
+guestapp_body = """
+  <section style="padding-bottom:32px">
+    <div class="wrap narrow center reveal">
+      <p class="eyebrow">The guest app</p>
+      <h1 class="display">Every stay arrives planned</h1>
+      <p class="lead">Each Ophir guest gets a private trip page: what's ready when they arrive, every day planned around the forecast, add-ons they can book and pay for, and Ask Ophir for any question, any hour.</p>
+    </div>
+  </section>
+  <section style="padding-top:0">
+    <div class="wrap" style="max-width:1100px"><img src="/assets/guest-app-preview.jpg" width="2012" height="1300" alt="Four screens from the Ophir Stays guest app: arrival checklist, a day-by-day itinerary, suggested add-ons and Ask Ophir" style="width:100%;height:auto;display:block;border:1px solid var(--line)"></div>
+    <div class="wrap narrow article" style="margin-top:32px">
+      <p>A sample itinerary for a family ski week at a home near Purgatory. Every guest's page is built from what they tell us before they arrive, then adjusted as the weather changes.</p>
+      <p><a href="/stay">See how a stay works</a> · <a href="/owners">For owners</a></p>
+    </div>
+  </section>
+"""
+guestapp = page('The Ophir Guest App · Ophir Stays', 'Every Ophir Stays guest gets a private trip page: arrival checklist, daily plans built around the forecast, add-ons and Ask Ophir.', '/guest-app', 'stay', guestapp_body, image='/assets/guest-app-preview.jpg')
+
 os.makedirs('journal', exist_ok=True); os.makedirs('homes', exist_ok=True); os.makedirs('trails', exist_ok=True)
-for name, html in [('index.html', home), ('owners.html', owners), ('about.html', about), ('journal.html', journal), ('journal/durango-rides.html', post), ('journal/durango-home-earnings.html', post2), ('journal/where-to-eat-durango.html', post3), ('journal/durango-short-term-rental-rules.html', post4), ('trail-map.html', trailmap), ('trails.html', trails_index), ('homes.html', homes_page), ('stay.html', stay_page)] + [(f"homes/{h['slug']}.html", home_page(h)) for h in LIVE_HOMES] + [(f"trails/{r['slug']}.html", route_page(r)) for r in ROUTES]:
+for name, html in [('index.html', home), ('owners.html', owners), ('about.html', about), ('journal.html', journal), ('journal/durango-rides.html', post), ('journal/durango-home-earnings.html', post2), ('journal/where-to-eat-durango.html', post3), ('journal/durango-short-term-rental-rules.html', post4), ('trail-map.html', trailmap), ('trails.html', trails_index), ('guest-app.html', guestapp), ('homes.html', homes_page), ('stay.html', stay_page)] + [(f"homes/{h['slug']}.html", home_page(h)) for h in LIVE_HOMES] + [(f"trails/{r['slug']}.html", route_page(r)) for r in ROUTES]:
     open(name, 'w').write(html)
 open('sitemap.xml', 'w').write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">\n' +
-    ''.join(f'<url><loc>https://ophirstays.com{p}</loc><lastmod>2026-10-18</lastmod>' + ('<image:image><image:loc>https://ophirstays.com/assets/ophir-durango-trail-map.jpg</image:loc></image:image>' if p == '/trail-map' else ''.join(f'<image:image><image:loc>https://ophirstays.com/assets/routes/{p[8:]}{x}.jpg</image:loc></image:image>' for x in ('', '-card')) if p.startswith('/trails/') else '') + '</url>\n' for p in ['/', '/stay', '/homes', '/owners', '/about', '/journal', '/journal/durango-rides', '/journal/durango-home-earnings', '/journal/where-to-eat-durango', '/journal/durango-short-term-rental-rules', '/trail-map', '/trails'] + [f"/trails/{r['slug']}" for r in ROUTES] + [f"/homes/{h['slug']}" for h in HOMES if not h['sample']]) + '</urlset>\n')
+    ''.join(f'<url><loc>https://ophirstays.com{p}</loc><lastmod>2026-10-18</lastmod>' + ('<image:image><image:loc>https://ophirstays.com/assets/ophir-durango-trail-map.jpg</image:loc></image:image>' if p == '/trail-map' else ''.join(f'<image:image><image:loc>https://ophirstays.com/assets/routes/{p[8:]}{x}.jpg</image:loc></image:image>' for x in ('', '-card')) if p.startswith('/trails/') else '') + '</url>\n' for p in ['/', '/stay', '/homes', '/owners', '/about', '/journal', '/journal/durango-rides', '/journal/durango-home-earnings', '/journal/where-to-eat-durango', '/journal/durango-short-term-rental-rules', '/trail-map', '/trails', '/guest-app'] + [f"/trails/{r['slug']}" for r in ROUTES] + [f"/homes/{h['slug']}" for h in HOMES if not h['sample']]) + '</urlset>\n')
 print('built')

@@ -162,25 +162,38 @@
       <div class="reveal">
         <p class="eyebrow">Free estimate</p>
         <h2 class="display">What could your home earn?</h2>
-        <p class="lead">Tell us about your home. Casey will send you a personal estimate within two business days, with no obligation.</p>
+        <p class="lead">Tell us about your home. Within 24 hours you get a three-page report: expected rent month by month, what you keep after every cost, comparable homes and our terms. Free, with no obligation.</p>
+        <p class="fine" style="margin-top:16px"><a href="/assets/ophir-earnings-estimate-sample.pdf">See a sample report</a></p>
         <p class="fine" style="margin-top:28px">Prefer to talk? <a href="mailto:casey@ophirstays.com">casey@ophirstays.com</a></p>
         <p class="fine" style="margin-top:12px">Before you apply: <a href="/journal/durango-home-earnings">what a Durango vacation home earns</a> and <a href="/journal/durango-short-term-rental-rules">the city and county rental rules</a>.</p>
       </div>
       <div class="reveal" id="estimate-box">
         <form class="form" id="estimate-form" novalidate>
+          <fieldset class="field full roles"><legend>I am</legend>
+            <label class="chip"><input type="radio" name="role" value="owner" checked><span>The owner</span></label>
+            <label class="chip"><input type="radio" name="role" value="agent"><span>A real estate agent</span></label></fieldset>
           <div class="field"><label for="f-name">Your name</label><input id="f-name" name="name" autocomplete="name" required></div>
           <div class="field"><label for="f-email">Email</label><input id="f-email" name="email" type="email" autocomplete="email" required></div>
           <div class="field"><label for="f-phone">Phone</label><input id="f-phone" name="phone" type="tel" autocomplete="tel"></div>
-          <div class="field"><label for="f-beds">Bedrooms</label><select id="f-beds" name="bedrooms"><option value="">Select</option><option>1–2</option><option>3</option><option>4</option><option>5</option><option>6+</option></select></div>
-          <div class="field full"><label for="f-addr">Home address in Durango</label><input id="f-addr" name="address" autocomplete="street-address" required></div>
-          <div class="field"><label for="f-renting">Rented now?</label><select id="f-renting" name="renting"><option value="">Select</option><option>Yes, I manage it myself</option><option>Yes, with a manager</option><option>Not yet</option></select></div>
-          <div class="field"><label for="f-rev">Last 12 months' income</label><input id="f-rev" name="revenue" inputmode="numeric" placeholder="Optional"><span class="hint">Sets your guarantee baseline.</span></div>
+          <div class="field agent-only"><label for="f-brk">Brokerage</label><input id="f-brk" name="brokerage" autocomplete="organization"></div>
+          <div class="field agent-only"><label for="f-own">Owner's name</label><input id="f-own" name="owner_name"><span class="hint">Shown on the report.</span></div>
+          <div class="field full"><label for="f-addr">Home address</label><input id="f-addr" name="address" autocomplete="street-address" required></div>
+          <div class="field"><label for="f-area">Area</label><select id="f-area" name="area"><option value="downtown">Downtown Durango</option><option value="valley">Animas Valley</option><option value="purgatory">Purgatory and Durango Mountain</option><option value="vallecito">Vallecito Lake and Bayfield</option><option value="west">West of Durango (Hesperus, Lightner Creek)</option><option value="east">East of Durango (Florida Road, Florida Mesa)</option><option value="other">Somewhere else in La Plata County</option></select></div>
+          <div class="field"><label for="f-type">Type of home</label><select id="f-type" name="home_type"><option value="house">House</option><option value="cabin">Cabin</option><option value="townhome">Townhome</option><option value="condo">Condo</option></select></div>
+          <div class="field"><label for="f-beds">Bedrooms</label><select id="f-beds" name="bedrooms" required><option value="">Select</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option></select></div>
+          <div class="field"><label for="f-baths">Bathrooms</label><input id="f-baths" name="baths" inputmode="decimal" placeholder="e.g. 3.5"></div>
+          <div class="field"><label for="f-sleeps">Sleeps</label><input id="f-sleeps" name="sleeps" inputmode="numeric"></div>
+          <div class="field"><label for="f-hoa">HOA</label><select id="f-hoa" name="hoa"><option value="">Not sure</option><option>No HOA</option><option>HOA allows nightly rentals</option><option>HOA restricts rentals</option></select></div>
+          <fieldset class="field full"><legend>Features</legend><div class="chips"><label class="chip"><input type="checkbox" name="features" value="hot_tub"><span>Hot tub</span></label><label class="chip"><input type="checkbox" name="features" value="views"><span>Mountain views</span></label><label class="chip"><input type="checkbox" name="features" value="water"><span>On the river or lake</span></label><label class="chip"><input type="checkbox" name="features" value="ski_in"><span>Ski-in, ski-out</span></label><label class="chip"><input type="checkbox" name="features" value="gear"><span>Garage or gear room</span></label><label class="chip"><input type="checkbox" name="features" value="ac"><span>Air conditioning</span></label><label class="chip"><input type="checkbox" name="features" value="game"><span>Game or media room</span></label><label class="chip"><input type="checkbox" name="features" value="acreage"><span>Private acreage</span></label><label class="chip"><input type="checkbox" name="features" value="pets"><span>Pet friendly</span></label></div></fieldset>
+          <div class="field"><label for="f-use">Rented now?</label><select id="f-use" name="current_use"><option value="">Select</option><option>Yes, I manage it myself</option><option>Yes, with a manager</option><option>Long-term rental</option><option>Not yet, personal use only</option></select></div>
+          <div class="field"><label for="f-rev">Last 12 months' rent</label><input id="f-rev" name="current_rent" inputmode="numeric" placeholder="Optional"><span class="hint">Sets the year-one guarantee baseline.</span></div>
+          <div class="field full"><label for="f-src">How did you hear about us?</label><input id="f-src" name="source" placeholder="A friend, an agent, a letter…"></div>
           <div class="field full"><label for="f-notes">Anything we should know?</label><textarea id="f-notes" name="notes"></textarea></div>
           <div class="hp" aria-hidden="true"><label for="f-web">Website</label><input id="f-web" name="website" tabindex="-1" autocomplete="off"></div>
           <button class="btn" type="submit">Send my request</button>
           <p class="form-status" role="status" aria-live="polite"></p>
         </form>
-        <div class="thanks" tabindex="-1"><svg aria-hidden="true"><use href="#summit"/></svg><h3>Thank you. We have your request.</h3><p style="color:var(--muted);margin:12px 0 0">Casey will email your estimate within two business days.</p></div>
+        <div class="thanks" tabindex="-1"><svg aria-hidden="true"><use href="#summit"/></svg><h3>Thank you. We have your request.</h3><p style="color:var(--muted);margin:12px 0 0">Casey will check the numbers and email your report within 24 hours.</p></div>
       </div>
     </div>
   </section>
@@ -234,14 +247,16 @@ b.disabled=false;});})();
 <script>
 (function(){
   var f=document.getElementById('estimate-form'),box=document.getElementById('estimate-box'),st=f.querySelector('.form-status');
+  var setRole=function(){var ag=f.role.value==='agent';f.querySelectorAll('.agent-only').forEach(function(el){el.hidden=!ag})};[].forEach.call(f.role,function(r){r.onchange=setRole});setRole();
+  var q=new URLSearchParams(location.search);if(q.get('role')==='agent'){f.role.value='agent';setRole()}
   f.addEventListener('submit',async function(e){
     e.preventDefault();st.className='form-status';
     var miss=[].filter.call(f.querySelectorAll('[required]'),function(i){return !i.value.trim()});
-    if(miss.length){st.textContent='Please fill in your name, email and the home address.';st.classList.add('err');miss[0].focus();return}
+    if(miss.length){st.textContent='Please fill in your name, email, the home address and bedrooms.';st.classList.add('err');miss[0].focus();return}
     if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(f.email.value)){st.textContent='Please check your email address.';st.classList.add('err');f.email.focus();return}
     var btn=f.querySelector('button');btn.disabled=true;btn.textContent='Sending…';
     try{
-      var r=await fetch('/api/estimate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(Object.fromEntries(new FormData(f)))});
+      var fd=new FormData(f),o=Object.fromEntries(fd);o.features=fd.getAll('features');var r=await fetch('/api/estimate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(o)});
       if(!r.ok)throw 0;
       box.classList.add('sent');box.querySelector('.thanks').focus();
     }catch(_){

@@ -345,6 +345,35 @@ home = page('Ophir Stays · Durango Vacation Rentals, Every Trip Planned',
             '/', 'home', home_body, SLIDE_JS)
 
 # ---------------- OWNERS ----------------
+
+FEATURE_OPTS = [('hot_tub','Hot tub'),('views','Mountain views'),('water','On the river or lake'),('ski_in','Ski-in, ski-out'),('gear','Garage or gear room'),('ac','Air conditioning'),('game','Game or media room'),('acreage','Private acreage'),('pets','Pet friendly')]
+AREA_OPTS = [('downtown','Downtown Durango'),('valley','Animas Valley'),('purgatory','Purgatory and Durango Mountain'),('vallecito','Vallecito Lake and Bayfield'),('west','West of Durango (Hesperus, Lightner Creek)'),('east','East of Durango (Florida Road, Florida Mesa)'),('other','Somewhere else in La Plata County')]
+ESTIMATE_FORM = f"""<form class="form" id="estimate-form" novalidate>
+          <fieldset class="field full roles"><legend>I am</legend>
+            <label class="chip"><input type="radio" name="role" value="owner" checked><span>The owner</span></label>
+            <label class="chip"><input type="radio" name="role" value="agent"><span>A real estate agent</span></label></fieldset>
+          <div class="field"><label for="f-name">Your name</label><input id="f-name" name="name" autocomplete="name" required></div>
+          <div class="field"><label for="f-email">Email</label><input id="f-email" name="email" type="email" autocomplete="email" required></div>
+          <div class="field"><label for="f-phone">Phone</label><input id="f-phone" name="phone" type="tel" autocomplete="tel"></div>
+          <div class="field agent-only"><label for="f-brk">Brokerage</label><input id="f-brk" name="brokerage" autocomplete="organization"></div>
+          <div class="field agent-only"><label for="f-own">Owner's name</label><input id="f-own" name="owner_name"><span class="hint">Shown on the report.</span></div>
+          <div class="field full"><label for="f-addr">Home address</label><input id="f-addr" name="address" autocomplete="street-address" required></div>
+          <div class="field"><label for="f-area">Area</label><select id="f-area" name="area">{''.join(f'<option value="{k}">{v}</option>' for k,v in AREA_OPTS)}</select></div>
+          <div class="field"><label for="f-type">Type of home</label><select id="f-type" name="home_type"><option value="house">House</option><option value="cabin">Cabin</option><option value="townhome">Townhome</option><option value="condo">Condo</option></select></div>
+          <div class="field"><label for="f-beds">Bedrooms</label><select id="f-beds" name="bedrooms" required><option value="">Select</option>{''.join(f'<option>{n}</option>' for n in range(1,9))}</select></div>
+          <div class="field"><label for="f-baths">Bathrooms</label><input id="f-baths" name="baths" inputmode="decimal" placeholder="e.g. 3.5"></div>
+          <div class="field"><label for="f-sleeps">Sleeps</label><input id="f-sleeps" name="sleeps" inputmode="numeric"></div>
+          <div class="field"><label for="f-hoa">HOA</label><select id="f-hoa" name="hoa"><option value="">Not sure</option><option>No HOA</option><option>HOA allows nightly rentals</option><option>HOA restricts rentals</option></select></div>
+          <fieldset class="field full"><legend>Features</legend><div class="chips">{''.join(f'<label class="chip"><input type="checkbox" name="features" value="{k}"><span>{v}</span></label>' for k,v in FEATURE_OPTS)}</div></fieldset>
+          <div class="field"><label for="f-use">Rented now?</label><select id="f-use" name="current_use"><option value="">Select</option><option>Yes, I manage it myself</option><option>Yes, with a manager</option><option>Long-term rental</option><option>Not yet, personal use only</option></select></div>
+          <div class="field"><label for="f-rev">Last 12 months' rent</label><input id="f-rev" name="current_rent" inputmode="numeric" placeholder="Optional"><span class="hint">Sets the year-one guarantee baseline.</span></div>
+          <div class="field full"><label for="f-src">How did you hear about us?</label><input id="f-src" name="source" placeholder="A friend, an agent, a letter…"></div>
+          <div class="field full"><label for="f-notes">Anything we should know?</label><textarea id="f-notes" name="notes"></textarea></div>
+          <div class="hp" aria-hidden="true"><label for="f-web">Website</label><input id="f-web" name="website" tabindex="-1" autocomplete="off"></div>
+          <button class="btn" type="submit">Send my request</button>
+          <p class="form-status" role="status" aria-live="polite"></p>
+        </form>"""
+
 owners_body = f'''
   <section class="center" style="padding-bottom:56px">
     <div class="wrap narrow reveal">
@@ -457,25 +486,14 @@ owners_body = f'''
       <div class="reveal">
         <p class="eyebrow">Free estimate</p>
         <h2 class="display">What could your home earn?</h2>
-        <p class="lead">Tell us about your home. Casey will send you a personal estimate within two business days, with no obligation.</p>
+        <p class="lead">Tell us about your home. Within 24 hours you get a three-page report: expected rent month by month, what you keep after every cost, comparable homes and our terms. Free, with no obligation.</p>
+        <p class="fine" style="margin-top:16px"><a href="/assets/ophir-earnings-estimate-sample.pdf">See a sample report</a></p>
         <p class="fine" style="margin-top:28px">Prefer to talk? <a href="mailto:casey@ophirstays.com">casey@ophirstays.com</a></p>
         <p class="fine" style="margin-top:12px">Before you apply: <a href="/journal/durango-home-earnings">what a Durango vacation home earns</a> and <a href="/journal/durango-short-term-rental-rules">the city and county rental rules</a>.</p>
       </div>
       <div class="reveal" id="estimate-box">
-        <form class="form" id="estimate-form" novalidate>
-          <div class="field"><label for="f-name">Your name</label><input id="f-name" name="name" autocomplete="name" required></div>
-          <div class="field"><label for="f-email">Email</label><input id="f-email" name="email" type="email" autocomplete="email" required></div>
-          <div class="field"><label for="f-phone">Phone</label><input id="f-phone" name="phone" type="tel" autocomplete="tel"></div>
-          <div class="field"><label for="f-beds">Bedrooms</label><select id="f-beds" name="bedrooms"><option value="">Select</option><option>1–2</option><option>3</option><option>4</option><option>5</option><option>6+</option></select></div>
-          <div class="field full"><label for="f-addr">Home address in Durango</label><input id="f-addr" name="address" autocomplete="street-address" required></div>
-          <div class="field"><label for="f-renting">Rented now?</label><select id="f-renting" name="renting"><option value="">Select</option><option>Yes, I manage it myself</option><option>Yes, with a manager</option><option>Not yet</option></select></div>
-          <div class="field"><label for="f-rev">Last 12 months' income</label><input id="f-rev" name="revenue" inputmode="numeric" placeholder="Optional"><span class="hint">Sets your guarantee baseline.</span></div>
-          <div class="field full"><label for="f-notes">Anything we should know?</label><textarea id="f-notes" name="notes"></textarea></div>
-          <div class="hp" aria-hidden="true"><label for="f-web">Website</label><input id="f-web" name="website" tabindex="-1" autocomplete="off"></div>
-          <button class="btn" type="submit">Send my request</button>
-          <p class="form-status" role="status" aria-live="polite"></p>
-        </form>
-        <div class="thanks" tabindex="-1"><svg aria-hidden="true"><use href="#summit"/></svg><h3>Thank you. We have your request.</h3><p style="color:var(--muted);margin:12px 0 0">Casey will email your estimate within two business days.</p></div>
+        {ESTIMATE_FORM}
+        <div class="thanks" tabindex="-1"><svg aria-hidden="true"><use href="#summit"/></svg><h3>Thank you. We have your request.</h3><p style="color:var(--muted);margin:12px 0 0">Casey will check the numbers and email your report within 24 hours.</p></div>
       </div>
     </div>
   </section>
@@ -499,14 +517,16 @@ FORM_JS = '''
 <script>
 (function(){
   var f=document.getElementById('estimate-form'),box=document.getElementById('estimate-box'),st=f.querySelector('.form-status');
+  var setRole=function(){var ag=f.role.value==='agent';f.querySelectorAll('.agent-only').forEach(function(el){el.hidden=!ag})};[].forEach.call(f.role,function(r){r.onchange=setRole});setRole();
+  var q=new URLSearchParams(location.search);if(q.get('role')==='agent'){f.role.value='agent';setRole()}
   f.addEventListener('submit',async function(e){
     e.preventDefault();st.className='form-status';
     var miss=[].filter.call(f.querySelectorAll('[required]'),function(i){return !i.value.trim()});
-    if(miss.length){st.textContent='Please fill in your name, email and the home address.';st.classList.add('err');miss[0].focus();return}
+    if(miss.length){st.textContent='Please fill in your name, email, the home address and bedrooms.';st.classList.add('err');miss[0].focus();return}
     if(!/^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$/.test(f.email.value)){st.textContent='Please check your email address.';st.classList.add('err');f.email.focus();return}
     var btn=f.querySelector('button');btn.disabled=true;btn.textContent='Sending…';
     try{
-      var r=await fetch('/api/estimate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(Object.fromEntries(new FormData(f)))});
+      var fd=new FormData(f),o=Object.fromEntries(fd);o.features=fd.getAll('features');var r=await fetch('/api/estimate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(o)});
       if(!r.ok)throw 0;
       box.classList.add('sent');box.querySelector('.thanks').focus();
     }catch(_){
@@ -1147,9 +1167,29 @@ guestapp_body = """
 """
 guestapp = page('The Ophir Guest App · Ophir Stays', 'Every Ophir Stays guest gets a private trip page: arrival checklist, daily plans built around the forecast, add-ons and Ask Ophir.', '/guest-app', 'stay', guestapp_body, image='/assets/guest-app-preview.jpg')
 
+
+estimate_body = f'''
+  <section class="tint" id="estimate" style="padding-top:72px">
+    <div class="wrap split top">
+      <div class="reveal">
+        <p class="eyebrow">Free earnings estimate</p>
+        <h1 class="display">What could this home earn?</h1>
+        <p class="lead">For owners and agents. Tell us about the home and within 24 hours you get a three-page report: expected rent month by month, what the owner keeps after every cost, comparable homes and our terms.</p>
+        <p class="fine" style="margin-top:20px"><a href="/assets/ophir-earnings-estimate-sample.pdf">See a sample report</a></p>
+        <p class="fine" style="margin-top:12px">Casey checks every number himself before it goes out. Questions? <a href="mailto:casey@ophirstays.com">casey@ophirstays.com</a> or 970-779-8992.</p>
+      </div>
+      <div class="reveal" id="estimate-box">
+        {ESTIMATE_FORM}
+        <div class="thanks" tabindex="-1"><svg aria-hidden="true"><use href="#summit"/></svg><h3>Thank you. We have your request.</h3><p style="color:var(--muted);margin:12px 0 0">Casey will check the numbers and email the report within 24 hours.</p></div>
+      </div>
+    </div>
+  </section>
+'''
+estimate_page = page('Free Durango Vacation Rental Earnings Estimate · Ophir Stays', 'Owners and agents: tell us about a Durango home and get a free three-page earnings report within 24 hours, with monthly rent, what the owner keeps and comparable homes.', '/estimate', 'owners', estimate_body, FORM_JS)
+
 os.makedirs('journal', exist_ok=True); os.makedirs('homes', exist_ok=True); os.makedirs('trails', exist_ok=True)
-for name, html in [('index.html', home), ('owners.html', owners), ('about.html', about), ('journal.html', journal), ('journal/durango-rides.html', post), ('journal/durango-home-earnings.html', post2), ('journal/where-to-eat-durango.html', post3), ('journal/durango-short-term-rental-rules.html', post4), ('trail-map.html', trailmap), ('trails.html', trails_index), ('guest-app.html', guestapp), ('homes.html', homes_page), ('stay.html', stay_page)] + [(f"homes/{h['slug']}.html", home_page(h)) for h in LIVE_HOMES] + [(f"trails/{r['slug']}.html", route_page(r)) for r in ROUTES]:
+for name, html in [('index.html', home), ('owners.html', owners), ('about.html', about), ('journal.html', journal), ('journal/durango-rides.html', post), ('journal/durango-home-earnings.html', post2), ('journal/where-to-eat-durango.html', post3), ('journal/durango-short-term-rental-rules.html', post4), ('trail-map.html', trailmap), ('trails.html', trails_index), ('guest-app.html', guestapp), ('estimate.html', estimate_page), ('homes.html', homes_page), ('stay.html', stay_page)] + [(f"homes/{h['slug']}.html", home_page(h)) for h in LIVE_HOMES] + [(f"trails/{r['slug']}.html", route_page(r)) for r in ROUTES]:
     open(name, 'w').write(html)
 open('sitemap.xml', 'w').write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">\n' +
-    ''.join(f'<url><loc>https://ophirstays.com{p}</loc><lastmod>2026-10-18</lastmod>' + ('<image:image><image:loc>https://ophirstays.com/assets/ophir-durango-trail-map.jpg</image:loc></image:image>' if p == '/trail-map' else ''.join(f'<image:image><image:loc>https://ophirstays.com/assets/routes/{p[8:]}{x}.jpg</image:loc></image:image>' for x in ('', '-card')) if p.startswith('/trails/') else '') + '</url>\n' for p in ['/', '/stay', '/homes', '/owners', '/about', '/journal', '/journal/durango-rides', '/journal/durango-home-earnings', '/journal/where-to-eat-durango', '/journal/durango-short-term-rental-rules', '/trail-map', '/trails', '/guest-app'] + [f"/trails/{r['slug']}" for r in ROUTES] + [f"/homes/{h['slug']}" for h in HOMES if not h['sample']]) + '</urlset>\n')
+    ''.join(f'<url><loc>https://ophirstays.com{p}</loc><lastmod>2026-10-18</lastmod>' + ('<image:image><image:loc>https://ophirstays.com/assets/ophir-durango-trail-map.jpg</image:loc></image:image>' if p == '/trail-map' else ''.join(f'<image:image><image:loc>https://ophirstays.com/assets/routes/{p[8:]}{x}.jpg</image:loc></image:image>' for x in ('', '-card')) if p.startswith('/trails/') else '') + '</url>\n' for p in ['/', '/stay', '/homes', '/owners', '/about', '/journal', '/journal/durango-rides', '/journal/durango-home-earnings', '/journal/where-to-eat-durango', '/journal/durango-short-term-rental-rules', '/trail-map', '/trails', '/guest-app', '/estimate'] + [f"/trails/{r['slug']}" for r in ROUTES] + [f"/homes/{h['slug']}" for h in HOMES if not h['sample']]) + '</urlset>\n')
 print('built')

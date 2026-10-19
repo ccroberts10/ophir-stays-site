@@ -1,6 +1,9 @@
 // Admin API for Casey. Every call needs header x-admin-key = ADMIN_PASSWORD.
 // POST { action: 'list' | 'detail' | 'approve' | 'replan' | 'simulate' | 'task' | 'resend_welcome', ... }
 import { db, json, readBody, isAdmin, loadTrip, createTrip, planTrip, approveTrip, sendWelcome, sendEmail, emailShell, esc, SITE } from './_lib.js';
+import { computeEstimate, AREAS, FEATURES } from './_model.js';
+
+const money = (n) => '$' + Math.round(n).toLocaleString('en-US');
 
 const addDays = (n) => { const d = new Date(); d.setDate(d.getDate() + n); return d.toISOString().slice(0, 10); };
 const SAMPLE_NAMES = ['Taylor Brooks', 'Morgan Hale', 'Jordan Pierce', 'Avery Collins', 'Riley Dawson'];
@@ -69,6 +72,49 @@ export default async function handler(req, res) {
         if (!row.name) return json(res, 400, { error: 'Name required' });
         const out = r.id ? await db.update('restaurants', `id=eq.${r.id}`, row) : await db.insert('restaurants', [row]);
         return json(res, 200, { ok: true, restaurant: out[0] });
+      }
+      case 'estimates': return json(res, 200, { estimates: await db.select('estimates', 'select=id,token,created_at,status,requester_role,requester_name,brokerage,owner_name,address,bedrooms,area,sent_at,model->rent,model->keep&order=created_at.desc&limit=200'), areas: AREAS, features: Object.fromEntries(Object.entries(FEATURES).map(([k, v]) => [k, v.label])) });
+      case 'estimate_get': return json(res, 200, { estimate: await db.one('estimates', `id=eq.${b.id}`) });
+      case 'estimate_save': {
+        const e = await db.one('estimates', `id=eq.${b.id}`);
+        if (!e) return json(res, 404, { error: 'Not found' });
+        const p = b.patch || {};
+        const next = { ...e };
+        if (p.adr_adjust != null) next.adr_adjust = Math.min(1.6, Math.max(0.5, Number(p.adr_adjust) || 1));
+        if (p.occ_adjust != null) next.occ_adjust = Math.min(1.6, Math.max(0.5, Number(p.occ_adjust) || 1));
+        if (p.bedrooms != null) next.bedrooms = Math.max(1, Math.min(10, parseInt(p.bedrooms, 10) || e.bedrooms));
+        if (p.area && AREAS[p.area]) next.area = p.area;
+        if (p.home_type) next.home_type = String(p.home_type).slice(0, 20);
+        if (Array.isArray(p.features)) next.features = p.features.filter((f) => FEATURES[f]);
+        if (p.personal_note != null) next.personal_note = String(p.personal_note).slice(0, 1500);
+        if (p.owner_name != null) next.owner_name = String(p.owner_name).slice(0, 120);
+        if (p.address) next.address = String(p.address).slice(0, 200);
+        next.model = computeEstimate(next);
+        const [row] = await db.update('estimates', `id=eq.${e.id}`, { adr_adjust: next.adr_adjust, occ_adjust: next.occ_adjust, bedrooms: next.bedrooms, area: next.area, home_type: next.home_type,
+          features: next.features, personal_note: next.personal_note, owner_name: next.owner_name, address: next.address, model: next.model });
+        return json(res, 200, { estimate: row });
+      }
+      case 'estimate_send': {
+        const e = await db.one('estimates', `id=eq.${b.id}`);
+        if (!e) return json(res, 404, { error: 'Not found' });
+        const m = e.model, link = `${SITE}/report/${e.token}`, first = String(e.requester_name || '').split(/\s+/)[0] || 'Hello';
+        const note = e.personal_note ? String(e.personal_note).split(/\n{2,}/).map((x) => `<p>${esc(x).replace(/\n/g, '<br>')}</p>`).join('') : '';
+        const forWho = e.requester_role === 'agent' && e.owner_name ? `your client ${esc(e.owner_name)}'s home at ` : '';
+        await sendEmail({ to: e.requester_email, replyTo: process.env.OWNER_INBOX, subject: `Your Ophir earnings estimate: ${e.address}`,
+          html: emailShell(`<p>${esc(first)},</p><p>Here is the earnings estimate for ${forWho}${esc(e.address)}.</p>${note}
+            <table style="width:100%;border-top:2px solid #2A2826;margin:18px 0;font-family:Arial,sans-serif"><tr>
+            <td style="padding:12px 12px 0 0"><div style="font-size:11px;letter-spacing:2px;color:#6F685F">EXPECTED RENT</div><div style="font-size:30px;font-family:Georgia,serif">${money(m.rent)}</div><div style="font-size:12px;color:#6F685F">${money(m.range[0])} to ${money(m.range[1])}</div></td>
+            <td style="padding:12px 0 0 12px;border-left:1px solid #E7E1D6"><div style="font-size:11px;letter-spacing:2px;color:#6F685F">THE OWNER KEEPS</div><div style="font-size:30px;font-family:Georgia,serif">${money(m.keep)}</div><div style="font-size:12px;color:#6F685F">after every fee and cost</div></td></tr></table>
+            <p style="text-align:center;margin:26px 0"><a href="${link}" style="background:#B4572B;color:#fff;text-decoration:none;padding:14px 26px;font-family:Arial,sans-serif;font-size:13px;letter-spacing:.2em;text-transform:uppercase">Open the full report</a></p>
+            <p style="font-size:14px;color:#6F685F">The report has the month-by-month numbers, comparable homes and our terms, and saves as a PDF from the Download button.</p>
+            <p>Casey Roberts<br>Ophir Stays · 970-779-8992</p>`) });
+        const [row] = await db.update('estimates', `id=eq.${e.id}`, { status: 'sent', sent_at: new Date().toISOString() });
+        return json(res, 200, { estimate: row });
+      }
+      case 'estimate_status': {
+        if (!['new', 'sent', 'signed', 'closed'].includes(b.status)) return json(res, 400, { error: 'Bad status' });
+        const [row] = await db.update('estimates', `id=eq.${b.id}`, { status: b.status });
+        return json(res, 200, { estimate: row });
       }
       default: return json(res, 400, { error: 'Unknown action' });
     }

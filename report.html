@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Earnings Estimate · Ophir Stays</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;1,500&family=Jost:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--ground:#E7E0D2;--sheet:#FBF8F2;--ink:#2A2826;--muted:#6F685F;--line:#DED4C2;--rust:#A34E25;--bar:#B4572B;--sand:#CFC3AC;--hl:#F1EADC;
+--display:'Cormorant Garamond',Georgia,serif;--body:'Jost',system-ui,-apple-system,'Segoe UI',sans-serif}
+*{box-sizing:border-box}
+body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;padding:28px 16px 56px}
+.bar{max-width:860px;margin:0 auto 16px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;font-size:14px;color:var(--muted)}
+.bar button{font:500 12px var(--body);letter-spacing:.18em;text-transform:uppercase;background:var(--ink);color:var(--sheet);border:0;padding:12px 18px;cursor:pointer}
+.wrap{max-width:860px;margin:0 auto;display:flex;flex-direction:column;gap:24px}
+.sheet{background:var(--sheet);border:1px solid var(--line);padding:clamp(22px,5vw,52px);display:flex;flex-direction:column;gap:28px;min-width:0}
+header.top{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;flex-wrap:wrap;border-bottom:1px solid var(--line);padding-bottom:22px}
+.brand{display:flex;align-items:center;gap:14px}.brand svg{width:40px;height:40px;flex:none}
+.wm{font-weight:500;letter-spacing:.38em;font-size:15px}.wm small{display:block;font-weight:400;letter-spacing:.32em;font-size:10px;color:var(--rust);margin-top:4px}
+.meta{text-align:right;font-size:13px;color:var(--muted);line-height:1.6}.meta b{color:var(--ink);font-weight:500}
+.eyebrow{font-size:12px;font-weight:500;letter-spacing:.24em;text-transform:uppercase;color:var(--rust);margin:0}
+h1{font-family:var(--display);font-weight:500;font-size:clamp(34px,6vw,50px);line-height:1.05;margin:6px 0 10px}
+h2{font-family:var(--display);font-weight:500;font-size:29px;line-height:1.15;margin:0}
+.home{color:var(--muted);max-width:64ch;margin:0}.home b{color:var(--ink);font-weight:500}
+.note{border-left:2px solid var(--bar);padding:4px 0 4px 16px;font-family:var(--display);font-size:21px;line-height:1.4;font-style:italic;white-space:pre-wrap}
+.figs{display:grid;grid-template-columns:1.3fr 1fr;border-top:2px solid var(--ink)}
+.fig{padding:18px 22px 4px 0;min-width:0}.fig+.fig{border-left:1px solid var(--line);padding-left:22px}
+.k{font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+.v{font-family:var(--display);font-size:clamp(44px,8vw,62px);line-height:1;margin:8px 0 6px}
+.r{font-size:14px;color:var(--muted)}
+.stats{display:flex;flex-wrap:wrap;gap:8px 26px;font-size:14px;color:var(--muted)}.stats b{color:var(--ink);font-weight:500}
+.sec{display:flex;flex-direction:column;gap:12px;min-width:0}.sec p{margin:0;max-width:66ch}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:30px}.two>*{min-width:0}
+svg.chart{width:100%;height:auto;display:block}.chart .g{stroke:var(--line)}.chart .ax{fill:var(--muted);font:12px var(--body)}.chart .sm{font-size:10px}
+.chart .b{fill:var(--sand)}.chart .b.pk{fill:var(--bar)}.chart .lab{fill:var(--ink);font:500 12px var(--body)}
+.tbl{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:14px;font-variant-numeric:tabular-nums}
+th{text-align:left;font-weight:500;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);padding:0 10px 8px 0;border-bottom:1px solid var(--ink)}
+td{padding:7px 10px 7px 0;border-bottom:1px solid var(--line);vertical-align:top}
+td:not(:first-child),th:not(:first-child){text-align:right}
+.comps td:nth-child(2),.comps th:nth-child(2){text-align:left}.comps a{color:var(--ink);text-decoration-color:var(--sand)}
+tfoot td{font-weight:500;border-bottom:none;border-top:1px solid var(--ink)}
+.keep td:last-child{white-space:nowrap}.keep tr.sub td{color:var(--muted);font-size:13px;padding-block:4px}.keep tr.sub td:first-child{padding-left:14px}
+.keep tr.tot td{font-size:17px;border-top:2px solid var(--ink);border-bottom:none;background:var(--hl);padding:11px 10px}
+.small{font-size:13px;color:var(--muted)}
+.mrow{display:grid;grid-template-columns:150px 1fr 80px;gap:12px;align-items:center;font-size:14px;margin-bottom:10px}
+.track{height:14px;background:var(--hl);position:relative}.fill{position:absolute;inset:0 auto 0 0;background:var(--sand)}.us .fill{background:var(--bar)}
+.amt{text-align:right;font-weight:500;font-variant-numeric:tabular-nums}
+.quad{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--ink)}
+.quad div{padding:12px 12px 0 0}.quad div+div{border-left:1px solid var(--line);padding-left:12px}
+.quad b{display:block;font-family:var(--display);font-size:30px;font-weight:500;line-height:1.1}.quad span{font-size:13px;color:var(--muted)}
+ul.plain{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px}
+.promise{display:grid;grid-template-columns:repeat(3,1fr);border-top:2px solid var(--ink)}
+.promise div{padding:12px 14px 6px 0}.promise div:nth-child(3n+2),.promise div:nth-child(3n+3){border-left:1px solid var(--line);padding-left:14px}
+.promise b{display:block;font-family:var(--display);font-size:27px;font-weight:500;line-height:1.1}.promise span{font-size:13px;color:var(--muted)}
+.foot{border-top:1px solid var(--line);padding-top:18px;display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap;font-size:13px;color:var(--muted)}.foot b{color:var(--ink);font-weight:500}
+.msg{max-width:560px;margin:80px auto;text-align:center;color:var(--muted)}
+@media (max-width:640px){.figs,.two{grid-template-columns:1fr}.fig+.fig{border-left:0;padding-left:0;border-top:1px solid var(--line)}.quad{grid-template-columns:1fr 1fr}.quad div:nth-child(3){border-left:0;padding-left:0}.promise{grid-template-columns:1fr 1fr}.promise div{border-left:0!important;padding-left:0!important}.mrow{grid-template-columns:110px 1fr 70px}.meta{text-align:left}}
+@media print{
+  @page{size:8.5in 11in;margin:0}
+  body{background:var(--sheet);padding:0}.bar{display:none}.wrap{max-width:none;gap:0}
+  .sheet{border:0;width:calc(8.5in / .84);height:calc(11in / .84);zoom:.84;padding:.6in .65in;gap:22px;break-after:page;overflow:hidden}
+  .sheet:last-child{break-after:auto}td{padding-block:6px}
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+</style>
+</head>
+<body>
+<div class="bar" id="bar" hidden><span>Ophir Stays · Earnings estimate</span><button type="button" onclick="window.print()">Download PDF</button></div>
+<div class="wrap" id="out"><p class="msg">Loading your report…</p></div>
+<script>
+(function(){
+  var esc=function(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})};
+  var $=function(n){return '$'+Math.round(n).toLocaleString('en-US')};
+  var K=function(n){return '$'+Math.round(n/1000)+'K'};
+  var t=(location.pathname.split('/report/')[1]||new URLSearchParams(location.search).get('t')||'').replace(/[^a-f0-9]/g,'');
+  var out=document.getElementById('out');
+  fetch('/api/estimate?t='+t).then(function(r){return r.json().then(function(j){if(!r.ok)throw new Error(j.error||'Not found');return j})}).then(render).catch(function(e){out.innerHTML='<p class="msg">'+esc(e.message)+'. Questions? casey@ophirstays.com</p>'});
+  function chart(ms){var W=720,H=260,pl=52,pr=8,pt=16,pb=44,iw=W-pl-pr,ih=H-pt-pb,mx=Math.max.apply(null,ms.map(function(x){return x.rent}));var step=mx>40000?10000:mx>16000?5000:2000;mx=Math.ceil(mx*1.08/step)*step;var bw=iw/12*.62,s='<svg class="chart" viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Expected rent by month">';
+    for(var v=0;v<=mx;v+=step){var y=pt+ih*(1-v/mx);s+='<line x1="'+pl+'" x2="'+(W-pr)+'" y1="'+y+'" y2="'+y+'" class="g"/><text x="'+(pl-8)+'" y="'+(y+4)+'" text-anchor="end" class="ax">'+(v?'$'+v/1000+'K':'$0')+'</text>'}
+    var top=ms.reduce(function(a,b,i){return b.rent>ms[a].rent?i:a},0);var sorted=ms.map(function(x){return x.rent}).slice().sort(function(a,b){return b-a});
+    ms.forEach(function(x,i){var X=pl+iw/12*i+(iw/12-bw)/2,h=ih*x.rent/mx,Y=pt+ih-h;s+='<rect x="'+X+'" y="'+Y+'" width="'+bw+'" height="'+h+'" rx="2" class="b'+(x.rent>=sorted[2]?' pk':'')+'"/><text x="'+(X+bw/2)+'" y="'+(H-pb+18)+'" text-anchor="middle" class="ax">'+x.m+'</text><text x="'+(X+bw/2)+'" y="'+(H-pb+34)+'" text-anchor="middle" class="ax sm">'+x.nights+' nts</text>'+(i===top?'<text x="'+(X+bw/2)+'" y="'+(Y-6)+'" text-anchor="middle" class="lab">'+$(x.rent)+'</text>':'')});
+    return s+'</svg>'}
+  function render(d){
+    var m=d.model;document.getElementById('bar').hidden=false;document.title='Earnings Estimate · '+d.address;
+    var dt=new Date(d.date+'T12:00:00').toLocaleDateString('en-US',{month:'long',year:'numeric'});
+    var peak=m.months.map(function(x,i){return[x.rent,x.m,i]}).sort(function(a,b){return b[0]-a[0]}).slice(0,3).sort(function(a,b){return a[2]-b[2]}).map(function(x){return x[1]});
+    var ms=m.months.reduce(function(a,x){return a+x.rent},0);var top3=m.months.slice().sort(function(a,b){return b.rent-a.rent}).slice(0,3).reduce(function(a,x){return a+x.rent},0);
+    var low=m.months.map(function(x,i){return[x.rent,x.m,i]}).sort(function(a,b){return a[0]-b[0]}).slice(0,2).sort(function(a,b){return a[2]-b[2]}).map(function(x){return x[1]});
+    var mx=Math.max.apply(null,m.managers.map(function(x){return x[1]}));
+    var feat=(d.features||[]).length?(d.features.join(', ').toLowerCase()+'. '):'';
+    var mark='<svg viewBox="80 80 240 230" aria-hidden="true"><path fill="#2A2826" d="M200 88 C213 140 225 198 248 246 C260 270 284 284 312 276 C292 300 250 304 226 290 C213 282 205 268 200 250 C195 268 187 282 174 290 C150 304 108 300 88 276 C116 284 140 270 152 246 C175 198 187 140 200 88 Z"/></svg>';
+    var homeType={house:'Home',cabin:'Cabin',townhome:'Townhome',condo:'Condo'}[d.home_type]||'Home';
+    var p1='<article class="sheet"><header class="top"><div class="brand">'+mark+'<div class="wm">OPHIR&nbsp;STAYS<small>DURANGO, COLORADO</small></div></div><div class="meta">'+(d.owner_name?'Prepared for <b>'+esc(d.owner_name)+'</b><br>':'')+(d.agent_name?'Presented by <b>'+esc(d.agent_name)+(d.brokerage?', '+esc(d.brokerage):'')+'</b><br>':'')+dt+'</div></header>'+
+      '<div><p class="eyebrow">Earnings estimate</p><h1>What your home could earn as a vacation rental</h1><p class="home"><b>'+esc(d.address)+'.</b> '+homeType+', '+d.bedrooms+' bedrooms'+(d.baths?', '+d.baths+' baths':'')+(d.sleeps?', sleeps '+d.sleeps:'')+'. '+esc(feat.charAt(0).toUpperCase()+feat.slice(1))+esc(m.area_label)+'.</p></div>'+
+      (d.personal_note?'<div class="note">'+esc(d.personal_note)+'</div>':'')+
+      '<div class="figs"><div class="fig"><div class="k">Expected rent, first full year</div><div class="v">'+K(m.rent)+'</div><div class="r">Likely range '+K(m.range[0])+' to '+K(m.range[1])+'</div></div><div class="fig"><div class="k">What you keep</div><div class="v">'+K(m.keep)+'</div><div class="r">After every fee and cost. Range '+K(m.keep_range[0])+' to '+K(m.keep_range[1])+'</div></div></div>'+
+      '<div class="stats"><span><b>'+m.nights+'</b> nights booked</span><span><b>'+$(m.avg_rate)+'</b> average nightly rate</span><span><b>'+m.occupancy+'%</b> of nights filled</span><span><b>'+m.stays+'</b> stays a year</span>'+(d.current_rent?'<span>Last 12 months: <b>'+$(d.current_rent)+'</b></span>':'')+'</div>'+
+      '<section class="sec"><h2>Month by month</h2><p>'+peak.join(', ').replace(/, ([^,]*)$/,' and $1')+' bring '+Math.round(top3/ms*100)+'% of the year’s rent. '+low.join(' and ')+' are the quietest months.</p>'+chart(m.months)+'</section></article>';
+    var p2='<article class="sheet"><div class="two"><section class="sec"><h2>The numbers behind it</h2><div class="tbl"><table><thead><tr><th>Month</th><th>Nights</th><th>Avg rate</th><th>Rent</th></tr></thead><tbody>'+
+      m.months.map(function(x){return '<tr><td>'+x.m+'</td><td>'+x.nights+'</td><td>'+$(x.rate)+'</td><td>'+$(x.rent)+'</td></tr>'}).join('')+'</tbody><tfoot><tr><td>Year</td><td>'+m.nights+'</td><td>'+$(m.avg_rate)+'</td><td>'+$(m.rent)+'</td></tr></tfoot></table></div></section>'+
+      '<section class="sec"><h2>What you keep</h2><div class="tbl"><table class="keep"><tbody><tr><td>Rent from guests</td><td>'+$(m.rent)+'</td></tr><tr><td>Booking site fees (3.5%)</td><td>−'+$(m.platform)+'</td></tr><tr><td>Ophir management (22%)</td><td>−'+$(m.ophir)+'</td></tr><tr><td>Running the home</td><td>−'+$(m.running)+'</td></tr>'+
+      m.costs.map(function(c){return '<tr class="sub"><td>'+esc(c[0])+'</td><td>−'+$(c[1])+'</td></tr>'}).join('')+'<tr class="tot"><td>Yours, before mortgage and property tax</td><td>'+$(m.keep)+'</td></tr></tbody></table></div><p class="small">Guests pay the cleaning fee and lodging taxes on top of rent. Neither comes out of your share.</p></section></div>'+
+      (m.comps.length?'<section class="sec"><h2>Homes like yours</h2><p>Nightly rates for comparable homes near Durango, from their public listings. Ranges run from quiet weeks to holidays.</p><div class="tbl"><table class="comps"><thead><tr><th>Home</th><th>Area</th><th>Beds</th><th>Sleeps</th><th>Nightly rate</th></tr></thead><tbody>'+
+      m.comps.map(function(c){return '<tr><td>'+(c.url?'<a href="'+esc(c.url)+'" target="_blank" rel="noopener">'+esc(c.name)+'</a>':esc(c.name))+'</td><td>'+esc(c.area)+'</td><td>'+c.bedrooms+'</td><td>'+esc(c.sleeps)+'</td><td>'+esc(c.rate)+'</td></tr>'}).join('')+'</tbody></table></div></section>':'')+
+      '<section class="sec"><h2>The same home, three managers</h2><p>What you keep each year at each fee, with everything else held equal.</p><div>'+
+      m.managers.map(function(x,i){return '<div class="mrow'+(i?'':' us')+'"><span>'+(i?esc(x[0]):'<b>'+esc(x[0])+'</b>')+'</span><div class="track"><div class="fill" style="width:'+Math.max(0,x[1]/mx*100).toFixed(1)+'%"></div></div><span class="amt">'+$(Math.round(x[1]/100)*100)+'</span></div>'}).join('')+
+      '</div><p class="small">Local full-service managers commonly charge 22–30%. Purgatory’s resort program keeps 35%.</p></section></article>';
+    var p3='<article class="sheet"><section class="sec"><h2>Using the home yourself</h2><p>Block any dates you like. This is what a week of your own use costs in expected rent, by season.</p><div class="quad">'+
+      m.weeks.map(function(w){return '<div><b>'+$(w[1])+'</b><span>'+esc(w[0])+'</span></div>'}).join('')+'</div></section>'+
+      '<div class="two"><section class="sec"><h2>What moves the number</h2><ul class="plain"><li>Professional photos, which we arrange before listing.</li><li>Holiday pricing: Christmas and spring break weeks are priced well above a normal week.</li><li>A hot tub, a gear room and fast Wi-Fi, which guests filter for.</li><li>Pet-friendly stays and minimum-stay rules, set with you.</li><li>Reviews: strong early reviews let the rate rise over time.</li></ul></section>'+
+      '<section class="sec"><h2>Before we list</h2><ul class="plain"><li>We confirm the city or county rules for this address, including any permit.</li><li>Lodging and sales taxes are collected from guests and filed by Ophir.</li><li>Occupancy follows local rules, generally two per bedroom plus one.</li><li>If there is an HOA, it must allow nightly rentals. We check before listing.</li></ul></section></div>'+
+      '<section class="sec"><h2>Our promise to you</h2><div class="promise"><div><b>22%</b><span>One fee. $0 to join.</span></div><div><b>Year one</b><span>Beat last year’s rent or we refund the shortfall, up to our fee.</span></div><div><b>$2,500</b><span>Guest damage covered per stay.</span></div><div><b>15 min</b><span>Replies 7am to 10pm. Someone at the house within 30 minutes.</span></div><div><b>$300</b><span>Nothing over it without your yes.</span></div><div><b>30 days</b><span>Notice to leave, either way.</span></div></div></section>'+
+      '<section class="sec"><h2>How we got these numbers</h2><p class="small">Nightly rates come from comparable homes and Ophir’s pricing for each season, adjusted for this home’s size, location and features. Nights booked follow the seasonal pattern for this part of the county. The likely range is 18% either side of the expected figure. Running costs are typical for a home this size and will be confirmed at the walkthrough. This is an estimate, not a promise of income; the year-one guarantee is the only guarantee, and it is in writing in the owner agreement. Talk to your tax advisor about how rental income affects you.</p></section>'+
+      '<footer class="foot"><span><b>Next step:</b> a 30-minute walkthrough of the home, and a final estimate within a week.</span><span><b>Casey Roberts</b> · Founder, Ophir Stays · 970-779-8992 · casey@ophirstays.com</span></footer></article>';
+    out.innerHTML=p1+p2+p3;
+  }
+})();
+</script>
+</body>
+</html>

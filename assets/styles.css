@@ -349,3 +349,15 @@ a.ptile:hover{background:#1E1C1A}
 .article .ptile,.article a.ptile{color:var(--bone)!important;text-decoration:none}
 .article .faq-q{font-family:var(--sans);font-size:18px;font-weight:500;margin:22px 0 6px}
 @media (max-width:600px){.pgrid-2{grid-template-columns:1fr}}
+fieldset.field{border:0;padding:0;margin:0;min-width:0}
+fieldset.field legend{font-size:12px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;padding:0;margin-bottom:8px}
+.roles{flex-direction:row;flex-wrap:wrap;gap:10px}
+.roles legend{width:100%}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{position:relative;cursor:pointer}
+.chip input{position:absolute;opacity:0;width:1px;height:1px}
+.chip span{display:inline-block;border:1px solid var(--line);background:#fff;padding:9px 14px;font-size:15px;line-height:1.2}
+.chip input:checked+span{background:var(--charcoal);color:#fff;border-color:var(--charcoal)}
+.chip input:focus-visible+span{outline:2px solid var(--rust);outline-offset:2px}
+[hidden]{display:none!important}
+.field .chip{font-size:15px;font-weight:400;letter-spacing:0;text-transform:none}

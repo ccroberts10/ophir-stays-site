@@ -44,6 +44,7 @@
 </div>
 <div class="a-wrap" id="main" hidden>
   <div>
+    <div class="panel" style="margin-bottom:24px"><h2>Estimate requests</h2><div id="ests"><p class="msg">Loading…</p></div></div>
     <div class="panel" style="margin-bottom:24px">
       <h2>Test a booking</h2>
       <div class="tools">
@@ -120,6 +121,39 @@
   document.getElementById('rf').onsubmit=async function(e){e.preventDefault();var f=e.target,m=document.getElementById('rm');
     try{await api({action:'restaurant_save',restaurant:{id:f.id.value||undefined,name:f.name.value,cuisine:f.cuisine.value,vibe:f.vibe.value,price:f.price.value,book_via:f.book_via.value,phone:f.phone.value,booking_url:f.booking_url.value,notes:f.notes.value,kid_friendly:f.kid_friendly.checked,first_round:f.first_round.checked}});m.textContent='Saved.';f.reset();f.id.value='';loadRests()}catch(err){m.textContent=err.message}};
   var _show=show;show=function(){_show();loadRests().catch(function(e){document.getElementById('rests').innerHTML='<p class="msg">'+esc(e.message)+'</p>'})};
+
+  // ---------- Estimates ----------
+  var EST={areas:{},features:{}};
+  var money=function(n){return '$'+Math.round(n||0).toLocaleString('en-US')};
+  async function loadEsts(){var j=await api({action:'estimates'});EST.areas=j.areas;EST.features=j.features;
+    document.getElementById('ests').innerHTML=j.estimates.length?j.estimates.map(function(e){return '<div class="row" data-est="'+e.id+'"><div><b>'+esc(e.address)+'</b><br><small>'+esc(e.requester_name)+(e.requester_role==='agent'?' · agent'+(e.brokerage?', '+esc(e.brokerage):''):' · owner')+' · '+e.bedrooms+' bd · '+d(e.created_at)+(e.rent?' · '+money(e.rent):'')+'</small></div><span class="pill '+(e.status==='new'?'plan_ready':e.status==='signed'?'approved':'')+'">'+esc(e.status)+'</span></div>'}).join(''):'<p class="msg">No requests yet. They arrive from ophirstays.com/estimate.</p>'}
+  document.getElementById('ests').onclick=function(e){var r=e.target.closest('[data-est]');if(r)estDetail(r.dataset.est)};
+  async function estDetail(id){var el=document.getElementById('detail');el.innerHTML='<p class="msg">Loading…</p>';
+    try{var e=(await api({action:'estimate_get',id:id})).estimate;renderEst(e)}catch(err){el.innerHTML='<p class="err">'+esc(err.message)+'</p>'}}
+  function renderEst(e){var el=document.getElementById('detail'),m=e.model||{};
+    var feats=Object.keys(EST.features).map(function(k){return '<label class="task" style="border:0;padding:4px 0"><input type="checkbox" name="features" value="'+k+'"'+((e.features||[]).indexOf(k)>=0?' checked':'')+'><span>'+esc(EST.features[k])+'</span></label>'}).join('');
+    el.innerHTML='<div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap"><div><h2 style="margin:0">'+esc(e.address)+'</h2><p class="msg">'+esc(e.requester_name)+' · '+esc(e.requester_email)+(e.requester_phone?' · '+esc(e.requester_phone):'')+(e.requester_role==='agent'?'<br>Agent'+(e.brokerage?', '+esc(e.brokerage):'')+(e.owner_name?' · owner '+esc(e.owner_name):''):'')+'</p></div><span class="pill">'+esc(e.status)+'</span></div>'+
+      '<div class="kv" style="margin:14px 0"><span>Expected rent</span><span><b>'+money(m.rent)+'</b> ('+money((m.range||[])[0])+'–'+money((m.range||[])[1])+')</span><span>Owner keeps</span><span><b>'+money(m.keep)+'</b></span><span>Nights · rate</span><span>'+m.nights+' nights · '+money(m.avg_rate)+' avg · '+m.occupancy+'%</span><span>Last 12 months</span><span>'+(e.current_rent?money(e.current_rent):'—')+'</span><span>HOA</span><span>'+esc(e.hoa||'Not sure')+'</span><span>Now</span><span>'+esc(e.current_use||'')+'</span><span>Notes</span><span>'+esc(e.notes||'')+'</span><span>Source</span><span>'+esc(e.source||'')+'</span></div>'+
+      '<form id="ef" style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px">'+
+      '<div class="field"><label>Bedrooms</label><input name="bedrooms" value="'+esc(e.bedrooms)+'" inputmode="numeric"></div>'+
+      '<div class="field"><label>Area</label><select name="area">'+Object.keys(EST.areas).map(function(k){return '<option value="'+k+'"'+(k===e.area?' selected':'')+'>'+esc(EST.areas[k].label)+'</option>'}).join('')+'</select></div>'+
+      '<div class="field"><label>Nightly rates</label><input name="adr" value="'+Math.round((e.adr_adjust||1)*100)+'" inputmode="numeric"><span class="hint">% of the model. 110 = 10% higher.</span></div>'+
+      '<div class="field"><label>Nights booked</label><input name="occ" value="'+Math.round((e.occ_adjust||1)*100)+'" inputmode="numeric"><span class="hint">% of the model.</span></div>'+
+      '<div class="field" style="grid-column:1/-1"><label>Features</label><div style="display:grid;grid-template-columns:1fr 1fr;gap:0 12px">'+feats+'</div></div>'+
+      '<div class="field" style="grid-column:1/-1"><label>Owner name on the report</label><input name="owner_name" value="'+esc(e.requester_role==='agent'?(e.owner_name||''):(e.requester_name||''))+'"'+(e.requester_role==='agent'?'':' disabled')+'></div>'+
+      '<div class="field" style="grid-column:1/-1"><label>Personal note (top of the report and the email)</label><textarea name="note" rows="4" style="height:auto;padding:12px">'+esc(e.personal_note||'')+'</textarea></div>'+
+      '<div style="grid-column:1/-1;display:flex;flex-wrap:wrap;gap:10px"><button class="btn sm" type="submit">Save and recalculate</button><a class="btn sm" href="/report/'+e.token+'" target="_blank">Preview report</a><button class="btn btn-rust sm" type="button" id="esend">'+(e.status==='sent'?'Send again':'Send report')+'</button>'+
+      '<select id="estat" style="width:auto;height:42px">'+['new','sent','signed','closed'].map(function(s){return '<option'+(s===e.status?' selected':'')+'>'+s+'</option>'}).join('')+'</select></div><p class="msg" id="emsg" style="grid-column:1/-1"></p></form>';
+    var f=document.getElementById('ef'),msg=document.getElementById('emsg');
+    async function save(){var feats=[].map.call(f.querySelectorAll('[name=features]:checked'),function(i){return i.value});
+      var patch={bedrooms:f.bedrooms.value,area:f.area.value,adr_adjust:(parseFloat(f.adr.value)||100)/100,occ_adjust:(parseFloat(f.occ.value)||100)/100,features:feats,personal_note:f.note.value};
+      if(!f.owner_name.disabled)patch.owner_name=f.owner_name.value;
+      return (await api({action:'estimate_save',id:e.id,patch:patch})).estimate}
+    f.onsubmit=async function(ev){ev.preventDefault();msg.textContent='Recalculating…';try{renderEst(await save());document.getElementById('emsg').textContent='Saved.';loadEsts()}catch(err){msg.textContent=err.message}};
+    document.getElementById('esend').onclick=async function(){var b=this;b.disabled=true;msg.textContent='Saving and sending to '+e.requester_email+'…';try{await save();var r=await api({action:'estimate_send',id:e.id});renderEst(r.estimate);document.getElementById('emsg').textContent='Sent to '+e.requester_email+'.';loadEsts()}catch(err){msg.textContent=err.message;b.disabled=false}};
+    document.getElementById('estat').onchange=async function(){try{await api({action:'estimate_status',id:e.id,status:this.value});loadEsts()}catch(err){msg.textContent=err.message}};
+  }
+  var _show2=show;show=function(){_show2();loadEsts().then(function(){var h=location.hash.match(/^#estimate-(.+)$/);if(h)estDetail(h[1])}).catch(function(e){document.getElementById('ests').innerHTML='<p class="msg">'+esc(e.message)+'. Run supabase/estimates.sql in Supabase first.</p>'})};
   if(pw){list().then(show).catch(signout)}
 })();
 </script>

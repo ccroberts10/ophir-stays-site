@@ -56,6 +56,24 @@
     </div>
     <div class="panel" style="margin-bottom:24px"><h2>Trips</h2><div id="trips"><p class="msg">Loading…</p></div></div>
     <div class="panel" style="margin-bottom:24px"><h2>Team to-do</h2><div id="tasks"></div></div>
+    <div class="panel" style="margin-bottom:24px"><h2>Homes</h2><p class="msg">Each home's details, access and house guide. Guests see the guide on their trip page once their plan is approved, and the door code and Wi-Fi on arrival day. Ask Ophir answers house questions from it.</p><div id="homes"><p class="msg">Loading…</p></div>
+      <form id="hf" style="margin-top:14px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px">
+        <input type="hidden" name="id">
+        <div class="field" style="grid-column:1/-1"><label>Home name</label><input name="name" required placeholder="Engineer Village Lodge"></div>
+        <div class="field"><label>Area</label><input name="area" placeholder="Purgatory"></div>
+        <div class="field"><label>Hostaway listing ID</label><input name="hostaway_listing_id"></div>
+        <div class="field" style="grid-column:1/-1"><label>Address</label><input name="address"></div>
+        <div class="field"><label>Bedrooms</label><input name="beds" inputmode="numeric"></div>
+        <div class="field"><label>Bathrooms</label><input name="baths" inputmode="decimal"></div>
+        <div class="field"><label>Sleeps</label><input name="sleeps" inputmode="numeric"></div>
+        <div class="field"><label>Door code</label><input name="door_code" autocomplete="off"></div>
+        <div class="field"><label>Wi-Fi name</label><input name="wifi_name" autocomplete="off"></div>
+        <div class="field"><label>Wi-Fi password</label><input name="wifi_password" autocomplete="off"></div>
+        <div id="msecs" style="grid-column:1/-1;display:grid;gap:10px"></div>
+        <div class="field" style="grid-column:1/-1"><label>Private notes for Ask Ophir (not shown as a section)</label><textarea name="house_notes" rows="3" placeholder="Anything else the guide should know about this house"></textarea></div>
+        <div style="grid-column:1/-1;display:flex;gap:10px"><button class="btn btn-rust sm">Save home</button><button class="btn sm" type="reset">New home</button></div>
+        <p class="msg" id="hm" style="grid-column:1/-1"></p>
+      </form></div>
     <div class="panel"><h2>Restaurants</h2><p class="msg">The AI only books dinners from this list.</p><div id="rests"></div>
       <form id="rf" style="margin-top:14px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px">
         <input type="hidden" name="id">
@@ -121,6 +139,21 @@
   document.getElementById('rf').onsubmit=async function(e){e.preventDefault();var f=e.target,m=document.getElementById('rm');
     try{await api({action:'restaurant_save',restaurant:{id:f.id.value||undefined,name:f.name.value,cuisine:f.cuisine.value,vibe:f.vibe.value,price:f.price.value,book_via:f.book_via.value,phone:f.phone.value,booking_url:f.booking_url.value,notes:f.notes.value,kid_friendly:f.kid_friendly.checked,first_round:f.first_round.checked}});m.textContent='Saved.';f.reset();f.id.value='';loadRests()}catch(err){m.textContent=err.message}};
   var _show=show;show=function(){_show();loadRests().catch(function(e){document.getElementById('rests').innerHTML='<p class="msg">'+esc(e.message)+'</p>'})};
+
+  // ---------- Homes and house guide ----------
+  var homes=[],SECS=[];
+  async function loadHomes(){var j=await api({action:'homes'});homes=j.homes;SECS=j.sections;
+    var box=document.getElementById('msecs');if(!box.dataset.built){box.innerHTML='<p class="eyebrow" style="margin:6px 0 0">House guide</p>'+SECS.map(function(x){return '<div class="field"><label>'+esc(x.label)+'</label><textarea name="m_'+x.key+'" rows="3" placeholder="'+esc(x.hint)+'"></textarea></div>'}).join('');box.dataset.built=1}
+    document.getElementById('homes').innerHTML=homes.length?homes.map(function(h,i){var n=Object.keys(h.manual||{}).length;return '<div class="row" data-h="'+i+'"><div><b>'+esc(h.name)+'</b><br><small>'+esc([h.area,h.beds?h.beds+' bd':'',h.sleeps?'sleeps '+h.sleeps:'','guide '+n+'/'+SECS.length,h.door_code?'code set':'no code',h.hostaway_listing_id?'Hostaway linked':'not linked'].filter(Boolean).join(' · '))+'</small></div><span class="pill">edit</span></div>'}).join(''):'<p class="msg">No homes yet. Add your first one below.</p>'}
+  document.getElementById('homes').onclick=function(e){var row=e.target.closest('[data-h]');if(!row)return;var h=homes[+row.dataset.h],f=document.getElementById('hf');
+    ['id','name','area','address','beds','baths','sleeps','door_code','wifi_name','wifi_password','hostaway_listing_id','house_notes'].forEach(function(k){f[k].value=h[k]==null?'':h[k]});
+    SECS.forEach(function(x){f['m_'+x.key].value=(h.manual||{})[x.key]||''});f.scrollIntoView({behavior:'smooth'})};
+  document.getElementById('hf').onsubmit=async function(e){e.preventDefault();var f=e.target,m=document.getElementById('hm'),manual={};
+    SECS.forEach(function(x){manual[x.key]=f['m_'+x.key].value});
+    var home={id:f.id.value||undefined,manual:manual};['name','area','address','beds','baths','sleeps','door_code','wifi_name','wifi_password','hostaway_listing_id','house_notes'].forEach(function(k){home[k]=f[k].value});
+    try{var r=await api({action:'home_save',home:home});f.id.value=r.home.id;m.textContent='Saved.';loadHomes()}catch(err){m.textContent=err.message}};
+  document.getElementById('hf').addEventListener('reset',function(){setTimeout(function(){document.getElementById('hf').id.value=''},0)});
+  var _showH=show;show=function(){_showH();loadHomes().catch(function(e){document.getElementById('homes').innerHTML='<p class="msg">'+esc(e.message)+'</p>'})};
 
   // ---------- Estimates ----------
   var EST={areas:{},features:{}};

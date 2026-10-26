@@ -14,6 +14,7 @@ create table if not exists homes (
   door_code text,            -- shown to guests only on arrival day
   wifi_name text, wifi_password text,
   house_notes text,
+  manual jsonb not null default '{}'::jsonb,   -- house manual sections, see MANUAL_SECTIONS in api/_lib.js
   hostaway_listing_id text unique,
   created_at timestamptz default now()
 );

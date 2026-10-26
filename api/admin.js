@@ -1,6 +1,6 @@
 // Admin API for Casey. Every call needs header x-admin-key = ADMIN_PASSWORD.
 // POST { action: 'list' | 'detail' | 'approve' | 'replan' | 'simulate' | 'task' | 'resend_welcome', ... }
-import { db, json, readBody, isAdmin, loadTrip, createTrip, planTrip, approveTrip, sendWelcome, sendEmail, emailShell, esc, SITE } from './_lib.js';
+import { db, json, readBody, isAdmin, loadTrip, createTrip, planTrip, approveTrip, sendWelcome, sendEmail, emailShell, esc, SITE, MANUAL_SECTIONS, cleanManual } from './_lib.js';
 import { computeEstimate, AREAS, FEATURES } from './_model.js';
 
 const money = (n) => '$' + Math.round(n).toLocaleString('en-US');
@@ -62,6 +62,21 @@ export default async function handler(req, res) {
         return json(res, 200, { ok: true, charge: c });
       }
       case 'charge_void': await db.update('charges', `id=eq.${b.charge_id}&status=eq.open`, { status: 'void' }); return json(res, 200, { ok: true });
+      case 'homes': return json(res, 200, { homes: await db.select('homes', 'order=name'), sections: MANUAL_SECTIONS });
+      case 'home_save': {
+        const h = b.home || {};
+        const name = String(h.name || '').trim().slice(0, 80);
+        if (!name) return json(res, 400, { error: 'Name required' });
+        const int = (v) => (v === '' || v == null || !Number.isFinite(+v) ? null : Math.round(+v));
+        const row = { name, slug: (String(h.slug || '').trim() || name).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 60),
+          area: (h.area || '').slice(0, 60) || null, address: (h.address || '').slice(0, 160) || null,
+          beds: int(h.beds), baths: h.baths === '' || h.baths == null || !Number.isFinite(+h.baths) ? null : +h.baths, sleeps: int(h.sleeps),
+          door_code: (h.door_code || '').slice(0, 40) || null, wifi_name: (h.wifi_name || '').slice(0, 60) || null, wifi_password: (h.wifi_password || '').slice(0, 60) || null,
+          hostaway_listing_id: (String(h.hostaway_listing_id || '').trim()).slice(0, 40) || null, house_notes: (h.house_notes || '').slice(0, 2000) || null,
+          manual: cleanManual(h.manual) };
+        const out = h.id ? await db.update('homes', `id=eq.${h.id}`, row) : await db.insert('homes', [row]);
+        return json(res, 200, { ok: true, home: out[0] });
+      }
       case 'restaurants': return json(res, 200, { restaurants: await db.select('restaurants', 'order=active.desc,name') });
       case 'restaurant_save': {
         const r = b.restaurant || {};

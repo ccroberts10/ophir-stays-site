@@ -43,6 +43,7 @@
   .item b{display:block;font-weight:500;font-size:18px}
   .item p{margin:4px 0 0;color:var(--muted);font-size:16px}
   .wx{display:inline-block;font-size:13px;color:var(--rust);margin-top:4px}
+  .guide details{border-top:1px solid var(--line);padding:14px 0}.guide details:last-child{border-bottom:1px solid var(--line)}.guide summary{cursor:pointer;font-size:18px;font-weight:500;list-style:none;display:flex;justify-content:space-between;gap:12px}.guide summary::-webkit-details-marker{display:none}.guide summary:after{content:'+';color:var(--muted)}.guide details[open] summary:after{content:'\2013'}.guide p{white-space:pre-line;margin:10px 0 0;color:var(--ink)}
   .stay-box{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:24px 0}
   .stay-box div{background:var(--paper);padding:18px}
   .stay-box b{display:block;font-size:22px;font-weight:500;margin-top:4px}
@@ -165,8 +166,9 @@
     var days={},wx={};data.itinerary.forEach(function(it){(days[it.day]=days[it.day]||[]).push(it)});(data.weather||[]).forEach(function(w){wx[w.date]=w});
     var req={};(data.requested||[]).forEach(function(x){req[x]=1});
     var stay=data.stay?'<div class="stay-box"><div><span class="eyebrow" style="margin:0">Door code</span><b>'+esc(data.stay.door_code||'Sent on arrival')+'</b></div><div><span class="eyebrow" style="margin:0">Wi-Fi</span><b>'+esc(data.stay.wifi_name||'—')+'</b><span style="color:var(--muted)">'+esc(data.stay.wifi_password||'')+'</span></div></div>':'';
+    var guide=(data.manual||[]).length?'<section class="step guide" id="guide"><p class="eyebrow">House guide</p><h2 class="display">How the house works</h2>'+data.manual.map(function(x,i){return '<details'+(i===0&&data.stay?' open':'')+'><summary>'+esc(x.label)+'</summary><p>'+esc(x.text)+'</p></details>'}).join('')+'</section>':'';
     var ready=(data.ready_list||[]).length?'<section class="ready"><p class="eyebrow" style="margin:0">Ready when you arrive</p><ul>'+data.ready_list.map(function(x){return '<li>'+esc(x)+'</li>'}).join('')+'</ul></section>':'';
-    var acts='<div class="actions">'+(data.host_phone?'<a class="btn btn-rust" href="sms:'+esc(data.host_phone)+'">Message your host</a>':'')+'<button class="btn" id="cal" type="button">Add to calendar</button><a class="btn" href="/trail-map" target="_blank" rel="noopener">Trail map</a><a class="btn" href="/trails" target="_blank" rel="noopener">Bike routes</a></div>';
+    var acts='<div class="actions">'+(data.host_phone?'<a class="btn btn-rust" href="sms:'+esc(data.host_phone)+'">Message your host</a>':'')+'<button class="btn" id="cal" type="button">Add to calendar</button>'+((data.manual||[]).length?'<a class="btn" href="#guide">House guide</a>':'')+'<a class="btn" href="/trail-map" target="_blank" rel="noopener">Trail map</a><a class="btn" href="/trails" target="_blank" rel="noopener">Bike routes</a></div>';
     var dayHtml=Object.keys(days).sort().map(function(d){var w=wx[d];
       return '<section class="day"><div class="day-head"><h3>'+fmt(d)+'</h3>'+(w?'<span class="wxs"><b>'+esc(w.label)+'</b> · '+w.high+'° / '+w.low+'°'+(w.snow>0.2?' · '+w.snow+' in. snow':(w.precip>=30?' · '+w.precip+'% chance of rain':''))+'</span>':'')+'</div>'+
         days[d].map(function(it){var mp=it.place&&['arrival','departure','rest'].indexOf(it.kind)<0?'<a class="map" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(it.place+', Durango, CO')+'">Map</a>':'';
@@ -175,7 +177,7 @@
       var money=o.pay_cents?'$'+(o.pay_cents/100).toLocaleString('en-US',{minimumFractionDigits:0}):null;
       return '<div class="offer">'+(o.reason?'<span class="why">'+esc(o.reason)+'</span>':'')+'<h4>'+esc(o.title)+'</h4><p>'+esc(o.blurb)+'</p><span class="pr">'+esc(money&&o.key==='private'&&o.pay_cents!==125000?money+' to upgrade':o.price)+'</span>'+
         (o.pay_cents?'<button class="btn btn-rust" data-pay="'+esc(o.key)+'">Add · '+money+'</button>':'<button class="btn" data-offer="'+esc(o.key)+'" '+(done?'disabled':'')+'>'+(done?'Requested':'Request')+'</button>')+'</div>'}).join('')+'</div><p class="fine">Secure payment by Stripe. Items priced on request are confirmed by Casey before anything is charged.</p></section>':'';
-    app.innerHTML=hero('Your Durango trip',data.stay?'Welcome home. Text us anything, any time.':'Every day, planned around the forecast. We’ll move things if the weather does.')+stay+ready+acts+dayHtml+chargesHtml()+offers+
+    app.innerHTML=hero('Your Durango trip',data.stay?'Welcome home. Text us anything, any time.':'Every day, planned around the forecast. We’ll move things if the weather does.')+stay+ready+acts+dayHtml+guide+chargesHtml()+offers+
       askHtml()+'<p class="center fine" style="padding:32px 0 64px">Questions or changes? Reply to our email and Casey will take care of it.</p>';
     app.querySelector('#cal').onclick=ics;
     bindPay();bindAsk();

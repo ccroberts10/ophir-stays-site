@@ -292,3 +292,27 @@ export async function stripe(path, params) {
   if (!r.ok) throw new Error(`Stripe ${r.status}: ${data.error?.message || 'error'}`);
   return data;
 }
+
+// ---------- House manual (one per home; edited in admin, shown on the guest trip page, used by Ask Ophir) ----------
+export const MANUAL_SECTIONS = [
+  { key: 'arrival', label: 'Arrival and parking', hint: 'Directions from Hwy 550 or 160, driveway, where to park, winter road notes, how the lock works' },
+  { key: 'heat', label: 'Heat and thermostat', hint: 'Thermostat location and settings, radiant floors, keep heat at or above 60 in winter' },
+  { key: 'fireplace', label: 'Fireplace', hint: 'Gas or wood, how to turn it on and off, firewood location' },
+  { key: 'hot_tub', label: 'Hot tub', hint: 'Cover, controls, jets, rules (no glass, kids supervised), what to do if it trips' },
+  { key: 'kitchen', label: 'Kitchen and coffee', hint: 'Coffee maker, dishwasher pods, grill and propane, anything unusual' },
+  { key: 'tv_wifi', label: 'TV and Wi-Fi', hint: 'Remotes, streaming logins, where the router is' },
+  { key: 'laundry', label: 'Laundry', hint: 'Washer and dryer location, detergent' },
+  { key: 'trash', label: 'Trash, recycling and bears', hint: 'Bear-proof cans, pickup day, never leave trash outside or in vehicles' },
+  { key: 'rules', label: 'House rules', hint: 'Quiet hours, maximum guests, pets, no smoking, parking limits, HOA rules guests must follow' },
+  { key: 'checkout', label: 'Checkout', hint: 'Checkout time and steps: dishes, towels, trash, thermostat, lock the door' },
+  { key: 'shutoffs', label: 'Water, gas and power shutoffs', hint: 'Location of the main water shutoff, gas shutoff and breaker panel' },
+  { key: 'emergency', label: 'Emergency and medical', hint: 'Nearest ER (Mercy Regional Medical Center, 1010 Three Springs Blvd), urgent care, 911 address to give' },
+];
+export function cleanManual(m) {
+  const out = {};
+  for (const { key } of MANUAL_SECTIONS) { const v = String((m || {})[key] || '').trim().slice(0, 2000); if (v) out[key] = v; }
+  return out;
+}
+export function manualForGuest(m) {
+  return MANUAL_SECTIONS.filter((x) => m && m[x.key]).map((x) => ({ label: x.label, text: m[x.key] }));
+}

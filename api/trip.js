@@ -1,5 +1,5 @@
 // Guest trip API. GET /api/trip?t=<token> returns the guest's trip; POST saves pre-trip answers and runs the AI planner.
-import { db, json, readBody, loadTrip, planTrip, aiJSON, PACKAGES, OFFERS, priceFor, sendEmail, emailShell, esc, SITE } from './_lib.js';
+import { db, json, readBody, loadTrip, planTrip, aiJSON, PACKAGES, OFFERS, priceFor, sendEmail, emailShell, esc, SITE, manualForGuest } from './_lib.js';
 
 const clip = (s, n) => (s == null ? null : String(s).trim().slice(0, n) || null);
 const num = (v, lo, hi) => { const n = parseInt(v, 10); return Number.isFinite(n) && n >= lo && n <= hi ? n : null; };
@@ -28,6 +28,7 @@ export default async function handler(req, res) {
         host_phone: (process.env.HOST_PHONE || '').trim() || null, requested: (t.tasks || []).filter((k) => k.title.startsWith('Guest requested:')).map((k) => k.title.replace('Guest requested: ', '')),
         charges: (await db.select('charges', `trip_id=eq.${trip.id}&status=neq.void&order=created_at.asc`)).map((c) => ({ key: `charge_${c.id}`, title: c.title, note: c.note, cents: c.amount_cents, status: c.status })),
         ask: (await db.select('messages', `trip_id=eq.${trip.id}&subject=eq.Ask%20Ophir&order=created_at.desc&limit=12`)).reverse().map((m) => ({ from: m.direction === 'inbound' ? 'guest' : 'ophir', body: m.body })),
+        manual: showPlan && home ? manualForGuest(home.manual) : [],
         stay: arrived && showPlan && home ? { door_code: home.door_code, wifi_name: home.wifi_name, wifi_password: home.wifi_password } : null,
       });
     }
@@ -45,7 +46,7 @@ export default async function handler(req, res) {
       const ctx = {
         today: today(), guest: trip.guest_name, check_in: trip.check_in, check_out: trip.check_out, adults: trip.adults, children: trip.children,
         package: PACKAGES[trip.package] || trip.package,
-        home: home ? { name: home.name, area: home.area, beds: home.beds, baths: home.baths, sleeps: home.sleeps, house_notes: home.house_notes,
+        home: home ? { name: home.name, area: home.area, beds: home.beds, baths: home.baths, sleeps: home.sleeps, house_notes: home.house_notes, house_manual: manualForGuest(home.manual),
           ...(arrived ? { door_code: home.door_code, wifi_name: home.wifi_name, wifi_password: home.wifi_password } : {}) } : null,
         itinerary: (['approved', 'in_stay', 'complete'].includes(trip.status) ? t.itinerary : []).map(({ day, start_time, title, details }) => ({ day, start_time, title, details })),
         weather: trip.weather || [],
@@ -55,7 +56,7 @@ export default async function handler(req, res) {
       const system = `You are Ask Ophir, the in-app guide for guests of Ophir Stays, a small, locally owned collection of vacation homes in Durango, Colorado, run by Casey Roberts, who has lived in Durango for 23 years.
 Answer the guest's question using ONLY the trip context below and general, stable knowledge of Durango. Voice: warm, plain and brief, like a local friend who knows the town. Two to five sentences, under 90 words. No exclamation marks. Never use the word "luxury". No lists unless the guest asks for steps.
 Rules:
-- House questions (appliances, hot tub, parking, trash, thermostat, codes, check-in, checkout): answer only from house_notes and the codes given. If the answer isn't there, say Casey will confirm shortly, and set notify_casey true. Never guess about the house.
+- House questions (appliances, hot tub, parking, trash, thermostat, codes, check-in, checkout): answer only from house_manual, house_notes and the codes given. If the answer isn't there, say Casey will confirm shortly, and set notify_casey true. Never guess about the house.
 - Door code and Wi-Fi exist in the context only on or after arrival day. Before that, say they appear on this page on arrival day.
 - Restaurants: recommend only from the restaurants list. If it's empty or nothing fits, say Casey will suggest a spot and set notify_casey true.
 - Bookings, changes, refunds, prices not in the context, early check-in, late checkout, extra guests, pets: never promise anything. Say Casey will confirm, and set notify_casey true.

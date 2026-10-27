@@ -181,7 +181,7 @@ def collection_grid():
     return f'<div class="grid3">{"".join(home_card(h) for h in LIVE_HOMES)}</div>' if LIVE_HOMES else FOUNDING
 
 # ---------------- HOME ----------------
-SLIDES = [('hero-ski', 'Winter', 'First chair, fresh snow, home by the fire.', 'Purgatory village at night beneath snow-covered peaks'),
+SLIDES = [('hero-ski', 'Winter', 'First chair, fresh snow, home by the fire.', 'Fresh snow on a tree-lined run at Purgatory Resort above Durango'),
           ('hero-bike', 'Summer', 'High passes, big days, home for dinner.', 'A mountain biker climbing a high pass in the San Juan Mountains'),
           ('hero-golf', 'Play', 'Tee times held, clubs waiting.', 'A striped fairway framed by autumn aspens below a sandstone cliff'),
           ('hero-fireplace', 'Evenings', 'The fire is lit before you arrive.', 'A great room with a stone fireplace lit at dusk'),

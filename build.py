@@ -651,7 +651,7 @@ about_body = f'''
   </section>
   <section style="padding-top:0">
     <div class="wrap split">
-      <div class="reveal">{photo('casey', 'Casey Roberts, founder of Ophir Stays, holding a brown trout on a drift boat', 'photo tall')}</div>
+      <div class="reveal">{photo('casey', 'Casey Roberts and his son at an alpine lake in the San Juan Mountains above Durango', 'photo tall')}</div>
       <div class="reveal">
         <p class="eyebrow">The founder</p>
         <h2 class="display">Casey Roberts</h2>
@@ -659,6 +659,16 @@ about_body = f'''
         <p style="color:var(--muted);margin-top:20px">Twenty-three years later I'm an orthopedic PA-C here and a dad. I founded Durango Bike Project, a coffee and bike shop, and spent years sending visitors to the right trail, the right river and the right table.</p>
         <p style="color:var(--muted);margin-top:20px">Ophir Stays is that same work, done properly: a small number of beautiful homes, cared for by people who live here, with every guest's trip planned by someone who knows this place. When you call, you get me.</p>
         <div class="facts"><div><b>23</b><span>years in Durango</span></div><div><b>25</b><span>homes, at most</span></div><div><b>15</b><span>minutes to a real reply</span></div></div>
+      </div>
+    </div>
+  </section>
+  <section style="padding-top:0">
+    <div class="wrap">
+      <p class="eyebrow reveal">Local since 2003</p>
+      <div class="reveal" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-top:18px">
+        <figure style="margin:0">{photo('casey-soccer', 'Casey and his son on the Fort Lewis College soccer field after a game', 'photo tall')}<figcaption class="fine" style="margin-top:10px">Back on the Fort Lewis pitch, where it started in 2003.</figcaption></figure>
+        <figure style="margin:0">{photo('casey-cx', 'Casey racing cyclocross on a frosty course in Durango', 'photo tall')}<figcaption class="fine" style="margin-top:10px">Racing cyclocross in Durango.</figcaption></figure>
+        <figure style="margin:0">{photo('casey-trout', 'Casey holding a brown trout on a drift boat', 'photo tall')}<figcaption class="fine" style="margin-top:10px">A brown trout from a day on the river.</figcaption></figure>
       </div>
     </div>
   </section>

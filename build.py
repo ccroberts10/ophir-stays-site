@@ -602,7 +602,7 @@ stay_body = f'''
         <div class="addon-row">
           <div><b>Fridge stocked</b><span>$95 plus groceries</span></div>
           <div><b>Arrival setup</b><span>Fire laid, wine chosen, flowers · $95 plus wine</span></div>
-          <div><b>Skis or bikes fitted and delivered</b><span>$45 plus rental</span></div>
+          <div><b>Skis or bikes fitted and delivered</b><span>Delivery and pickup · $95 for up to 4, $20 each after, plus rental</span></div>
           <div><b>Mid-stay clean</b><span>Fresh linens, full clean, restock · $195</span></div>
           <div><b>Early check-in or late checkout</b><span>When the calendar allows · $95 each</span></div>
         </div>

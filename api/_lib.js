@@ -136,7 +136,7 @@ export const OFFERS = {
   addon_midclean: { title: 'Mid-stay clean', price: '$195', cents: 19500, blurb: 'Fresh linens and towels, a full clean and a restock, halfway through.' },
   addon_early: { title: 'Early check-in', price: '$95', cents: 9500, blurb: 'In the door by noon, when the calendar allows.' },
   addon_late: { title: 'Late checkout', price: '$95', cents: 9500, blurb: 'Stay until 1pm, when the calendar allows.' },
-  addon_gear: { title: 'Skis or bikes, fitted and delivered', price: '$45 plus rental', cents: 4500, blurb: 'Sized to each guest and waiting in the gear room.', grants: 'gear' },
+  addon_gear: { title: 'Skis or bikes, fitted and delivered', price: '$95 for up to 4 guests, $20 each after, plus rental', cents: 9500, blurb: 'Fitted at the shop, delivered and set up in the gear room, picked up when you leave.', grants: 'gear' },
   massage: { title: 'In-home massage', price: 'Priced on request', blurb: 'A licensed therapist at the house, after a day outside.' },
   golf: { title: 'A round of golf', price: 'Priced on request', blurb: 'Tee time held, clubs and cart ready.' },
   guide: { title: 'A private guide', price: 'Priced on request', blurb: 'Fly fishing, a guided ride or a backcountry hike with a local.' },
@@ -280,6 +280,7 @@ export function priceFor(key, trip) {
   const o = OFFERS[key];
   if (!o || !o.cents) return null;
   if (key === 'arranged') return { cents: arrangedCents(trip), label: o.title };
+  if (key === 'addon_gear') return { cents: o.cents + Math.max(0, partyOf(trip) - 4) * 2000, label: o.title };
   if (key === 'private') {
     const extra = Math.max(0, nightsOf(trip) - 5) * 29500;
     const credit = trip.package === 'arranged' ? arrangedCents(trip) : 0;

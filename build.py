@@ -474,7 +474,7 @@ owners_body = f'''
     <div class="wrap center">
       <div class="reveal"><p class="eyebrow">Pricing</p><h2 class="display">One fee. No surprises.</h2></div>
       <div class="price reveal">
-        <div><b>22%</b><span>of booking revenue. Pricing, guests, cleaning, trip planning and your monthly report.</span></div>
+        <div><b>22%</b><span>Founding rate for the first ten homes, locked for as long as you stay. 25% after. Everything included: pricing, guests, cleaning, linens, photography, trip planning and your monthly report.</span></div>
         <div><b>$0</b><span>to join. Readiness work is quoted up front and billed at cost.</span></div>
         <div><b>30 days</b><span>notice to leave, either way. No long contracts.</span></div>
       </div>

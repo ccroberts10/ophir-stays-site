@@ -118,9 +118,9 @@ export async function forecast(startDate, endDate) {
 
 // ---------- Business knowledge given to the AI ----------
 export const PACKAGES = {
-  stay: 'The Stay (included with every booking): inspected home, hotel-grade linens, welcome card and tumblers, house guide in the app, weather-aware ideas, a local host by text.',
-  arranged: 'The Arranged Stay ($395): everything in The Stay, plus a planning call, skis and boots sized to each guest and waiting in the gear room, bikes fitted and delivered, lift tickets/guides/rafting/fly fishing booked, dinner reservations held with the first round on us (a gift card in the welcome packet, only at restaurants where we keep cards), an itinerary that moves with the weather. The $395 covers planning and booking only: ski and bike rentals, lift tickets, guides, rafting and fly fishing are paid separately at partner rates.',
-  private: 'The Private Stay ($1,250 up to 5 nights, $150 per extra night): everything in The Arranged Stay, plus groceries shopped and the fridge stocked, fire laid and wine chosen, a dedicated host on call, private chef/massage/sitter booked, airport transfer booked, mid-stay refresh. The package fee covers planning, booking and hosting only: groceries (at cost), the chef, therapist, sitter, driver and rentals are paid separately at their own rates.',
+  stay: 'The Stay (included with every booking): inspected home, hotel-grade linens, a welcome kit (local coffee, Ophir lip balm and sticker, local chocolate, and a Casey\'s Durango card with a 10% return-guest code for ophirstays.com), house guide in the app, weather-aware ideas, a local host by text who replies within 15 minutes from 7am to 10pm, urgent issues any hour.',
+  arranged: 'The Arranged Stay ($395 for up to 6 guests, $595 for 7 to 12): everything in The Stay, plus two Ophir tumblers to keep, a planning call, skis and boots sized to each guest and waiting in the gear room, bikes fitted and delivered, lift tickets/guides/rafting/fly fishing booked, dinner reservations held, with the first round on the house at partner restaurants that offer it, an itinerary that moves with the weather. The package fee covers planning and booking only: ski and bike rentals, lift tickets, guides, rafting and fly fishing are paid separately at partner rates.',
+  private: 'The Private Stay ($1,950 up to 5 nights, $295 per extra night): everything in The Arranged Stay, plus groceries shopped and the fridge stocked, fire laid and wine chosen, a dedicated host on call, private chef/massage/sitter booked, airport transfer booked, mid-stay refresh. The package fee covers planning, booking and hosting only: groceries (at cost), the chef, therapist, sitter, driver and rentals are paid separately at their own rates.',
 };
 // What each package lets the team DO (used to guard AI tasks), and what can be offered.
 export const INCLUDES = {
@@ -129,10 +129,13 @@ export const INCLUDES = {
   private: ['gear', 'bookings', 'dinners', 'groceries', 'arrival_setup', 'host', 'wellness'],
 };
 export const OFFERS = {
-  arranged: { title: 'The Arranged Stay', price: '$395', cents: 39500, blurb: 'We plan and book everything: gear sized and waiting, guides, tickets and tables.' },
-  private: { title: 'The Private Stay', price: '$1,250', cents: 125000, blurb: 'Your own host. Groceries stocked, fire laid, chef or massage arranged.' },
+  arranged: { title: 'The Arranged Stay', price: '$395 (up to 6 guests), $595 for 7 to 12', cents: 39500, cents_large: 59500, blurb: 'We plan and book everything: gear sized and waiting, guides, tickets and tables.' },
+  private: { title: 'The Private Stay', price: '$1,950 up to 5 nights', cents: 195000, blurb: 'Your own host. Groceries stocked, fire laid, chef or massage arranged.' },
   addon_fridge: { title: 'A stocked fridge', price: '$95 plus groceries', cents: 9500, blurb: 'Your grocery list, shopped the morning you arrive.', grants: 'groceries' },
-  addon_arrival: { title: 'Arrival setup', price: '$75', cents: 7500, blurb: 'Fire laid, wine chosen, flowers on the table.', grants: 'arrival_setup' },
+  addon_arrival: { title: 'Arrival setup', price: '$95 plus wine at cost', cents: 9500, blurb: 'Fire laid, wine chosen, flowers on the table.', grants: 'arrival_setup' },
+  addon_midclean: { title: 'Mid-stay clean', price: '$195', cents: 19500, blurb: 'Fresh linens and towels, a full clean and a restock, halfway through.' },
+  addon_early: { title: 'Early check-in', price: '$95', cents: 9500, blurb: 'In the door by noon, when the calendar allows.' },
+  addon_late: { title: 'Late checkout', price: '$95', cents: 9500, blurb: 'Stay until 1pm, when the calendar allows.' },
   addon_gear: { title: 'Skis or bikes, fitted and delivered', price: '$45 plus rental', cents: 4500, blurb: 'Sized to each guest and waiting in the gear room.', grants: 'gear' },
   massage: { title: 'In-home massage', price: 'Priced on request', blurb: 'A licensed therapist at the house, after a day outside.' },
   golf: { title: 'A round of golf', price: 'Priced on request', blurb: 'Tee time held, clubs and cart ready.' },
@@ -269,14 +272,17 @@ export function isAdmin(req) {
 }
 
 // ---------- Stripe ----------
+export function partyOf(trip) { return (Number(trip.adults) || 0) + (Number(trip.children) || 0); }
+export function arrangedCents(trip) { return partyOf(trip) > 6 ? OFFERS.arranged.cents_large : OFFERS.arranged.cents; }
 export function nightsOf(trip) { return Math.round((new Date(trip.check_out) - new Date(trip.check_in)) / 864e5); }
 // What the guest pays today for an item, given their current package.
 export function priceFor(key, trip) {
   const o = OFFERS[key];
   if (!o || !o.cents) return null;
+  if (key === 'arranged') return { cents: arrangedCents(trip), label: o.title };
   if (key === 'private') {
-    const extra = Math.max(0, nightsOf(trip) - 5) * 15000;
-    const credit = trip.package === 'arranged' ? OFFERS.arranged.cents : 0;
+    const extra = Math.max(0, nightsOf(trip) - 5) * 29500;
+    const credit = trip.package === 'arranged' ? arrangedCents(trip) : 0;
     return { cents: o.cents + extra - credit, label: credit ? 'The Private Stay (upgrade from Arranged)' : 'The Private Stay' };
   }
   return { cents: o.cents, label: o.title };

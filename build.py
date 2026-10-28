@@ -160,7 +160,7 @@ HOMES = [
          line='Stone, glass and a fairway view, twenty minutes from town.',
          features=['Hot tub on a deck facing the cliffs', 'Wood-burning stone fireplace', 'Gear room with boot dryers and bike storage',
                    'Chef\'s kitchen with a six-burner range', 'Golf cart for the course'],
-         trip='Tee times held, a morning ride in Haflin Canyon, dinner on Main Avenue with the first round on us.'),
+         trip='Tee times held, a morning ride in Haflin Canyon, dinner on Main Avenue with the first round on the house.'),
 ]
 LIVE_HOMES = [h for h in HOMES if SHOW_SAMPLES or not h['sample']]
 
@@ -197,7 +197,7 @@ EXPS = [('ski', 'Ski', 'Purgatory is thirty minutes up the valley. Rentals fitte
         ('spa', 'Spa', 'Hot springs, in-home massage and a hot tub at every home. We book the treatments; you choose the hour.'),
         ('golf', 'Golf', 'Tee times arranged at the best courses in the valley, with a cart and a cooler ready when you arrive.'),
         ('bike', 'Mountain bike', 'Some of the best singletrack in the West. Bikes sized to each rider and delivered, routes picked for your level.'),
-        ('coffee', 'Coffee & town', 'Main Avenue, its cafés and its kitchens. Your table is held and the first round is on us.'),
+        ('coffee', 'Coffee & town', 'Main Avenue, its cafés and its kitchens. Your table is held, often with the first round on the house.'),
         ('fireplace', 'Fireside', 'Evenings at the house: firewood stacked, blankets out, a bottle chosen for the night.')]
 exps = ''.join(f'''<a class="card reveal" href="/owners#estimate" style="pointer-events:none">
         {photo(n, t + ' in Durango', 'ph')}
@@ -225,7 +225,7 @@ home_body = f'''
       <div class="pillars reveal">
         <div class="pillar"><div class="num">i.</div><h3>THE HOMES</h3><p>Hotel-grade linens, a hot tub or a view, a gear room. Inspected before every arrival.</p></div>
         <div class="pillar"><div class="num">ii.</div><h3>THE TRIP</h3><p>Tell us what you love. Gear delivered, guides booked, tables held. The plan moves with the weather.</p></div>
-        <div class="pillar"><div class="num">iii.</div><h3>THE CARE</h3><p>A real person, twenty-three years in Durango, answering within fifteen minutes.</p></div>
+        <div class="pillar"><div class="num">iii.</div><h3>THE CARE</h3><p>A real person, twenty-three years in Durango, answering within fifteen minutes from 7am to 10pm.</p></div>
       </div>
     </div>
   </section>
@@ -545,16 +545,16 @@ owners = page('Durango Vacation Rental Management · Ophir Stays',
 # ---------------- YOUR STAY (packages) ----------------
 TIERS = [
   dict(name='The Stay', price='Included', unit='with every booking', lead='A beautiful home, kept to our standard, with a local on call.',
-       items=['Home inspected before every arrival', 'Hotel-grade linens, robes and toiletries', 'Welcome card and Ophir tumblers to keep',
-              'Door code and house guide in the app', 'Weather-aware ideas for every day', 'A local host by text, replies within fifteen minutes']),
-  dict(name='The Arranged Stay', price='$395', unit='per stay', lead='Tell us what you love. We plan the trip around it.', feature=True,
-       items=['Everything in The Stay', 'A planning call before you arrive', 'Skis and boots sized to each guest and waiting in the gear room (rental extra)',
+       items=['Home inspected before every arrival', 'Hotel-grade linens, robes and toiletries', 'A welcome kit: local coffee, chocolate and a card with our favorite spots',
+              'Door code and house guide in the app', 'Weather-aware ideas for every day', 'A local host by text, replies within 15 minutes, 7am to 10pm. Urgent issues any hour']),
+  dict(name='The Arranged Stay', price='$395', unit='per stay, up to 6 guests', lead='Tell us what you love. We plan the trip around it.', feature=True,
+       items=['Everything in The Stay', 'Two Ophir tumblers to keep', 'A planning call before you arrive', 'Skis and boots sized to each guest and waiting in the gear room (rental extra)',
               'Bikes fitted to each rider and delivered (rental extra)', 'Lift tickets, guides, rafting and fly fishing booked (paid at partner rates)',
-              'Dinner reservations held, first round on us', 'Your itinerary in the app, moved when the weather moves'], note='The planning fee covers our work. Rentals, tickets and guides are paid separately, at our partners\u2019 rates.'),
-  dict(name='The Private Stay', price='$1,250', unit='per stay, up to five nights', lead='A dedicated host. Nothing left for you to do.',
+              'Dinner reservations held, first round on the house at our partner restaurants', 'Your itinerary in the app, moved when the weather moves'], note='Groups of 7 to 12: $595. The planning fee covers our work. Rentals, tickets and guides are paid separately, at our partners\u2019 rates.'),
+  dict(name='The Private Stay', price='$1,950', unit='per stay, up to five nights', lead='A dedicated host. Nothing left for you to do.',
        items=['Everything in The Arranged Stay', 'Groceries shopped and the fridge stocked to your list (groceries at cost)', 'Fire laid, wine chosen, music on when you walk in',
               'Your own host, on call for the whole stay', 'Private chef, in-home massage or a sitter booked for you (their fee extra)',
-              'Airport transfer booked (fare extra)', 'Mid-stay refresh: linens, towels, restock', 'Longer stays: $150 per additional night'], note='We book everything. You pay the chef, therapist, sitter, driver, rentals and groceries directly at their rates, in the app.'),
+              'Airport transfer booked (fare extra)', 'Mid-stay refresh: linens, towels, restock', 'Longer stays: $295 per additional night'], note='We book everything. You pay the chef, therapist, sitter, driver, rentals and groceries directly at their rates, in the app.'),
 ]
 def tier_html(t):
     items=''.join(f'<li>{i}</li>' for i in t['items'])
@@ -601,8 +601,10 @@ stay_body = f'''
         <p class="eyebrow" style="text-align:center">Or add a single touch to any stay</p>
         <div class="addon-row">
           <div><b>Fridge stocked</b><span>$95 plus groceries</span></div>
-          <div><b>Arrival setup</b><span>Fire laid, wine chosen, flowers · $75</span></div>
+          <div><b>Arrival setup</b><span>Fire laid, wine chosen, flowers · $95 plus wine</span></div>
           <div><b>Skis or bikes fitted and delivered</b><span>$45 plus rental</span></div>
+          <div><b>Mid-stay clean</b><span>Fresh linens, full clean, restock · $195</span></div>
+          <div><b>Early check-in or late checkout</b><span>When the calendar allows · $95 each</span></div>
         </div>
       </div>
       <p class="fine center" style="margin-top:28px"><b>How it works:</b> package prices cover our planning, booking and hosting. Rentals, lift tickets, guides, chefs, massage, transport and groceries are paid separately at our partners' rates, with no markup to you. You see every price and confirm it in the app before anything is charged.</p>

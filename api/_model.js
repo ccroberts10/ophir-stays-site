@@ -59,7 +59,19 @@ export function computeEstimate(e) {
     ['Added STR insurance', condo ? 900 : 1500],
   ];
   const running = costs.reduce((s, c) => s + c[1], 0);
-  const platform = Math.round(rent * 0.035);
+  // Booking-channel fees, owner side. Planning mix: 50% Airbnb, 25% Vrbo, 25% direct.
+  // Airbnb host-only fee 15.5% of rent + cleaning (mandatory for software-connected hosts since Oct 2025).
+  // Vrbo 5% commission on rent + cleaning, plus 3% processing on the full charge incl. ~6.9% tax.
+  // Direct: Stripe 2.9% + $0.30 on the full charge incl. tax.
+  const clean = 100 + 50 * beds;
+  const TAX = 1.069;
+  const mix = { airbnb: 0.5, vrbo: 0.25, direct: 0.25 };
+  const perStay = (rent / Math.max(stays, 1)) + clean;
+  const feeAirbnb = perStay * 0.155;
+  const feeVrbo = perStay * 0.05 + perStay * TAX * 0.03;
+  const feeDirect = perStay * TAX * 0.029 + 0.30;
+  const platform = stays ? Math.round(stays * (mix.airbnb * feeAirbnb + mix.vrbo * feeVrbo + mix.direct * feeDirect)) : 0;
+  const platformPct = rent ? platform / rent : 0;
   const ophir = Math.round(rent * 0.22);
   const keep = rent - platform - ophir - running;
   const keepAt = (fee) => Math.round(rent - platform - rent * fee - running);
@@ -70,7 +82,8 @@ export function computeEstimate(e) {
   return {
     months: months.map(({ occ, ...x }) => x), rent, nights, stays, avg_rate: nights ? Math.round(rent / nights) : 0, occupancy: Math.round(nights / 365 * 100),
     range: [r100(lo), r100(hi)], platform, ophir, costs, running, keep,
-    keep_range: [r100(lo * (1 - 0.035 - 0.22) - running), r100(hi * (1 - 0.035 - 0.22) - running)],
+    keep_range: [r100(lo * (1 - platformPct - 0.22) - running), r100(hi * (1 - platformPct - 0.22) - running)],
+    platform_pct: Math.round(platformPct * 1000) / 10,
     managers: [['Ophir, 22%', keepAt(0.22)], ['Typical, 28%', keepAt(0.28)], ['Resort program, 35%', keepAt(0.35)]],
     weeks: [['A week in July', week(6)], ['A week in September', week(8)], ['A week in February', week(1)], ['A week in April', week(3)]],
     comps, area_label: area.label, profile: area.profile, beds,

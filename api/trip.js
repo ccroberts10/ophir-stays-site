@@ -1,5 +1,5 @@
 // Guest trip API. GET /api/trip?t=<token> returns the guest's trip; POST saves pre-trip answers and runs the AI planner.
-import { db, json, readBody, loadTrip, planTrip, aiJSON, PACKAGES, OFFERS, priceFor, sendEmail, emailShell, esc, SITE, manualForGuest } from './_lib.js';
+import { db, json, readBody, loadTrip, planTrip, aiJSON, PACKAGES, OFFERS, priceFor, sendEmail, emailShell, esc, SITE, manualForGuest, menuFor, paidAddons } from './_lib.js';
 
 const clip = (s, n) => (s == null ? null : String(s).trim().slice(0, n) || null);
 const num = (v, lo, hi) => { const n = parseInt(v, 10); return Number.isFinite(n) && n >= lo && n <= hi ? n : null; };
@@ -29,6 +29,8 @@ export default async function handler(req, res) {
         charges: (await db.select('charges', `trip_id=eq.${trip.id}&status=neq.void&order=created_at.asc`)).map((c) => ({ key: `charge_${c.id}`, title: c.title, note: c.note, cents: c.amount_cents, status: c.status })),
         ask: (await db.select('messages', `trip_id=eq.${trip.id}&subject=eq.Ask%20Ophir&order=created_at.desc&limit=12`)).reverse().map((m) => ({ from: m.direction === 'inbound' ? 'guest' : 'ophir', body: m.body })),
         manual: showPlan && home ? manualForGuest(home.manual) : [],
+        menu: trip.status === 'cancelled' ? [] : menuFor(trip, await paidAddons(trip.id)).map((m) => ({ ...m, price: OFFERS[m.key].price })),
+        nights: Math.round((new Date(trip.check_out) - new Date(trip.check_in)) / 864e5),
         stay: arrived && showPlan && home ? { door_code: home.door_code, wifi_name: home.wifi_name, wifi_password: home.wifi_password } : null,
       });
     }

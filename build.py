@@ -426,7 +426,7 @@ owners_body = f'''
       <div class="details four reveal">
         <div><span class="ital">i.</span><h3>Damage, covered</h3><p>Every guest pays a damage waiver. It covers your home up to $2,500 a stay, and you never file a claim.</p></div>
         <div><span class="ital">ii.</span><h3>Small fixes, included</h3><p>Bulbs, batteries, filters, a loose handle: fixed and never billed. Bigger repairs are billed at cost plus 10%, with photos, and nothing over $300 happens without your yes.</p></div>
-        <div><span class="ital">iii.</span><h3>Fifteen minutes</h3><p>Guests and owners hear back within fifteen minutes, 7am to 10pm. Someone is at your house within thirty minutes, any hour.</p></div>
+        <div><span class="ital">iii.</span><h3>Fifteen minutes</h3><p>Guests and owners hear back within fifteen minutes, 7am to 10pm. Someone is at your house within an hour, any hour.</p></div>
         <div><span class="ital">iv.</span><h3>Priced every day</h3><p>Nightly rates move daily with the season, events and demand, set by live Durango data and checked by someone who lives here.</p></div>
       </div>
     </div>

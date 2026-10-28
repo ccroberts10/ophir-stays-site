@@ -46,7 +46,7 @@ export default async function handler(req, res) {
     try { result = await planTrip(trip.id); } catch (e) { console.error('replan after payment', e); }
     const inbox = (process.env.OWNER_INBOX || '').trim();
     if (inbox) await sendEmail({ to: inbox, subject: `Paid: ${trip.guest_name} added ${OFFERS[pay.item]?.title || pay.item} ($${(pay.amount_cents / 100).toFixed(2)})`,
-      html: emailShell(`<p><strong>${esc(trip.guest_name)}</strong> paid <strong>$${(pay.amount_cents / 100).toFixed(2)}</strong> for <strong>${esc(OFFERS[pay.item]?.title || pay.item)}</strong>.</p><p>${result ? 'The AI has updated the plan and tasks to include it. Please review and approve.' : 'Please re-plan this trip in admin.'}</p><p><a href="${SITE}/admin">Open admin</a></p>`) });
+      html: emailShell(`<p><strong>${esc(trip.guest_name)}</strong> paid <strong>$${(pay.amount_cents / 100).toFixed(2)}</strong> for <strong>${esc(OFFERS[pay.item]?.title || pay.item)}</strong>.</p>${/^addon_(early|late)$/.test(pay.item) ? '<p><strong>Check the calendar now.</strong> Confirm with the guest within a day, or refund it in Stripe.</p>' : ''}<p>${result ? 'The AI has updated the plan and tasks to include it. Please review and approve.' : 'Please re-plan this trip in admin.'}</p><p><a href="${SITE}/admin">Open admin</a></p>`) });
     return json(res, 200, { ok: true });
   } catch (e) {
     console.error('stripe webhook', e);

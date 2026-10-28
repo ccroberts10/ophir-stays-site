@@ -1,6 +1,6 @@
 // Admin API for Casey. Every call needs header x-admin-key = ADMIN_PASSWORD.
-// POST { action: 'list' | 'detail' | 'approve' | 'replan' | 'simulate' | 'task' | 'resend_welcome', ... }
-import { db, json, readBody, isAdmin, loadTrip, createTrip, planTrip, approveTrip, sendWelcome, sendEmail, emailShell, esc, SITE, MANUAL_SECTIONS, cleanManual } from './_lib.js';
+// POST { action: 'list' | 'detail' | 'approve' | 'replan' | 'simulate' | 'task' | 'resend_welcome' | 'send_upgrade' | 'preview_upgrade', ... }
+import { db, json, readBody, isAdmin, loadTrip, createTrip, planTrip, approveTrip, sendWelcome, sendUpgradeOffer, upgradeEmailHtml, menuFor, paidAddons, sendEmail, emailShell, esc, SITE, MANUAL_SECTIONS, cleanManual } from './_lib.js';
 import { computeEstimate, AREAS, FEATURES } from './_model.js';
 
 const money = (n) => '$' + Math.round(n).toLocaleString('en-US');
@@ -30,6 +30,8 @@ export default async function handler(req, res) {
       case 'approve': await approveTrip(b.id); return json(res, 200, { ok: true });
       case 'replan': return json(res, 200, { ok: true, ...(await planTrip(b.id)) });
       case 'resend_welcome': { const t = await loadTrip(`id=eq.${b.id}`); await sendWelcome(t.trip, t.home); return json(res, 200, { ok: true }); }
+      case 'send_upgrade': { const t = await loadTrip(`id=eq.${b.id}`); return json(res, 200, await sendUpgradeOffer(t.trip, t.home)); }
+      case 'preview_upgrade': { const t = await loadTrip(`id=eq.${b.id}`); return json(res, 200, { html: upgradeEmailHtml(t.trip, t.home, menuFor(t.trip, await paidAddons(t.trip.id))) }); }
       case 'task': {
         const patch = {};
         if (b.status) patch.status = b.status;

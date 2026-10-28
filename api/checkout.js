@@ -1,5 +1,5 @@
 // POST /api/checkout?t=<token> { key } -> Stripe Checkout URL for a fixed-price offer on this trip.
-import { db, json, readBody, OFFERS, priceFor, stripe, SITE } from './_lib.js';
+import { db, json, readBody, OFFERS, priceFor, stripe, SITE, menuFor, paidAddons } from './_lib.js';
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') return json(res, 405, { error: 'Method not allowed' });
@@ -17,7 +17,8 @@ export default async function handler(req, res) {
       if (c.status === 'paid') return json(res, 409, { error: 'Already paid. Thank you.' });
       price = { cents: c.amount_cents, label: c.title }; blurb = c.note || 'Arranged by Ophir Stays for your trip.';
     } else {
-      if (!(trip.offers || []).some((o) => o.key === key)) return json(res, 400, { error: 'This addition is not available for your trip.' });
+      const onMenu = menuFor(trip, await paidAddons(trip.id)).some((m) => m.key === key);
+      if (!onMenu && !(trip.offers || []).some((o) => o.key === key)) return json(res, 400, { error: 'This addition is not available for your trip.' });
       price = priceFor(key, trip);
       if (!price || price.cents <= 0) return json(res, 400, { error: 'This addition is priced on request.' });
       blurb = OFFERS[key].blurb;

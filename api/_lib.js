@@ -322,3 +322,112 @@ export function cleanManual(m) {
 export function manualForGuest(m) {
   return MANUAL_SECTIONS.filter((x) => m && m[x.key]).map((x) => ({ label: x.label, text: m[x.key] }));
 }
+
+// ---------- Upgrade offer: packages and add-ons a guest can buy directly on /upgrade/<token> ----------
+const MENU_ORDER = ['arranged', 'private', 'addon_fridge', 'addon_arrival', 'addon_gear', 'addon_midclean', 'addon_early', 'addon_late'];
+const COVERED = { // what each package already includes, so we never sell it twice
+  stay: [],
+  arranged: ['arranged', 'addon_gear'],
+  private: ['arranged', 'private', 'addon_fridge', 'addon_arrival', 'addon_gear', 'addon_midclean'],
+};
+export function menuFor(trip, paid = []) {
+  const covered = COVERED[trip.package] || [];
+  return MENU_ORDER.filter((k) => !covered.includes(k) && !paid.includes(k))
+    .filter((k) => k !== 'addon_midclean' || nightsOf(trip) >= 4)
+    .filter((k) => !(k === 'arranged' && paid.includes('private')))
+    .map((k) => { const p = priceFor(k, trip); return { key: k, kind: k.startsWith('addon_') ? 'addon' : 'package', title: OFFERS[k].title, blurb: OFFERS[k].blurb, cents: p ? p.cents : null }; })
+    .filter((m) => m.cents > 0);
+}
+const usd = (c) => '$' + (c / 100).toLocaleString('en-US', { maximumFractionDigits: 0 });
+const winter = (d) => { const m = new Date(d + 'T12:00:00').getMonth(); return m >= 10 || m <= 3; };
+
+export function upgradeEmailHtml(trip, home, menu) {
+  const link = (k) => `${SITE}/upgrade/${trip.access_token}${k ? `?add=${k}` : ''}`;
+  const first = esc(firstName(trip.guest_name));
+  const snow = winter(trip.check_in);
+  const serif = "font-family:Georgia,'Times New Roman',serif";
+  const sans = 'font-family:Helvetica,Arial,sans-serif';
+  const eyebrow = (t) => `<div style="${sans};font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:#B4572B;margin:0 0 10px">${t}</div>`;
+  const btn = (href, label, dark) => `<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:22px 0 0"><tr><td style="background:${dark ? '#2A2826' : '#B4572B'}"><a href="${href}" style="display:inline-block;padding:15px 30px;${sans};font-size:12px;letter-spacing:.24em;text-transform:uppercase;color:#FFFFFF;text-decoration:none">${label}</a></td></tr></table>`;
+  const li = (items) => items.map((i) => `<tr><td valign="top" style="padding:0 12px 9px 0;color:#B4572B;${serif};font-size:15px">&mdash;</td><td style="padding:0 0 9px;${serif};font-size:16px;line-height:24px;color:#3A3632">${i}</td></tr>`).join('');
+  const pkg = menu.filter((m) => m.kind === 'package');
+  const adds = menu.filter((m) => m.kind === 'addon');
+  const card = (m) => {
+    const isPrivate = m.key === 'private';
+    const img = isPrivate ? 'upgrade-private.jpg' : snow ? 'upgrade-ski.jpg' : 'upgrade-bike.jpg';
+    const items = isPrivate
+      ? ['Your own host, on call for the whole stay', 'Groceries shopped and the fridge stocked to your list', 'Fire laid, wine chosen, music on when you walk in', 'Private chef, in-home massage or a sitter booked for you', 'Airport transfer booked, and a mid-stay refresh']
+      : [snow ? 'Skis and boots sized to each guest, waiting in the gear room' : 'Bikes fitted to each rider and delivered to the house', snow ? 'Lift tickets, lessons and guides booked' : 'Guides, rafting and fly fishing booked', 'Dinner reservations held, first round on the house at our partner restaurants', 'A planning call, then every day built around the forecast', 'Two Ophir tumblers to keep'];
+    const unit = isPrivate ? (trip.package === 'arranged' ? 'upgrade, your Arranged Stay credited' : `per stay${nightsOf(trip) > 5 ? `, ${nightsOf(trip)} nights` : ', up to five nights'}`) : `per stay, ${partyOf(trip)} guests`;
+    const lead = isPrivate ? 'A dedicated host. Nothing left for you to do.' : 'Tell us what you love. We plan the trip around it.';
+    return `<tr><td style="padding:0 0 28px"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#FFFFFF;border:1px solid #E7E1D6">
+      <tr><td><a href="${link(m.key)}"><img src="${SITE}/assets/email/${img}" width="560" alt="" style="display:block;width:100%;height:auto;border:0"></a></td></tr>
+      <tr><td style="padding:30px 32px 32px">${eyebrow(isPrivate ? 'The Private Stay' : 'The Arranged Stay')}
+        <div style="${serif};font-size:26px;line-height:32px;color:#2A2826;margin:0 0 6px">${lead}</div>
+        <div style="margin:14px 0 18px"><span style="${serif};font-size:34px;color:#2A2826">${usd(m.cents)}</span> <span style="${sans};font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#7A7268">&nbsp;${unit}</span></div>
+        <table role="presentation" cellpadding="0" cellspacing="0" border="0">${li(items)}</table>
+        ${btn(link(m.key), isPrivate ? 'Reserve your host' : 'Arrange my trip', isPrivate)}
+      </td></tr></table></td></tr>`;
+  };
+  const addCell = (m) => `<td width="50%" valign="top" style="padding:0 6px 12px"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#FFFFFF;border:1px solid #E7E1D6"><tr><td style="padding:20px 20px 18px">
+      <div style="${serif};font-size:18px;line-height:24px;color:#2A2826">${esc(m.title)}</div>
+      <div style="${serif};font-size:14px;line-height:21px;color:#6F685F;margin:6px 0 12px">${esc(m.blurb)}</div>
+      <div style="${sans};font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#2A2826">${esc(OFFERS[m.key].price)}</div>
+      <a href="${link(m.key)}" style="display:inline-block;margin-top:12px;${sans};font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:#B4572B;text-decoration:none;border-bottom:1px solid #B4572B;padding-bottom:3px">Add to my stay</a>
+    </td></tr></table></td>`;
+  let addRows = '';
+  for (let i = 0; i < adds.length; i += 2) addRows += `<tr>${addCell(adds[i])}${adds[i + 1] ? addCell(adds[i + 1]) : '<td width="50%"></td>'}</tr>`;
+  const intro = trip.package === 'private'
+    ? `Your Private Stay is set. A few last touches are below if you want them, all booked directly with us.`
+    : `Your home is ready for you. If you would like us to take care of the rest of the trip, it is all below. Choose a package, add a single touch, or simply arrive. Everything is booked directly with us, and you can add to it any time before you arrive.`;
+  return `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light"><title>Your stay</title></head>
+<body style="margin:0;padding:0;background:#F3EFE7">
+<div style="display:none;max-height:0;overflow:hidden;color:#F3EFE7">Gear sized and waiting, tables held, a host on call. Add as much of the trip as you like.</div>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#F3EFE7"><tr><td align="center" style="padding:28px 12px 40px">
+<table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="width:100%;max-width:600px">
+  <tr><td align="center" style="padding:6px 0 26px"><img src="${SITE}/assets/email-mark.png" width="40" alt="Ophir Stays" style="display:block;border:0;margin:0 auto 12px">
+    <div style="${sans};font-size:17px;font-weight:600;letter-spacing:.5em;color:#2A2826;padding-left:.5em">OPHIR</div>
+    <div style="${sans};font-size:9px;font-weight:600;letter-spacing:.6em;color:#B4572B;margin-top:6px;padding-left:.6em">STAYS</div></td></tr>
+  <tr><td><img src="${SITE}/assets/email/upgrade-hero.jpg" width="600" alt="A great room with the fire lit, ready for arrival" style="display:block;width:100%;height:auto;border:0"></td></tr>
+  <tr><td style="background:#FFFFFF;padding:44px 40px 40px;border:1px solid #E7E1D6;border-top:0" align="center">
+    ${eyebrow(`${esc(home?.name || 'Your stay')} &middot; ${esc(fmt(trip.check_in).replace(/^\w+, /, ''))} to ${esc(fmt(trip.check_out).replace(/^\w+, /, ''))}`)}
+    <div style="${serif};font-size:34px;line-height:40px;color:#2A2826;margin:4px 0 18px">${first}, the trip is ours to handle.</div>
+    <div style="width:44px;height:1px;background:#B4572B;margin:0 auto 22px;line-height:1px;font-size:1px">&nbsp;</div>
+    <div style="${serif};font-size:17px;line-height:27px;color:#4A443E;text-align:left">${intro}</div>
+  </td></tr>
+  <tr><td style="padding:34px 0 6px" align="center">${eyebrow('Packages')}<div style="${serif};font-size:28px;color:#2A2826;margin:0 0 22px">Choose how much we handle.</div></td></tr>
+  ${pkg.map(card).join('')}
+  ${adds.length ? `<tr><td style="padding:12px 0 8px" align="center">${eyebrow('A la carte')}<div style="${serif};font-size:28px;color:#2A2826;margin:0 0 20px">Or add a single touch.</div></td></tr>
+  <tr><td><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">${addRows}</table></td></tr>` : ''}
+  <tr><td style="padding:24px 0 0"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#2A2826"><tr>
+    <td width="96" valign="top" style="padding:28px 0 28px 28px"><img src="${SITE}/assets/email/casey-lake.jpg" width="68" height="68" alt="Casey Roberts" style="display:block;width:68px;height:68px;border-radius:34px;border:0;object-fit:cover"></td>
+    <td valign="top" style="padding:28px 28px 28px 18px"><div style="${serif};font-size:16px;line-height:25px;color:#ECE4D3">I have lived in Durango for twenty-three years. Tell me what you love and I will build the days around it, the way I would for my own family.</div>
+    <div style="${sans};font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:#C99A7A;margin-top:14px">Casey Roberts &middot; Founder</div></td></tr></table></td></tr>
+  <tr><td align="center" style="padding:26px 24px 0">${btn(link(''), 'See everything for my stay', true)}</td></tr>
+  <tr><td align="center" style="padding:24px 30px 0;${sans};font-size:12px;line-height:19px;color:#7A7268">Package prices cover our planning, booking and hosting. Rentals, lift tickets, guides, chefs and groceries are paid separately at our partners' rates, with no markup. Early check-in and late checkout are confirmed within a day, or refunded in full.<br><br>Ophir Stays &middot; Durango, Colorado &middot; <a href="${SITE}" style="color:#7A7268">ophirstays.com</a></td></tr>
+</table></td></tr></table></body></html>`;
+}
+
+export async function sendUpgradeOffer(trip, home) {
+  if (!trip.guest_email || trip.status === 'cancelled') return { skipped: 'no email or cancelled' };
+  const menu = menuFor(trip, await paidAddons(trip.id));
+  if (!menu.length) return { skipped: 'nothing to offer' };
+  const subject = trip.package === 'private' ? 'A few last touches for your stay' : `Your Durango trip, handled`;
+  await sendEmail({ to: trip.guest_email, subject, html: upgradeEmailHtml(trip, home, menu), replyTo: env('OWNER_INBOX') });
+  await db.insert('messages', [{ trip_id: trip.id, channel: 'email', direction: 'outbound', subject: 'Upgrade offer', body: `Sent: ${menu.map((m) => m.key).join(', ')}`, status: 'sent', sent_at: new Date().toISOString() }]);
+  return { sent: menu.length };
+}
+// Daily: every trip booked at least ~20 hours ago, arriving 3 or more days out, that hasn't had the offer yet.
+export async function runUpgradeOffers() {
+  const cutoff = new Date(Date.now() - 20 * 36e5).toISOString();
+  const soon = new Date(Date.now() + 3 * 864e5).toLocaleDateString('en-CA', { timeZone: 'America/Denver' });
+  const trips = await db.select('trips', `status=neq.cancelled&created_at=lte.${cutoff}&check_in=gte.${soon}&guest_email=not.is.null&order=created_at.asc&limit=40`);
+  let sent = 0;
+  for (const trip of trips) {
+    const done = await db.select('messages', `trip_id=eq.${trip.id}&subject=eq.Upgrade%20offer&select=id&limit=1`);
+    if (done.length) continue;
+    try { const home = trip.home_id ? await db.one('homes', `id=eq.${trip.home_id}`) : null; const r = await sendUpgradeOffer(trip, home); if (r.sent) sent++; }
+    catch (e) { console.error('upgrade offer', trip.id, e.message); }
+  }
+  return sent;
+}

@@ -55,7 +55,6 @@ export function computeEstimate(e) {
     ...(feats.includes('hot_tub') ? [['Hot tub service', 1200]] : []),
     ...(condo ? [] : [['Snow removal', area.profile === 'lake' ? 800 : 1500]]),
     ['Repairs reserve', r100(900 + 400 * beds)],
-    ['Linen replacement', 150 * beds],
     ['Added STR insurance', condo ? 900 : 1500],
   ];
   const running = costs.reduce((s, c) => s + c[1], 0);

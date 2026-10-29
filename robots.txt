@@ -3,4 +3,6 @@ Allow: /
 Disallow: /admin
 Disallow: /trip/
 Disallow: /api/
+Disallow: /upgrade/
+Disallow: /report/
 Sitemap: https://ophirstays.com/sitemap.xml

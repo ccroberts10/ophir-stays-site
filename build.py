@@ -539,6 +539,11 @@ FORM_JS = '''
 })();
 </script>'''
 
+import re as _re, html as _html
+_faq = [(_html.unescape(_re.sub('<[^>]+>','',q)).strip(), _html.unescape(_re.sub('<[^>]+>','',x)).strip()) for q,x in _re.findall(r'<details><summary>(.*?)</summary><p>(.*?)</p></details>', owners_body, _re.S)]
+POST_LD['/owners'] = '<script type="application/ld+json">' + _json.dumps({"@context":"https://schema.org","@graph":[
+  {"@type":"ProfessionalService","name":"Ophir Stays","url":"https://ophirstays.com/owners","description":"Locally owned Durango vacation rental management: pricing, guests, cleaning, trip planning and a first-year income guarantee, for no more than 25 homes.","email":"casey@ophirstays.com","telephone":"+1-970-779-8992","address":{"@type":"PostalAddress","addressLocality":"Durango","addressRegion":"CO","postalCode":"81301","addressCountry":"US"},"areaServed":["Durango, CO","Purgatory, CO","Vallecito Lake, CO","La Plata County, CO"],"serviceType":"Vacation rental management","founder":{"@type":"Person","name":"Casey Roberts"}},
+  {"@type":"FAQPage","mainEntity":[{"@type":"Question","name":q,"acceptedAnswer":{"@type":"Answer","text":x}} for q,x in _faq]}]}) + '</script>'
 owners = page('Durango Vacation Rental Management · Ophir Stays',
               'Apply to the Ophir Collection: twenty-five Durango homes, one standard, and a first-year income guarantee. Get a free estimate of what your home could earn.',
               '/owners', 'owners', owners_body, FORM_JS)

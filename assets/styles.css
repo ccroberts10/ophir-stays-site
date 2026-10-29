@@ -361,3 +361,23 @@ fieldset.field legend{font-size:12px;font-weight:500;letter-spacing:.2em;text-tr
 .chip input:focus-visible+span{outline:2px solid var(--rust);outline-offset:2px}
 [hidden]{display:none!important}
 .field .chip{font-size:15px;font-weight:400;letter-spacing:0;text-transform:none}
+/* Owner comparison table */
+table.compare{width:100%;border-collapse:collapse;font-size:16px;line-height:1.45;background:#fff;border:1px solid var(--line)}
+table.compare th,table.compare td{padding:16px 18px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+table.compare thead th{font-size:12px;letter-spacing:.18em;text-transform:uppercase;font-weight:500;color:var(--muted);border-bottom:1px solid var(--charcoal);background:#fff}
+table.compare thead th.us{color:#fff;background:var(--rust)}
+table.compare tbody th{font-weight:500;width:22%}
+table.compare td.us{background:#FBF4EE;font-weight:500;color:var(--charcoal)}
+table.compare td{color:var(--muted)}
+table.compare tr:last-child th,table.compare tr:last-child td{border-bottom:0}
+@media (max-width:720px){
+  table.compare thead{display:none}
+  table.compare,table.compare tbody,table.compare tr,table.compare th,table.compare td{display:block;width:100%}
+  table.compare tr{border-bottom:1px solid var(--line);padding:14px 16px}
+  table.compare tbody th{width:100%;padding:0 0 8px;border:0;font-size:12px;letter-spacing:.16em;text-transform:uppercase}
+  table.compare td{border:0;padding:6px 0 6px 0;display:grid;grid-template-columns:118px 1fr;gap:10px;background:none}
+  table.compare td:before{content:attr(data-l);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:500}
+  table.compare td.us{background:#FBF4EE;padding:8px 10px;margin:2px -10px}
+  table.compare td.us:before{color:var(--rust)}
+}
+table.data.wrap th[scope=row]{white-space:normal;padding-right:24px}

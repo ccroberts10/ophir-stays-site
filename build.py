@@ -480,6 +480,12 @@ owners_body = f'''
         <div><b>$0</b><span>to join. Readiness work is quoted up front and billed at cost.</span></div>
         <div><b>30 days</b><span>notice to leave, either way. No long contracts.</span></div>
       </div>
+      <div class="reveal" style="max-width:980px;margin:56px auto 0;text-align:left">
+        <p class="eyebrow" style="text-align:center">How we compare</p>
+        <h2 class="display" style="text-align:center;margin-bottom:28px">Ophir, on your own, or a large manager</h2>
+        <table class="compare"><thead><tr><th scope="col"></th><th scope="col" class="us">Ophir</th><th scope="col">On your own</th><th scope="col">Large managers</th></tr></thead><tbody><tr><th scope="row">Fee</th><td class="us" data-l="Ophir">22% founding rate, all in</td><td data-l="On your own">0%, plus your time</td><td data-l="Large managers">Typically 25 to 40%, plus add-on fees</td></tr><tr><th scope="row">Hidden fees</th><td class="us" data-l="Ophir">None. Repairs at cost.</td><td data-l="On your own">None</td><td data-l="Large managers">Linen, setup, card and repair markups are common</td></tr><tr><th scope="row">Year-one guarantee</th><td class="us" data-l="Ophir">Yes, up to our fee</td><td data-l="On your own">No</td><td data-l="Large managers">Rarely</td></tr><tr><th scope="row">Contract</th><td class="us" data-l="Ophir">30 days’ notice</td><td data-l="On your own">None</td><td data-l="Large managers">Often 12 months, sometimes with an exit fee</td></tr><tr><th scope="row">Who answers</th><td class="us" data-l="Ophir">Casey, a 23-year local</td><td data-l="On your own">You, at 2am</td><td data-l="Large managers">A call center or a rotating team</td></tr><tr><th scope="row">Homes per manager</th><td class="us" data-l="Ophir">25, at most</td><td data-l="On your own">1</td><td data-l="Large managers">Hundreds</td></tr><tr><th scope="row">Trip planning for guests</th><td class="us" data-l="Ophir">Every stay</td><td data-l="On your own">No</td><td data-l="Large managers">Rarely</td></tr><tr><th scope="row">Pricing</th><td class="us" data-l="Ophir">Set daily, by season and event</td><td data-l="On your own">Usually set once</td><td data-l="Large managers">Software, set by region</td></tr></tbody></table>
+        <p class="fine" style="margin-top:12px">Large managers means national and regional companies with hundreds of homes. Terms vary by company and contract; ask yours for a full fee schedule.</p>
+      </div>
     </div>
   </section>
 
@@ -491,7 +497,7 @@ owners_body = f'''
         <p class="lead">Tell us about your home. Within 24 hours you get a three-page report: expected rent month by month, what you keep after every cost, comparable homes and our terms. Free, with no obligation.</p>
         <p class="fine" style="margin-top:16px"><a href="/assets/ophir-earnings-estimate-sample.pdf">See a sample report</a></p>
         <p class="fine" style="margin-top:28px">Prefer to talk? <a href="mailto:casey@ophirstays.com">casey@ophirstays.com</a></p>
-        <p class="fine" style="margin-top:12px">Before you apply: <a href="/journal/durango-home-earnings">what a Durango vacation home earns</a> and <a href="/journal/durango-short-term-rental-rules">the city and county rental rules</a>.</p>
+        <p class="fine" style="margin-top:12px">Before you apply: <a href="/journal/durango-home-earnings">what a Durango vacation home earns</a> and <a href="/journal/durango-short-term-rental-rules">the city and county rental rules</a>. Own at Purgatory? <a href="/areas/purgatory">Purgatory vacation rental management</a>.</p>
       </div>
       <div class="reveal" id="estimate-box">
         {ESTIMATE_FORM}
@@ -1207,8 +1213,99 @@ estimate_body = f'''
 estimate_page = page('Free Durango Vacation Rental Earnings Estimate · Ophir Stays', 'Owners and agents: tell us about a Durango home and get a free three-page earnings report within 24 hours, with monthly rent, what the owner keeps and comparable homes.', '/estimate', 'owners', estimate_body, FORM_JS)
 
 os.makedirs('journal', exist_ok=True); os.makedirs('homes', exist_ok=True); os.makedirs('trails', exist_ok=True)
-for name, html in [('index.html', home), ('owners.html', owners), ('about.html', about), ('journal.html', journal), ('journal/durango-rides.html', post), ('journal/durango-home-earnings.html', post2), ('journal/where-to-eat-durango.html', post3), ('journal/durango-short-term-rental-rules.html', post4), ('trail-map.html', trailmap), ('trails.html', trails_index), ('guest-app.html', guestapp), ('estimate.html', estimate_page), ('homes.html', homes_page), ('stay.html', stay_page)] + [(f"homes/{h['slug']}.html", home_page(h)) for h in LIVE_HOMES] + [(f"trails/{r['slug']}.html", route_page(r)) for r in ROUTES]:
+
+# ---------------- AREA: PURGATORY ----------------
+PURG_FAQ = [
+ ('Can I rent my Purgatory condo or home nightly?', 'Usually yes. Unincorporated La Plata County, where Purgatory sits, has no short-term rental permit. The answer comes from your HOA covenants. Most resort condos and townhomes rent nightly today; Glacier Club homes do not. We check your documents before you sign anything.'),
+ ('What does a Purgatory vacation home earn?', 'In our model, a 2-bedroom condo earns about $40,000 a year in rent, a 3-bedroom townhome with a hot tub about $64,000, and a 4-bedroom home with a hot tub and views about $94,000. About two-thirds of it comes in December through March. We send a free estimate for your home within 24 hours.'),
+ ('I already have a manager. Can I switch in the middle of ski season?', 'Yes. We start the day after the last stay your current manager keeps, honor every reservation that moves to us, and handle the handoff. Many owners sign in the fall and start in January.'),
+]
+POST_LD['/areas/purgatory'] = '<script type="application/ld+json">' + _json.dumps({"@context":"https://schema.org","@graph":[
+  {"@type":"Service","name":"Vacation rental management at Purgatory","serviceType":"Vacation rental management","provider":{"@type":"LocalBusiness","name":"Ophir Stays","url":"https://ophirstays.com","telephone":"+1-970-779-8992","address":{"@type":"PostalAddress","addressLocality":"Durango","addressRegion":"CO","postalCode":"81301","addressCountry":"US"}},"areaServed":{"@type":"Place","name":"Purgatory, Durango Mountain, Colorado"},"url":"https://ophirstays.com/areas/purgatory"},
+  {"@type":"FAQPage","mainEntity":[{"@type":"Question","name":q,"acceptedAnswer":{"@type":"Answer","text":a}} for q,a in PURG_FAQ]},
+  {"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Ophir Stays","item":"https://ophirstays.com/"},{"@type":"ListItem","position":2,"name":"For owners","item":"https://ophirstays.com/owners"},{"@type":"ListItem","position":3,"name":"Purgatory","item":"https://ophirstays.com/areas/purgatory"}]}]}) + '</script>'
+purg_faq_html = ''.join(f'<details><summary>{q}</summary><p>{a}</p></details>' for q,a in PURG_FAQ)
+purg_body = f"""
+  <section class="center" style="padding-bottom:40px">
+    <div class="wrap narrow reveal">
+      <p class="eyebrow">Areas · Purgatory and Durango Mountain</p>
+      <h1 class="display">Vacation rental management at Purgatory</h1>
+      <p class="post-meta">By Casey Roberts · October 2026</p>
+    </div>
+  </section>
+  <div class="wrap">{photo('hero-ski', 'Skiers touring below the San Juan peaks near Purgatory')}</div>
+  <section style="padding-top:56px">
+    <div class="wrap narrow article">
+      <p><strong>Purgatory is the strongest rental market we serve. Most resort condos and homes can rent nightly, and about two-thirds of a home's year is earned from December through March. Here is what's allowed, what homes earn, and how we run them.</strong></p>
+
+      <h2>Can you rent here?</h2>
+      <p>Purgatory sits in unincorporated La Plata County. The county has no short-term rental permit, so the real answer is your HOA. This is where things stand for the neighborhoods we work in:</p>
+      <div class="table-wrap"><table class="data wrap">
+        <thead><tr><th scope="col">Neighborhood</th><th scope="col">Nightly rentals</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Purgatory Village condos (Angelhaus, Eolus, Needles, Sitzmark, Twilight View, Silverpick)</th><td>Yes</td></tr>
+          <tr><th scope="row">Durango Mountain townhomes (Tacoma Village, Travertine, Alpenglow)</th><td>Yes</td></tr>
+          <tr><th scope="row">Lake Purgatory, Lake of the Pines and Beaver Circle homes</th><td>Yes, check covenants</td></tr>
+          <tr><th scope="row">Tamarron Lodge condos</th><td>Yes</td></tr>
+          <tr><th scope="row">Glacier Club homes</th><td>No</td></tr>
+          <tr><th scope="row">Cascade Village and homes north of the county line</th><td>San Juan County rules</td></tr>
+        </tbody>
+      </table></div>
+      <p class="fine">"Yes" means homes in that neighborhood rent nightly today. Covenants differ by building and can change, so we read yours before you sign. Checked October 2026.</p>
+      <p>Every stay owes the county's 2% lodging tax, 2% county sales tax and state sales tax. Airbnb and Vrbo collect some of these; we register for and remit the rest, including on direct bookings.</p>
+
+      <h2>What a home here earns</h2>
+      <div class="table-wrap"><table class="data">
+        <thead><tr><th scope="col">Home</th><th scope="col">Rent a year</th><th scope="col">Owner keeps</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">2-bedroom condo</th><td>$40,000</td><td>$18,200</td></tr>
+          <tr><th scope="row">3-bedroom townhome, hot tub</th><td>$63,900</td><td>$28,700</td></tr>
+          <tr><th scope="row">4-bedroom home, hot tub and views</th><td>$93,900</td><td>$47,600</td></tr>
+        </tbody>
+      </table></div>
+      <p class="fine">From our estimate model for Purgatory. "Owner keeps" is after booking fees, Ophir's 22% founding rate, utilities, supplies, snow removal, a repair reserve and rental insurance, before mortgage and property tax. Your home will differ; your own estimate takes 24 hours.</p>
+      <p>Winter carries the year. December through March brings in about two-thirds of the rent, July and August most of the rest. April, May and November are quiet, which is when we do the deep clean and the repairs, and when you can use the home yourself without costing much.</p>
+
+      <h2>What guests come for</h2>
+      <ul>
+        <li>Ski days at Purgatory, with skis and boots sized and waiting in the gear room.</li>
+        <li>Lift-served mountain biking and the alpine coaster in summer.</li>
+        <li>Haviland Lake, Hermosa Creek Trail and the high passes toward Silverton.</li>
+        <li>A hot tub at the end of the day. In our model it's one of the biggest lifts to a mountain home's rent.</li>
+      </ul>
+
+      <h2>Homes we take here</h2>
+      <p>Every Ophir home meets one standard. At Purgatory that also means a ski room or closet with a boot dryer, a plowed and reliable winter driveway, Wi-Fi of at least 100 Mbps, and beds for a group: most winter guests are families of six or more.</p>
+
+      <h2>How we run a Purgatory home</h2>
+      <ul>
+        <li>The driveway is plowed and the walk cleared before every winter arrival.</li>
+        <li>We check heat, heat tape and pipes in every cold snap, occupied or not.</li>
+        <li>Rates move daily around holidays, spring break and powder forecasts.</li>
+        <li>Guests are met on arrival, and their trip is planned before they come.</li>
+        <li>Mud season brings a deep clean, a repair list for your approval and a photo report.</li>
+      </ul>
+
+      <h2>Questions owners ask</h2>
+      <div class="faq">{purg_faq_html}</div>
+
+      <p style="margin-top:36px"><a class="btn btn-rust" href="/owners#estimate">Get a free estimate for your Purgatory home</a></p>
+      <p class="fine" style="margin-top:14px">Or read <a href="/journal/durango-short-term-rental-rules">the full city and county rental rules</a> and <a href="/owners">how Ophir works with owners</a>.</p>
+
+      <h2 style="font-size:20px;margin-top:56px">Sources</h2>
+      <p class="fine" style="margin:0">
+        <a href="https://www.lpcgov.org/departments/finance___procurement/lodging_tax_information/be_a_good_neighbor_(vacation_rental).php" rel="noopener">La Plata County: Be a Good Neighbor (vacation rental)</a> (checked October 2026)<br>
+        Neighborhood status from current nightly listings and HOA documents reviewed by Ophir, October 2026. This is a plain-English summary, not legal advice.
+      </p>
+    </div>
+  </section>
+"""
+purg_page = page('Purgatory Vacation Rental Management · Ophir Stays',
+                 'Vacation rental management at Purgatory and Durango Mountain: which condos and homes can rent nightly, what they earn, and how a local manager runs them.',
+                 '/areas/purgatory', 'owners', purg_body, image='/assets/photos/hero-ski.jpg')
+os.makedirs('areas', exist_ok=True)
+for name, html in [('index.html', home), ('owners.html', owners), ('about.html', about), ('journal.html', journal), ('journal/durango-rides.html', post), ('journal/durango-home-earnings.html', post2), ('journal/where-to-eat-durango.html', post3), ('journal/durango-short-term-rental-rules.html', post4), ('trail-map.html', trailmap), ('trails.html', trails_index), ('guest-app.html', guestapp), ('estimate.html', estimate_page), ('homes.html', homes_page), ('stay.html', stay_page), ('areas/purgatory.html', purg_page)] + [(f"homes/{h['slug']}.html", home_page(h)) for h in LIVE_HOMES] + [(f"trails/{r['slug']}.html", route_page(r)) for r in ROUTES]:
     open(name, 'w').write(html)
 open('sitemap.xml', 'w').write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">\n' +
-    ''.join(f'<url><loc>https://ophirstays.com{p}</loc><lastmod>2026-10-18</lastmod>' + ('<image:image><image:loc>https://ophirstays.com/assets/ophir-durango-trail-map.jpg</image:loc></image:image>' if p == '/trail-map' else ''.join(f'<image:image><image:loc>https://ophirstays.com/assets/routes/{p[8:]}{x}.jpg</image:loc></image:image>' for x in ('', '-card')) if p.startswith('/trails/') else '') + '</url>\n' for p in ['/', '/stay', '/homes', '/owners', '/about', '/journal', '/journal/durango-rides', '/journal/durango-home-earnings', '/journal/where-to-eat-durango', '/journal/durango-short-term-rental-rules', '/trail-map', '/trails', '/guest-app', '/estimate'] + [f"/trails/{r['slug']}" for r in ROUTES] + [f"/homes/{h['slug']}" for h in HOMES if not h['sample']]) + '</urlset>\n')
+    ''.join(f'<url><loc>https://ophirstays.com{p}</loc><lastmod>2026-10-18</lastmod>' + ('<image:image><image:loc>https://ophirstays.com/assets/ophir-durango-trail-map.jpg</image:loc></image:image>' if p == '/trail-map' else ''.join(f'<image:image><image:loc>https://ophirstays.com/assets/routes/{p[8:]}{x}.jpg</image:loc></image:image>' for x in ('', '-card')) if p.startswith('/trails/') else '') + '</url>\n' for p in ['/', '/stay', '/homes', '/owners', '/about', '/journal', '/journal/durango-rides', '/journal/durango-home-earnings', '/journal/where-to-eat-durango', '/journal/durango-short-term-rental-rules', '/trail-map', '/trails', '/guest-app', '/estimate', '/areas/purgatory'] + [f"/trails/{r['slug']}" for r in ROUTES] + [f"/homes/{h['slug']}" for h in HOMES if not h['sample']]) + '</urlset>\n')
 print('built')

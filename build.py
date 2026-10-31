@@ -427,10 +427,11 @@ owners_body = f'''
       <div class="reveal"><p class="eyebrow">Our promises</p><h2 class="display">What we put in writing.</h2></div>
       <div class="details four reveal">
         <div><span class="ital">i.</span><h3>Damage, covered</h3><p>Every guest pays a damage waiver. It covers your home up to $2,500 a stay, and you never file a claim.</p></div>
-        <div><span class="ital">ii.</span><h3>Small fixes, included</h3><p>Bulbs, batteries, filters, a loose handle: fixed and never billed. Bigger repairs are billed at cost plus 10%, with photos, and nothing over $300 happens without your yes.</p></div>
+        <div><span class="ital">ii.</span><h3>Small fixes, included</h3><p>Bulbs, batteries, filters, a loose handle: fixed and never billed. Bigger repairs are billed at cost, with no markup and with photos, and nothing over $300 happens without your yes.</p></div>
         <div><span class="ital">iii.</span><h3>Fifteen minutes</h3><p>Guests and owners hear back within fifteen minutes, 7am to 10pm. Someone is at your house within an hour, any hour.</p></div>
         <div><span class="ital">iv.</span><h3>Priced every day</h3><p>Nightly rates move daily with the season, events and demand, set by live Durango data and checked by someone who lives here.</p></div>
       </div>
+      <p class="fine reveal" style="margin-top:28px">Every stay in your home also gives $10 to Durango: our trails, adaptive skiing at Purgatory, and local housing. It comes from our fee, never yours. <a href="/about#give">How we give back</a>.</p>
     </div>
   </section>
 
@@ -684,6 +685,25 @@ about_body = f'''
         <figure style="margin:0">{photo('casey-soccer', 'Casey and his son on the Fort Lewis College soccer field after a game', 'photo tall')}<figcaption class="fine" style="margin-top:10px">Back on the Fort Lewis pitch, where it started in 2003.</figcaption></figure>
         <figure style="margin:0">{photo('casey-cx', 'Casey racing cyclocross on a frosty course in Durango', 'photo tall')}<figcaption class="fine" style="margin-top:10px">Racing cyclocross in Durango.</figcaption></figure>
         <figure style="margin:0">{photo('casey-trout', 'Casey holding a brown trout on a drift boat', 'photo tall')}<figcaption class="fine" style="margin-top:10px">A brown trout from a day on the river.</figcaption></figure>
+      </div>
+    </div>
+  </section>
+  <section id="give">
+    <div class="wrap">
+      <div class="center reveal" style="max-width:720px;margin:0 auto 40px">
+        <p class="eyebrow">Ophir in Durango</p>
+        <h2 class="display">$10 from every stay stays in Durango.</h2>
+        <hr class="rule">
+        <p class="lead">It comes from our fee, never the owner's. After booking, each guest chooses where their $10 goes.</p>
+      </div>
+      <div class="give reveal">
+        <a class="cause" href="https://www.durangotrails.org" rel="noopener" target="_blank"><span class="mk">Trails</span><h3>Durango Trails</h3><p>The nonprofit that builds and cares for the singletrack our guests ride, from Horse Gulch to Animas Mountain.</p><span class="link">durangotrails.org</span></a>
+        <a class="cause" href="https://www.asadurango.com" rel="noopener" target="_blank"><span class="mk">Mountain</span><h3>Adaptive Sports Association</h3><p>Ski and outdoor programs at Purgatory for people with disabilities, for more than forty years.</p><span class="link">asadurango.com</span></a>
+        <a class="cause" href="https://swhousingsolutions.com" rel="noopener" target="_blank"><span class="mk">Home</span><h3>Housing Solutions for the Southwest</h3><p>Helping local families find and keep a home in La Plata County, where housing is the hardest thing to find.</p><span class="link">swhousingsolutions.com</span></a>
+      </div>
+      <div class="split top reveal" style="margin-top:48px;gap:40px">
+        <div><h3 class="display" style="font-size:26px">Spent here, too</h3><p style="color:var(--muted)">Our cleaners, handymen, guides, shops, coffee and restaurants are local, and paid fairly. Each year we publish how much of every booking dollar stayed in La Plata County.</p></div>
+        <div><h3 class="display" style="font-size:26px">Given so far</h3><p style="color:var(--muted)">Our first donations go out with our first guest stays, and we'll post each one here as it happens. We volunteer at Durango Trails work days, and owners and returning guests are welcome to join us.</p></div>
       </div>
     </div>
   </section>

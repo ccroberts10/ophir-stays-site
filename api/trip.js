@@ -30,6 +30,7 @@ export default async function handler(req, res) {
         ask: (await db.select('messages', `trip_id=eq.${trip.id}&subject=eq.Ask%20Ophir&order=created_at.desc&limit=12`)).reverse().map((m) => ({ from: m.direction === 'inbound' ? 'guest' : 'ophir', body: m.body })),
         manual: showPlan && home ? manualForGuest(home.manual) : [],
         menu: trip.status === 'cancelled' ? [] : menuFor(trip, await paidAddons(trip.id)).map((m) => ({ ...m, price: OFFERS[m.key].price })),
+        cause: trip.cause || null,
         nights: Math.round((new Date(trip.check_out) - new Date(trip.check_in)) / 864e5),
         stay: arrived && showPlan && home ? { door_code: home.door_code, wifi_name: home.wifi_name, wifi_password: home.wifi_password } : null,
       });
@@ -84,6 +85,13 @@ Trip context: ${JSON.stringify(ctx)}`;
           html: emailShell(`<p><strong>${esc(trip.guest_name)}</strong> (${esc(trip.check_in)} to ${esc(trip.check_out)}${home ? `, ${esc(home.name)}` : ''}) asked:</p><p style="border-left:2px solid #B4572B;padding-left:12px">${esc(q)}</p><p>Ask Ophir answered:</p><p style="color:#6B645B">${esc(answer)}</p><p>Follow up with the guest directly.</p><p><a href="${SITE}/admin">Open admin</a></p>`) }).catch((e) => console.error('ask email', e));
       }
       return json(res, 200, { answer, notified: notify });
+    }
+
+    if (req.method === 'POST' && req.query.action === 'cause') {
+      const c = String(readBody(req).cause || '');
+      if (!['trails', 'adaptive', 'housing'].includes(c)) return json(res, 400, { error: 'Pick one of the three.' });
+      await db.update('trips', `id=eq.${trip.id}`, { cause: c });
+      return json(res, 200, { ok: true, cause: c });
     }
 
     if (req.method === 'POST' && req.query.action === 'request') {

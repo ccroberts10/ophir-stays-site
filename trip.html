@@ -177,16 +177,21 @@
           return '<div class="item"><span class="tm">'+esc(it.start_time||'')+'</span><div><b>'+esc(it.title)+'</b>'+(it.details?'<p>'+esc(it.details)+'</p>':'')+(it.weather_note?'<span class="wx">'+esc(it.weather_note)+'</span>':'')+(mp?'<br>'+mp:'')+'</div></div>'}).join('')+'</section>'}).join('');
     var offers=(data.offers||[]).length?'<section class="step"><p class="eyebrow">For your trip</p><h2 class="display">A few additions we’d suggest</h2><div class="offers">'+data.offers.map(function(o){var done=req[o.title];
       var money=o.pay_cents?'$'+(o.pay_cents/100).toLocaleString('en-US',{minimumFractionDigits:0}):null;
-      return '<div class="offer">'+(o.reason?'<span class="why">'+esc(o.reason)+'</span>':'')+'<h4>'+esc(o.title)+'</h4><p>'+esc(o.blurb)+'</p><span class="pr">'+esc(money&&o.key==='private'&&o.pay_cents!==125000?money+' to upgrade':o.price)+'</span>'+
+      return '<div class="offer">'+(o.reason?'<span class="why">'+esc(o.reason)+'</span>':'')+'<h4>'+esc(o.title)+'</h4><p>'+esc(o.blurb)+'</p><span class="pr">'+esc(money&&o.key==='private'&&o.pay_cents!==195000?money+' to upgrade':o.price)+'</span>'+
         (o.pay_cents?'<button class="btn btn-rust" data-pay="'+esc(o.key)+'">Add · '+money+'</button>':'<button class="btn" data-offer="'+esc(o.key)+'" '+(done?'disabled':'')+'>'+(done?'Requested':'Request')+'</button>')+'</div>'}).join('')+'</div><p class="fine">Secure payment by Stripe. Items priced on request are confirmed by Casey before anything is charged.</p></section>':'';
-    app.innerHTML=hero('Your Durango trip',data.stay?'Welcome home. Text us anything, any time.':'Every day, planned around the forecast. We’ll move things if the weather does.')+stay+ready+acts+dayHtml+guide+chargesHtml()+offers+
+    app.innerHTML=hero('Your Durango trip',data.stay?'Welcome home. Text us anything, any time.':'Every day, planned around the forecast. We’ll move things if the weather does.')+stay+ready+acts+dayHtml+guide+chargesHtml()+offers+giveHtml()+
       askHtml()+'<p class="center fine" style="padding:32px 0 64px">Questions or changes? Reply to our email and Casey will take care of it.</p>';
     app.querySelector('#cal').onclick=ics;
-    bindPay();bindAsk();
+    bindPay();bindAsk();bindGive();
     app.querySelectorAll('[data-offer]').forEach(function(b){b.onclick=async function(){b.disabled=true;b.textContent='Sending…';
       try{var r=await fetch('/api/trip?t='+token+'&action=request',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({key:b.dataset.offer})});if(!r.ok)throw 0;b.textContent='Requested';(data.requested=data.requested||[]).push(b.closest('.offer').querySelector('h4').textContent)}
       catch(e){b.disabled=false;b.textContent='Try again'}}});
   }
+  var CAUSES=[['trails','Durango Trails','The singletrack you ride, built and cared for.'],['adaptive','Adaptive Sports Association','Skiing at Purgatory for people with disabilities.'],['housing','Housing Solutions for the Southwest','Homes for local families in La Plata County.']];
+  function giveHtml(){return '<section class="step" id="give"><p class="eyebrow">Your stay gives back</p><h2 class="display">$10 from your stay stays in Durango</h2><p class="sub">It comes from our fee, not your bill. Choose where it goes.</p><div class="offers">'+CAUSES.map(function(c){var on=data.cause===c[0];return '<div class="offer"><h4>'+esc(c[1])+'</h4><p>'+esc(c[2])+'</p><button class="btn'+(on?' btn-rust':'')+'" data-cause="'+c[0]+'">'+(on?'Your $10 goes here':'Choose')+'</button></div>'}).join('')+'</div></section>'}
+  function bindGive(){app.querySelectorAll('[data-cause]').forEach(function(b){b.onclick=async function(){var c=b.dataset.cause;app.querySelectorAll('[data-cause]').forEach(function(x){x.disabled=true});
+    try{var r=await fetch('/api/trip?t='+token+'&action=cause',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({cause:c})});if(!r.ok)throw 0;data.cause=c}catch(e){}
+    app.querySelectorAll('[data-cause]').forEach(function(x){x.disabled=false;var on=data.cause===x.dataset.cause;x.className='btn'+(on?' btn-rust':'');x.textContent=on?'Your $10 goes here':'Choose'})}})}
   var TIPS=['How does the hot tub work?','Where should we eat tonight?','What should we pack?','Good easy hike nearby?'];
   function askHtml(){var log=(data.ask||[]).map(function(m){return '<div class="bub '+(m.from==='guest'?'g':'o')+'">'+esc(m.body)+'</div>'}).join('');
     return '<section class="ask" id="ask"><p class="eyebrow">Ask Ophir</p><h2 class="display">Anything about your stay</h2><p class="sub">The house, the town, where to eat, what to pack. Answers come right away, and anything that needs a person goes straight to Casey.</p>'+

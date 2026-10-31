@@ -17,7 +17,13 @@ export default async function handler(req, res) {
       case 'list': {
         const trips = await db.select('trips', 'select=id,guest_name,guest_email,check_in,check_out,adults,children,package,status,source,created_at,homes(name)&order=check_in.asc&limit=200');
         const tasks = await db.select('tasks', 'select=id,trip_id,title,assignee,due_at,status,approved&status=eq.open&order=due_at.asc&limit=300');
-        return json(res, 200, { trips, tasks });
+        // $10 per completed stay, by the guest's chosen cause (unchosen counts toward Durango Trails).
+        const today = new Date().toLocaleDateString('en-CA', { timeZone: 'America/Denver' });
+        let causes = [];
+        try { causes = await db.select('trips', `select=cause&status=neq.cancelled&check_out=lte.${today}`); } catch (e) { causes = []; }
+        const give = { trails: 0, adaptive: 0, housing: 0 };
+        causes.forEach((t) => { give[t.cause && give[t.cause] !== undefined ? t.cause : 'trails'] += 10; });
+        return json(res, 200, { trips, tasks, give });
       }
       case 'detail': {
         const t = await loadTrip(`id=eq.${b.id}`);

@@ -105,6 +105,8 @@
   function show(){document.getElementById('login').hidden=true;document.getElementById('main').hidden=false;document.getElementById('out').hidden=false}
   var tripsById={};
   async function list(){var j=await api({action:'list'});tripsById={};j.trips.forEach(function(t){tripsById[t.id]=t});
+    var g=j.give||{},gt=(g.trails||0)+(g.adaptive||0)+(g.housing||0),gb=document.getElementById('givebox');if(!gb){gb=document.createElement('p');gb.id='givebox';gb.className='msg';document.getElementById('trips').before(gb)}
+    gb.textContent='Given back (completed stays, $10 each): $'+gt+' · Durango Trails $'+(g.trails||0)+' · Adaptive Sports $'+(g.adaptive||0)+' · Housing Solutions $'+(g.housing||0);
     document.getElementById('trips').innerHTML=j.trips.length?j.trips.map(function(t){return '<div class="row" data-id="'+t.id+'"><div><b>'+esc(t.guest_name)+'</b><br><small>'+d(t.check_in)+'–'+d(t.check_out)+' · '+esc(t.homes?t.homes.name:'')+' · '+esc(t.package)+' · '+esc(t.source)+'</small></div><span class="pill '+esc(t.status)+'">'+esc(t.status.replace('_',' '))+'</span></div>'}).join(''):'<p class="msg">No trips yet. Simulate a booking.</p>';
     document.getElementById('tasks').innerHTML=j.tasks.length?j.tasks.map(taskRow).join(''):'<p class="msg">Nothing open.</p>';}
   function taskRow(k){var t=tripsById[k.trip_id];return '<label class="task"><input type="checkbox" data-task="'+k.id+'"><span>'+esc(k.title)+'<small>'+esc(k.assignee||'')+(k.due_at?' · due '+d(k.due_at,{weekday:'short',month:'short',day:'numeric',hour:'numeric',minute:'2-digit'}):'')+(t?' · '+esc(t.guest_name):'')+(k.approved?'':' · awaiting approval')+'</small></span></label>'}

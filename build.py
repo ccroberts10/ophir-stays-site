@@ -512,7 +512,8 @@ owners_body = f'''
       <p class="eyebrow">Questions</p>
       <h2 class="display" style="margin-bottom:24px">Before you apply.</h2>
       <div class="faq">
-        <details><summary>I already have a manager. Can I switch?</summary><p>Yes. Most agreements need thirty to sixty days' notice. We handle the handover and move your future bookings across.</p></details>
+        <details><summary>I already have a manager. Can I switch?</summary><p>Yes, and we do the work. We read your current agreement, draft the notice for you to sign, and start the day after the last stay your manager keeps. Every booking that moves to us is honored at the same dates and price. Send us last year's owner statements and we'll show you, line by line, what you'd have kept with Ophir.</p></details>
+        <details><summary>What if my contract has an exit fee?</summary><p>We cover it, up to $1,000, as a credit against our fees. You shouldn't pay a penalty to get better care for your home.</p></details>
         <details><summary>Can I still use my home?</summary><p>Of course. Block your dates in the app any time. Your own nights simply lower the guarantee baseline, so the comparison stays fair.</p></details>
         <details><summary>Where do you list my home?</summary><p>On Airbnb and VRBO, and on ophirstays.com, where returning guests book direct. Direct bookings skip platform fees, which means more for you.</p></details>
         <details><summary>Who cleans and maintains it?</summary><p>Local crews we've known for years, inspected after every clean. Small fixes are included. Nothing over $300 happens without your approval.</p></details>

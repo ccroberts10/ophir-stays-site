@@ -128,7 +128,7 @@ FOOT = '''<footer class="site-foot">
       <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
       <p class="nl-status" role="status" aria-live="polite"></p>
     </form>
-    <nav class="foot-links" aria-label="Footer"><a href="/stay">Your Stay</a><a href="/owners">Owners</a><a href="/journal">Journal</a><a href="/trails">Bike Routes</a><a href="/trail-map">Trail Map</a><a href="/about">About</a><a href="mailto:casey@ophirstays.com">casey@ophirstays.com</a></nav>
+    <nav class="foot-links" aria-label="Footer"><a href="/stay">Your Stay</a><a href="/basecamp">Basecamp</a><a href="/owners">Owners</a><a href="/journal">Journal</a><a href="/trails">Bike Routes</a><a href="/trail-map">Trail Map</a><a href="/about">About</a><a href="mailto:casey@ophirstays.com">casey@ophirstays.com</a></nav>
     <div class="foot-base"><span>© 2026 Ophir Stays</span><span>Guest booking opens 2027</span></div>
   </div>
 </footer>
@@ -505,6 +505,7 @@ owners_body = f'''
           <li>A garage or locked bike storage</li><li>A hose or wash station</li><li>A mudroom or gear room</li><li>15 minutes or less to a trailhead or the Purgatory lifts</li>
         </ul>
         <p class="fine" style="margin-top:14px">Missing a stand, a pump or a bike rack? We source them at cost, usually $300 to $600.</p>
+        <p style="margin-top:18px"><a class="link" href="/basecamp">See Basecamp as guests see it</a></p>
       </div>
     </div>
   </section>
@@ -645,6 +646,14 @@ stay_body = f'''
     </div>
   </section>
 
+  <section style="padding:40px 0">
+    <div class="wrap narrow center reveal">
+      <p class="eyebrow">Coming to ride or ski hard?</p>
+      <p class="lead" style="margin-top:10px">Basecamp plans the San Juan high country for your group: routes, shuttles, fuel and repairs. <a class="link" href="/basecamp">See Basecamp</a></p>
+    </div>
+  </section>
+
+  
   <section>
     <div class="wrap split">
       <div class="reveal">{photo('ski', 'Wooden skis against a cabin wall')}</div>
@@ -675,6 +684,132 @@ stay_body = f'''
 stay_page = page('Durango Trip Planning, Ski and Bike Concierge · Ophir Stays',
                  'Skis and boots sized and waiting, bikes fitted, the fridge stocked and every table booked before you arrive. Ophir Stays packages for Durango, Colorado.',
                  '/stay', 'stay', stay_body)
+
+
+# ---------------- BASECAMP ----------------
+basecamp_body = f'''
+  <section class="center" style="padding-bottom:48px">
+    <div class="wrap narrow reveal">
+      <p class="eyebrow">Ophir Basecamp</p>
+      <h1 class="display">Come to ride. We handle everything else.</h1>
+      <hr class="rule">
+      <p class="lead">A home built for riders and skiers, and a local who plans the routes, books the shuttles, stocks the fuel and fixes what breaks. You bring the legs.</p>
+      <p style="margin-top:28px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap"><a class="btn btn-rust" href="#inquire">Plan a trip</a> <a class="btn" href="#rides">See the rides</a></p>
+      <p class="fine">Basecamp opens for summer 2027. Tell us your trip now and we'll plan it with you.</p>
+    </div>
+  </section>
+
+  <section style="padding-top:0">
+    <div class="wrap split">
+      <div class="reveal">{photo('basecamp-hero', 'A mountain biker climbing alpine singletrack above treeline in the San Juan Mountains', 'photo tall')}</div>
+      <div class="reveal">
+        <p class="eyebrow">What Basecamp handles</p>
+        <h2 class="display">Every day planned around your riders.</h2>
+        <ul class="standard" style="grid-template-columns:1fr;margin-top:28px">
+          <li>Routes matched to each rider, with GPX files before you arrive</li>
+          <li>Shuttles booked with licensed local shuttle companies</li>
+          <li>Tailwind and recovery basics stocked for every rider</li>
+          <li>Bikes or skis fitted and delivered, mechanical help the same day</li>
+          <li>A conditions text by 7am, and plans that move with the weather</li>
+          <li>If someone gets hurt, we handle it: care, transport, repairs, rebooking</li>
+        </ul>
+        <p class="fine">Basecamp homes have a garage or locked bike storage, a wash station, a gear room, and a short drive to the trails or the lifts.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="tint" id="rides">
+    <div class="wrap" style="max-width:980px">
+      <div class="reveal center"><p class="eyebrow">The high country</p><h2 class="display">The San Juan rides we plan.</h2>
+      <p class="lead" style="margin:18px auto 0;max-width:640px">Above 10,000 feet, from Coal Bank and Molas Pass. Ridden from mid-July to early October, started early, off the ridges by noon.</p></div>
+      <table class="data wrap rides reveal" style="margin-top:36px"><thead><tr><th scope="col">Ride</th><th scope="col">Miles</th><th scope="col">Climbing</th><th scope="col">High point</th><th scope="col">Shuttle</th></tr></thead><tbody><tr><th scope="row">Pass Creek to Coal Creek</th><td>7.8</td><td>1,714 ft</td><td>11,884 ft</td><td>No, loop</td></tr><tr><th scope="row">Engineer Mountain Trail from Pass Creek</th><td>8.2</td><td>1,083 ft</td><td>11,731 ft</td><td>Yes</td></tr><tr><th scope="row">Deer Creek</th><td>8.6</td><td>1,558 ft</td><td>11,931 ft</td><td>Yes</td></tr><tr><th scope="row">Engine Creek</th><td>13.2</td><td>1,649 ft</td><td>11,802 ft</td><td>Yes</td></tr><tr><th scope="row">Little Molas to Engineer Mountain</th><td>17.9</td><td>2,449 ft</td><td>12,190 ft</td><td>Yes</td></tr><tr><th scope="row">Blackhawk Pass Loop</th><td>25.7</td><td>3,901 ft</td><td>11,992 ft</td><td>No, loop</td></tr><tr><th scope="row">Colorado Trail: Little Molas to Hermosa</th><td>52.7</td><td>6,675 ft</td><td>12,494 ft</td><td>Yes</td></tr></tbody></table>
+      <p class="fine">Closer to town: <a class="link" href="/trails">ten Durango rides</a> for arrival day and rest days. Trail data © OpenStreetMap contributors.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap split">
+      <div class="reveal">
+        <p class="eyebrow">A sample week</p>
+        <h2 class="display">Five days in July.</h2>
+        <ol class="days" style="list-style:none;padding:0;margin:28px 0 0">
+          <li><b>Day 1</b> Arrive, spin Telegraph and Sidewinder in town. 8.6 miles at 6,600 feet to settle in.</li>
+          <li><b>Day 2</b> Pass Creek to Coal Creek from Coal Bank Pass. 7.8 miles, 1,700 feet, back to the car.</li>
+          <li><b>Day 3</b> Engine Creek. 13 miles, mostly down, shuttle back from Cascade.</li>
+          <li><b>Day 4</b> Rest. The river, a massage, an early dinner.</li>
+          <li><b>Day 5</b> Little Molas to Engineer Mountain. 18 miles, 12,190 feet high, shuttled to Molas Pass.</li>
+        </ol>
+        <p class="fine">Every plan moves with the forecast and the group. Riders new to altitude start lower.</p>
+      </div>
+      <div class="reveal">{photo('basecamp-engineer', 'A mountain bike resting in a wildflower meadow below Engineer Mountain', 'photo tall')}</div>
+    </div>
+  </section>
+
+  <section class="tint">
+    <div class="wrap">
+      <div class="reveal center"><p class="eyebrow">Who it's for</p><h2 class="display">Built for groups who come to move.</h2></div>
+      <div class="grid3" style="margin-top:44px">
+        <div class="reveal">{photo('basecamp-trail', 'Singletrack across a green alpine meadow toward Engineer Mountain')}<h3 style="margin-top:18px">Bike trip crews</h3><p style="color:var(--muted);margin-top:8px">Four to eight riders, four to seven nights. Spring in the desert-edge trails, summer up high, fall in the aspens.</p></div>
+        <div class="reveal">{photo('basecamp-notch', 'A rocky notch high in the San Juans looking down a forested valley')}<h3 style="margin-top:18px">Training camps</h3><p style="color:var(--muted);margin-top:8px">Clubs and teams training at altitude. A quiet house, big volume, fuel and recovery handled.</p></div>
+        <div class="reveal">{photo('basecamp-ski', 'A groomed run through aspens at Purgatory with snow-covered peaks behind')}<h3 style="margin-top:18px">Ski groups</h3><p style="color:var(--muted);margin-top:8px">First chair at Purgatory, skis tuned and boots dry, and backcountry days booked with certified guides.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap narrow center reveal">
+      <p class="eyebrow">Pricing</p>
+      <h2 class="display">$495 a stay.</h2>
+      <p class="lead" style="margin-top:18px">For up to six guests. $795 for seven to twelve. Training camps of a week or more are quoted to the group.</p>
+      <p class="fine">Shuttles, guides, rentals and lift tickets are booked at the partner's own rate, with no markup. Guided rides and backcountry days are led by permitted, certified guide services.</p>
+    </div>
+  </section>
+
+  <section class="tint" id="inquire">
+    <div class="wrap split top">
+      <div class="reveal">
+        <p class="eyebrow">Plan a trip</p>
+        <h2 class="display">Tell us about your group.</h2>
+        <p class="lead">Casey reads every one and replies within a day with a first plan and the homes that fit.</p>
+        <p class="fine">Spring and fall camps fill first. Most groups book three months ahead.</p>
+      </div>
+      <div class="reveal" id="bc-box">
+        <form class="form" id="bc-form" novalidate>
+          <div class="field"><label for="b-name">Your name</label><input id="b-name" name="name" autocomplete="name" required></div>
+          <div class="field"><label for="b-email">Email</label><input id="b-email" name="email" type="email" autocomplete="email" required></div>
+          <div class="field"><label for="b-phone">Phone</label><input id="b-phone" name="phone" type="tel" autocomplete="tel"></div>
+          <div class="field"><label for="b-type">The trip</label><select id="b-type" name="trip_type"><option value="bike">Bike trip</option><option value="camp">Training camp</option><option value="iron_horse">Iron Horse week</option><option value="ski">Ski trip</option><option value="other">Something else</option></select></div>
+          <div class="field"><label for="b-size">Group size</label><select id="b-size" name="group_size"><option>2 to 4</option><option selected>5 to 8</option><option>9 to 12</option><option>13 or more</option></select></div>
+          <div class="field"><label for="b-level">Riding level</label><select id="b-level" name="level"><option value="mixed">Mixed</option><option value="intermediate">Intermediate</option><option value="advanced">Advanced</option><option value="expert">Expert or racing</option></select></div>
+          <div class="field full"><label for="b-when">When</label><input id="b-when" name="dates" placeholder="Dates, or a month and how many nights" required></div>
+          <div class="field full"><label for="b-notes">Anything else</label><textarea id="b-notes" name="notes" placeholder="The rides you have in mind, e-bikes, kids, a race you're training for"></textarea></div>
+          <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+          <div class="field full"><button class="btn btn-rust" type="submit">Send my trip</button><p class="form-status" role="status" aria-live="polite"></p></div>
+        </form>
+        <div class="thanks" tabindex="-1"><h3>Thank you.</h3><p style="color:var(--muted);margin-top:8px">Your trip is with Casey. Expect a first plan within a day.</p></div>
+      </div>
+    </div>
+  </section>
+'''
+BASECAMP_JS = '''
+<script>
+(function(){
+  var f=document.getElementById('bc-form'),st=f.querySelector('.form-status');
+  f.addEventListener('submit',async function(e){
+    e.preventDefault();st.className='form-status';
+    var miss=[].filter.call(f.querySelectorAll('[required]'),function(i){return !i.value.trim()});
+    if(miss.length){st.textContent='Please add your name, email and when you want to come.';st.classList.add('err');miss[0].focus();return}
+    if(!/^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$/.test(f.email.value)){st.textContent='Please check your email address.';st.classList.add('err');f.email.focus();return}
+    var btn=f.querySelector('button');btn.disabled=true;btn.textContent='Sending…';
+    try{var r=await fetch('/api/basecamp',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(Object.fromEntries(new FormData(f)))});if(!r.ok)throw 0;
+      var bx=document.getElementById('bc-box');bx.classList.add('sent');bx.querySelector('.thanks').focus();
+    }catch(_){st.textContent='Something went wrong. Please email casey@ophirstays.com and we\\'ll reply today.';st.classList.add('err');btn.disabled=false;btn.textContent='Send my trip'}
+  });
+})();
+</script>'''
+basecamp_page = page('Durango Mountain Bike and Ski Trips, Planned · Ophir Basecamp',
+  'Ophir Basecamp: Durango homes built for riders and skiers, with San Juan high-country routes planned, shuttles booked, fuel stocked and repairs handled. Plan a bike trip, training camp or ski week.',
+  '/basecamp', 'stay', basecamp_body, BASECAMP_JS, image='/assets/photos/basecamp-hero.jpg')
 
 # ---------------- ABOUT ----------------
 about_body = f'''
@@ -1344,8 +1479,8 @@ purg_page = page('Purgatory Vacation Rental Management · Ophir Stays',
                  'Vacation rental management at Purgatory and Durango Mountain: which condos and homes can rent nightly, what they earn, and how a local manager runs them.',
                  '/areas/purgatory', 'owners', purg_body, image='/assets/photos/hero-ski.jpg')
 os.makedirs('areas', exist_ok=True)
-for name, html in [('index.html', home), ('owners.html', owners), ('about.html', about), ('journal.html', journal), ('journal/durango-rides.html', post), ('journal/durango-home-earnings.html', post2), ('journal/where-to-eat-durango.html', post3), ('journal/durango-short-term-rental-rules.html', post4), ('trail-map.html', trailmap), ('trails.html', trails_index), ('guest-app.html', guestapp), ('estimate.html', estimate_page), ('homes.html', homes_page), ('stay.html', stay_page), ('areas/purgatory.html', purg_page)] + [(f"homes/{h['slug']}.html", home_page(h)) for h in LIVE_HOMES] + [(f"trails/{r['slug']}.html", route_page(r)) for r in ROUTES]:
+for name, html in [('index.html', home), ('owners.html', owners), ('about.html', about), ('journal.html', journal), ('journal/durango-rides.html', post), ('journal/durango-home-earnings.html', post2), ('journal/where-to-eat-durango.html', post3), ('journal/durango-short-term-rental-rules.html', post4), ('trail-map.html', trailmap), ('trails.html', trails_index), ('guest-app.html', guestapp), ('estimate.html', estimate_page), ('homes.html', homes_page), ('stay.html', stay_page), ('areas/purgatory.html', purg_page), ('basecamp.html', basecamp_page)] + [(f"homes/{h['slug']}.html", home_page(h)) for h in LIVE_HOMES] + [(f"trails/{r['slug']}.html", route_page(r)) for r in ROUTES]:
     open(name, 'w').write(html)
 open('sitemap.xml', 'w').write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">\n' +
-    ''.join(f'<url><loc>https://ophirstays.com{p}</loc><lastmod>2026-10-18</lastmod>' + ('<image:image><image:loc>https://ophirstays.com/assets/ophir-durango-trail-map.jpg</image:loc></image:image>' if p == '/trail-map' else ''.join(f'<image:image><image:loc>https://ophirstays.com/assets/routes/{p[8:]}{x}.jpg</image:loc></image:image>' for x in ('', '-card')) if p.startswith('/trails/') else '') + '</url>\n' for p in ['/', '/stay', '/homes', '/owners', '/about', '/journal', '/journal/durango-rides', '/journal/durango-home-earnings', '/journal/where-to-eat-durango', '/journal/durango-short-term-rental-rules', '/trail-map', '/trails', '/guest-app', '/estimate', '/areas/purgatory'] + [f"/trails/{r['slug']}" for r in ROUTES] + [f"/homes/{h['slug']}" for h in HOMES if not h['sample']]) + '</urlset>\n')
+    ''.join(f'<url><loc>https://ophirstays.com{p}</loc><lastmod>2026-10-18</lastmod>' + ('<image:image><image:loc>https://ophirstays.com/assets/ophir-durango-trail-map.jpg</image:loc></image:image>' if p == '/trail-map' else ''.join(f'<image:image><image:loc>https://ophirstays.com/assets/routes/{p[8:]}{x}.jpg</image:loc></image:image>' for x in ('', '-card')) if p.startswith('/trails/') else '') + '</url>\n' for p in ['/', '/stay', '/homes', '/owners', '/about', '/journal', '/journal/durango-rides', '/journal/durango-home-earnings', '/journal/where-to-eat-durango', '/journal/durango-short-term-rental-rules', '/trail-map', '/trails', '/guest-app', '/estimate', '/areas/purgatory', '/basecamp'] + [f"/trails/{r['slug']}" for r in ROUTES] + [f"/homes/{h['slug']}" for h in HOMES if not h['sample']]) + '</urlset>\n')
 print('built')

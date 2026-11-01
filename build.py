@@ -157,6 +157,7 @@ def photo(name, alt, cls='photo'):
 # (1 = hero exterior or view, 2 = great room, 3 = kitchen, 4 = primary bedroom, 5 = hot tub / deck / view).
 # SHOW_SAMPLES must be False before launch so no sample home is ever published.
 SHOW_SAMPLES = False
+BASECAMP_ON = False  # flip to True (with BASECAMP_ON=1 in Vercel) to show Basecamp Ready badges; mark homes with 'basecamp': True
 HOMES = [
     dict(slug='sample-cliff-house', sample=True, name='The Cliff House', area='Glacier Club', beds=5, baths=5.5, sleeps=12,
          line='Stone, glass and a fairway view, twenty minutes from town.',
@@ -989,7 +990,7 @@ def home_page(h):
     <div class="wrap center reveal">{sample}
       <p class="eyebrow">{h['area']} · Durango</p>
       <h1 class="display">{h['name']}</h1>
-      <p class="post-meta">{h['beds']} bedrooms · {h['baths']} baths · sleeps {h['sleeps']}</p>
+      <p class="post-meta">{h['beds']} bedrooms · {h['baths']} baths · sleeps {h['sleeps']}</p>{'<p class="eyebrow" style="margin-top:14px">Basecamp Ready · garage, wash station, gear room, close to the trails</p>' if BASECAMP_ON and h.get('basecamp') else ''}
     </div>
   </section>
   <div class="wrap">

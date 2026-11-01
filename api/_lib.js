@@ -117,19 +117,25 @@ export async function forecast(startDate, endDate) {
 }
 
 // ---------- Business knowledge given to the AI ----------
+// Basecamp is hidden until BASECAMP_ON=1 is set in Vercel, and then only sold in homes marked basecamp_ready.
+export const BASECAMP_ON = env('BASECAMP_ON') === '1';
+export const ROUTE_LIBRARY = [{"name": "Meadow Loop", "area": "Horse Gulch", "difficulty": "Easy", "miles": 3.7, "climb": 626, "gpx": "https://ophirstays.com/assets/routes/meadow-loop.gpx", "page": "https://ophirstays.com/trails/meadow-loop"}, {"name": "Telegraph and Sidewinder", "area": "Horse Gulch", "difficulty": "Intermediate", "miles": 8.6, "climb": 1007, "gpx": "https://ophirstays.com/assets/routes/telegraph-sidewinder.gpx", "page": "https://ophirstays.com/trails/telegraph-sidewinder"}, {"name": "Raider Ridge", "area": "Horse Gulch", "difficulty": "Advanced", "miles": 8, "climb": 1364, "gpx": "https://ophirstays.com/assets/routes/raider-ridge.gpx", "page": "https://ophirstays.com/trails/raider-ridge"}, {"name": "Animas Mountain Loop", "area": "Animas Mountain", "difficulty": "Advanced", "miles": 5.9, "climb": 1473, "gpx": "https://ophirstays.com/assets/routes/animas-mountain-loop.gpx", "page": "https://ophirstays.com/trails/animas-mountain-loop"}, {"name": "Star Wars and 8 Bells", "area": "Overend Mountain Park", "difficulty": "Intermediate", "miles": 3.9, "climb": 675, "gpx": "https://ophirstays.com/assets/routes/star-wars-8-bells.gpx", "page": "https://ophirstays.com/trails/star-wars-8-bells"}, {"name": "Star Wars and Spirit", "area": "Overend Mountain Park", "difficulty": "Intermediate", "miles": 6.2, "climb": 966, "gpx": "https://ophirstays.com/assets/routes/star-wars-spirit.gpx", "page": "https://ophirstays.com/trails/star-wars-spirit"}, {"name": "Twin Buttes Loop", "area": "Twin Buttes", "difficulty": "Intermediate", "miles": 6.4, "climb": 815, "gpx": "https://ophirstays.com/assets/routes/twin-buttes-loop.gpx", "page": "https://ophirstays.com/trails/twin-buttes-loop"}, {"name": "Log Chutes", "area": "Junction Creek", "difficulty": "Intermediate", "miles": 5.9, "climb": 654, "gpx": "https://ophirstays.com/assets/routes/log-chutes.gpx", "page": "https://ophirstays.com/trails/log-chutes"}, {"name": "Carbon Junction and Skull Rock", "area": "Carbon Junction", "difficulty": "Advanced", "miles": 8.7, "climb": 1167, "gpx": "https://ophirstays.com/assets/routes/carbon-junction-skull-rock.gpx", "page": "https://ophirstays.com/trails/carbon-junction-skull-rock"}, {"name": "Sale Barn and Skull Rock", "area": "Durango Mesa", "difficulty": "Intermediate", "miles": 7.2, "climb": 848, "gpx": "https://ophirstays.com/assets/routes/sale-barn-skull-rock.gpx", "page": "https://ophirstays.com/trails/sale-barn-skull-rock"}];
 export const PACKAGES = {
   stay: 'The Stay (included with every booking): inspected home, hotel-grade linens, a welcome kit (local coffee, Ophir lip balm and sticker, local chocolate, and a Casey\'s Durango card with a 10% return-guest code for ophirstays.com), house guide in the app, weather-aware ideas, a local host by text who replies within 15 minutes from 7am to 10pm, urgent issues any hour.',
   arranged: 'The Arranged Stay ($395 for up to 6 guests, $595 for 7 to 12): everything in The Stay, plus two Ophir tumblers to keep, a planning call, skis and boots sized to each guest and waiting in the gear room, bikes fitted and delivered, lift tickets/guides/rafting/fly fishing booked, dinner reservations held, with the first round on the house at partner restaurants that offer it, an itinerary that moves with the weather. The package fee covers planning and booking only: ski and bike rentals, lift tickets, guides, rafting and fly fishing are paid separately at partner rates.',
+  basecamp: 'Basecamp ($495 for up to 6 guests, $795 for 7 to 12), for guests who come to ride and ski: everything in The Arranged Stay, plus a ride or ski plan matched to each rider with GPX files, Tailwind and recovery basics stocked for every rider, shuttles booked with licensed shuttle companies, guides booked with permitted guide services, same-day mechanical help, a conditions text every morning, and if anyone gets hurt Ophir coordinates care, transport, repairs and rebooking (logistics only, never medical care).',
   private: 'The Private Stay ($1,950 up to 5 nights, $295 per extra night): everything in The Arranged Stay, plus groceries shopped and the fridge stocked, fire laid and wine chosen, a dedicated host on call, private chef/massage/sitter booked, airport transfer booked, mid-stay refresh. The package fee covers planning, booking and hosting only: groceries (at cost), the chef, therapist, sitter, driver and rentals are paid separately at their own rates.',
 };
 // What each package lets the team DO (used to guard AI tasks), and what can be offered.
 export const INCLUDES = {
   stay: [],
   arranged: ['gear', 'bookings', 'dinners'],
+  basecamp: ['gear', 'bookings', 'dinners', 'shuttles', 'fuel'],
   private: ['gear', 'bookings', 'dinners', 'groceries', 'arrival_setup', 'host', 'wellness'],
 };
 export const OFFERS = {
   arranged: { title: 'The Arranged Stay', price: '$395 (up to 6 guests), $595 for 7 to 12', cents: 39500, cents_large: 59500, blurb: 'We plan and book everything: gear sized and waiting, guides, tickets and tables.' },
+  basecamp: { title: 'Basecamp', price: '$495 (up to 6 guests), $795 for 7 to 12', cents: 49500, cents_large: 79500, blurb: 'For riders and skiers: routes planned, fuel stocked, shuttles and guides booked.' },
   private: { title: 'The Private Stay', price: '$1,950 up to 5 nights', cents: 195000, blurb: 'Your own host. Groceries stocked, fire laid, chef or massage arranged.' },
   addon_fridge: { title: 'A stocked fridge', price: '$95 plus groceries', cents: 9500, blurb: 'Your grocery list, shopped the morning you arrive.', grants: 'groceries' },
   addon_arrival: { title: 'Arrival setup', price: '$95 plus wine at cost', cents: 9500, blurb: 'Fire laid, wine chosen, flowers on the table.', grants: 'arrival_setup' },
@@ -141,7 +147,7 @@ export const OFFERS = {
   golf: { title: 'A round of golf', price: 'Priced on request', blurb: 'Tee time held, clubs and cart ready.' },
   guide: { title: 'A private guide', price: 'Priced on request', blurb: 'Fly fishing, a guided ride or a backcountry hike with a local.' },
 };
-export const TEAM = 'Team and partners (assign tasks to these names): "Casey" (owner/host, books everything), "CRC Janitorial" (cleaning and turnover), "James Hillyer" (maintenance/handyman), "Ski shop" (ski and boot rentals), "Bike shop" (bike rentals and delivery), "San Juan Angler" (fly fishing), "Grocery run" (shopping, done by Casey).';
+export const TEAM = 'Team and partners (assign tasks to these names): "Casey" (owner/host, books everything), "CRC Janitorial" (cleaning and turnover), "James Hillyer" (maintenance/handyman), "Ski shop" (ski and boot rentals), "Bike shop" (bike rentals and delivery), "San Juan Angler" (fly fishing), "Grocery run" (shopping, done by Casey). "Shuttle partner" (licensed shuttle company: trailhead and point-to-point shuttles, bikes and skis carried), "Guide partner" (permitted guide service: guided rides and ski days), "Ride coordinator" (Basecamp backup: route briefings, daily conditions text, mechanical help).';
 export const DURANGO_NOTES = 'Durango, Colorado. Purgatory Resort is about 30 minutes north (ski/ride in winter, bike park and alpine coaster in summer). Downtown Main Avenue for dining. Animas River for rafting and fly fishing. Trails: Horse Gulch, Animas Mountain, Log Chutes, Colorado Trail at Junction Creek, Hermosa Creek. Hot springs north of town. Glacier Club and Dalton Ranch for golf. Afternoon thunderstorms are common in July and August, so plan rides and hikes in the morning.';
 
 // ---------- Core flows ----------
@@ -208,16 +214,18 @@ export async function planTrip(tripId) {
   const weather = await forecast(trip.check_in, trip.check_out);
   const restaurants = await db.select('restaurants', 'active=eq.true&order=name').catch(() => []);
   const dining = (answers && answers.raw && answers.raw.dining) || {};
-  const offerKeys = Object.keys(OFFERS).filter((k) => !(k === 'arranged' && trip.package !== 'stay') && !(k === 'private' && trip.package === 'private') && !addons.includes(k)
+  const offerKeys = Object.keys(OFFERS).filter((k) => !(k === 'arranged' && trip.package !== 'stay') && !(k === 'basecamp' && !(trip.package === 'stay' && basecampOk(home))) && !(k === 'private' && trip.package === 'private') && !addons.includes(k)
     && !(OFFERS[k].grants && granted.has(OFFERS[k].grants)));
   const plan = await aiJSON(
     `You are the head concierge of Ophir Stays in Durango, Colorado. You plan trips with local precision and create the behind-the-scenes task list for the team. ${DURANGO_NOTES} ${TEAM}
 VOICE for anything the guest reads: short, warm, certain, understated. Never use exclamation marks. Never say "luxury". Never mention packages, prices, upgrades or what is "not included" inside the itinerary.
 PACKAGE RULES (strict):
 - What Ophir will actually do for this guest: ${[...granted].join(', ') || 'nothing beyond the home and local tips'}.
-- Only promise or create tasks for those. "gear" = sizing and delivering skis/boots/bikes. "bookings" = guides, tickets, rafting, fishing, golf. "dinners" = holding tables and the first round. "groceries" = shopping and stocking the fridge. "arrival_setup" = fire, wine, flowers. "wellness" = massage, chef, sitter.
+- Only promise or create tasks for those. "gear" = sizing and delivering skis/boots/bikes. "shuttles" = booking trailhead shuttles with the Shuttle partner. "fuel" = stocking Tailwind and recovery basics for every rider. "bookings" = guides, tickets, rafting, fishing, golf. "dinners" = holding tables and the first round. "groceries" = shopping and stocking the fridge. "arrival_setup" = fire, wine, flowers. "wellness" = massage, chef, sitter.
 - Anything the guest would enjoy that is NOT in that list: do not promise it and create no task for it. Put it in the itinerary as a plain idea (e.g. "Ride Horse Gulch", "Dinner on Main Avenue"), and instead add a matching offer key to "offers".
-- Allowed offer keys: ${offerKeys.join(', ') || 'none'}.
+- Allowed offer keys: ${offerKeys.join(', ') || 'none'}.${trip.package === 'basecamp' ? `
+BASECAMP (this guest is here to ride and ski): build each riding day from the route library below, matched to each rider's bike_level and the forecast; put the route page link in the item details and say the GPX file is there. Ski days follow ski_level. Create tasks: "Stock Tailwind and recovery basics for N riders" (Casey, needs fuel, due the day before arrival); a shuttle task for any point-to-point ride (Shuttle partner, needs shuttles); a guide task only if the guest asked for a guide (Guide partner, needs bookings); and "Send conditions text by 7am" each morning of the stay (Ride coordinator, needs house). Never plan backcountry skiing except with the Guide partner, and never describe Ophir as guiding, driving or giving medical care.
+Route library: ${JSON.stringify(ROUTE_LIBRARY)}` : ''}
 Use the forecast when given: move outdoor plans away from storms, put riding in the morning in summer, flag powder days. If a resort or activity is closed for the season, plan around it and say why in the summary. Keep days relaxed, 2 to 4 items. Arrival day: settle in. Departure day: checkout by 10am. Task due times must be before they are needed, ISO 8601 with Denver offset. Every gear task lists each person's height, weight, boot size and level.
 DINNERS: Choose restaurants ONLY from Casey's list below, matching the guest's cuisine, atmosphere, budget, kids and dietary needs; never invent a restaurant. Book only as many dinners as the guest asked for. Each dinner task must read like: "Book <Restaurant>, <Day Mon D> <time>, party of N (X children), <occasion>, <seating/atmosphere request>, <dietary needs>. Book via <method> <phone or url>." Do not ask the restaurant to arrange anything. If that restaurant has first_round true, ALSO create a separate task assigned to "Casey" with needs "dinners", due the day before arrival: "Pack first-round card: <Restaurant>, $<10 x adults, rounded up to 20 or 40> (<N> adults)". Add a ready_list line like "Your first round at <Restaurant>, on us. The card is on the counter." Restaurants without first_round get no card and no first-round promise. Use the restaurant name in the itinerary title (e.g. "Dinner at <Restaurant>"). If the list is empty, create one task "Choose and book dinner: <guest's preferences>" for Casey and keep the itinerary title generic.
 Casey's restaurant list: ${JSON.stringify(restaurants.map(({ name, cuisine, vibe, price, kid_friendly, book_via, phone, booking_url, first_round, notes }) => ({ name, cuisine, vibe, price: price ? '$'.repeat(price) : null, kid_friendly, book_via, phone, booking_url, first_round, notes })))}`,
@@ -229,7 +237,7 @@ Forecast (may be empty if dates are far out): ${JSON.stringify(weather)}
 Return JSON: {"summary": "2-4 sentences for Casey: shape of the trip, anything to confirm, anything closed or risky",
 "ready_list": ["what the guest will find waiting on arrival, ONLY things Ophir will do, e.g. 'Bikes fitted for John and Loic in the gear room'; 3 to 6 short lines"],
 "days": [{"date": "YYYY-MM-DD", "items": [{"time": "9:00 AM", "title": "...", "details": "1-2 sentences for the guest", "kind": "ski|bike|dine|spa|golf|river|hike|rest|arrival|departure|town", "place": "short place name for a map search, or empty", "weather_note": ""}]}],
-"tasks": [{"title": "...", "assignee": "one of the team names", "due_at": "ISO", "needs": "one of: gear, bookings, dinners, groceries, arrival_setup, wellness, house"}],
+"tasks": [{"title": "...", "assignee": "one of the team names", "due_at": "ISO", "needs": "one of: gear, bookings, dinners, groceries, arrival_setup, wellness, shuttles, fuel, house"}],
 "offers": [{"key": "one allowed offer key", "reason": "one short sentence tied to this guest, e.g. 'For your anniversary evening'"}]}`, 6000);
 
   // Guard: drop any task the package doesn't cover (house tasks like cleaning are always allowed).
@@ -273,6 +281,8 @@ export function isAdmin(req) {
 
 // ---------- Stripe ----------
 export function partyOf(trip) { return (Number(trip.adults) || 0) + (Number(trip.children) || 0); }
+export function basecampCents(trip) { return partyOf(trip) > 6 ? OFFERS.basecamp.cents_large : OFFERS.basecamp.cents; }
+export function basecampOk(home) { return BASECAMP_ON && !!(home && home.basecamp_ready); }
 export function arrangedCents(trip) { return partyOf(trip) > 6 ? OFFERS.arranged.cents_large : OFFERS.arranged.cents; }
 export function nightsOf(trip) { return Math.round((new Date(trip.check_out) - new Date(trip.check_in)) / 864e5); }
 // What the guest pays today for an item, given their current package.
@@ -280,11 +290,12 @@ export function priceFor(key, trip) {
   const o = OFFERS[key];
   if (!o || !o.cents) return null;
   if (key === 'arranged') return { cents: arrangedCents(trip), label: o.title };
+  if (key === 'basecamp') return { cents: basecampCents(trip), label: o.title };
   if (key === 'addon_gear') return { cents: o.cents + Math.max(0, partyOf(trip) - 4) * 2000, label: o.title };
   if (key === 'private') {
     const extra = Math.max(0, nightsOf(trip) - 5) * 29500;
-    const credit = trip.package === 'arranged' ? arrangedCents(trip) : 0;
-    return { cents: o.cents + extra - credit, label: credit ? 'The Private Stay (upgrade from Arranged)' : 'The Private Stay' };
+    const credit = trip.package === 'arranged' ? arrangedCents(trip) : trip.package === 'basecamp' ? basecampCents(trip) : 0;
+    return { cents: o.cents + extra - credit, label: credit ? `The Private Stay (upgrade from ${trip.package === 'basecamp' ? 'Basecamp' : 'Arranged'})` : 'The Private Stay' };
   }
   return { cents: o.cents, label: o.title };
 }
@@ -325,17 +336,19 @@ export function manualForGuest(m) {
 }
 
 // ---------- Upgrade offer: packages and add-ons a guest can buy directly on /upgrade/<token> ----------
-const MENU_ORDER = ['arranged', 'private', 'addon_fridge', 'addon_arrival', 'addon_gear', 'addon_midclean', 'addon_early', 'addon_late'];
+const MENU_ORDER = ['basecamp', 'arranged', 'private', 'addon_fridge', 'addon_arrival', 'addon_gear', 'addon_midclean', 'addon_early', 'addon_late'];
 const COVERED = { // what each package already includes, so we never sell it twice
   stay: [],
-  arranged: ['arranged', 'addon_gear'],
-  private: ['arranged', 'private', 'addon_fridge', 'addon_arrival', 'addon_gear', 'addon_midclean'],
+  arranged: ['arranged', 'basecamp', 'addon_gear'],
+  basecamp: ['arranged', 'basecamp', 'addon_gear'],
+  private: ['arranged', 'basecamp', 'private', 'addon_fridge', 'addon_arrival', 'addon_gear', 'addon_midclean'],
 };
-export function menuFor(trip, paid = []) {
+export function menuFor(trip, paid = [], home = null) {
   const covered = COVERED[trip.package] || [];
   return MENU_ORDER.filter((k) => !covered.includes(k) && !paid.includes(k))
     .filter((k) => k !== 'addon_midclean' || nightsOf(trip) >= 4)
-    .filter((k) => !(k === 'arranged' && paid.includes('private')))
+    .filter((k) => !(k === 'arranged' && (paid.includes('private') || paid.includes('basecamp'))))
+    .filter((k) => k !== 'basecamp' || (basecampOk(home) && !paid.includes('arranged') && !paid.includes('private')))
     .map((k) => { const p = priceFor(k, trip); return { key: k, kind: k.startsWith('addon_') ? 'addon' : 'package', title: OFFERS[k].title, blurb: OFFERS[k].blurb, cents: p ? p.cents : null }; })
     .filter((m) => m.cents > 0);
 }
@@ -355,19 +368,22 @@ export function upgradeEmailHtml(trip, home, menu) {
   const adds = menu.filter((m) => m.kind === 'addon');
   const card = (m) => {
     const isPrivate = m.key === 'private';
+    const isBase = m.key === 'basecamp';
     const img = isPrivate ? 'upgrade-private.jpg' : snow ? 'upgrade-ski.jpg' : 'upgrade-bike.jpg';
-    const items = isPrivate
+    const items = isBase
+      ? ['A ride or ski plan for each rider, with GPX files', 'Tailwind and recovery basics stocked for every rider', 'Shuttles, guides and lift tickets booked', 'Bikes or skis fitted and delivered, mechanical help the same day', 'A conditions text every morning, and if anyone gets hurt, we handle it']
+      : isPrivate
       ? ['Your own host, on call for the whole stay', 'Groceries shopped and the fridge stocked to your list', 'Fire laid, wine chosen, music on when you walk in', 'Private chef, in-home massage or a sitter booked for you', 'Airport transfer booked, and a mid-stay refresh']
       : [snow ? 'Skis and boots sized to each guest, waiting in the gear room' : 'Bikes fitted to each rider and delivered to the house', snow ? 'Lift tickets, lessons and guides booked' : 'Guides, rafting and fly fishing booked', 'Dinner reservations held, first round on the house at our partner restaurants', 'A planning call, then every day built around the forecast', 'Two Ophir tumblers to keep'];
-    const unit = isPrivate ? (trip.package === 'arranged' ? 'upgrade, your Arranged Stay credited' : `per stay${nightsOf(trip) > 5 ? `, ${nightsOf(trip)} nights` : ', up to five nights'}`) : `per stay, ${partyOf(trip)} guests`;
-    const lead = isPrivate ? 'A dedicated host. Nothing left for you to do.' : 'Tell us what you love. We plan the trip around it.';
+    const unit = isPrivate ? (trip.package === 'arranged' || trip.package === 'basecamp' ? `upgrade, your ${trip.package === 'basecamp' ? 'Basecamp' : 'Arranged Stay'} credited` : `per stay${nightsOf(trip) > 5 ? `, ${nightsOf(trip)} nights` : ', up to five nights'}`) : `per stay, ${partyOf(trip)} guests`;
+    const lead = isBase ? 'Come to ride. We handle everything else.' : isPrivate ? 'A dedicated host. Nothing left for you to do.' : 'Tell us what you love. We plan the trip around it.';
     return `<tr><td style="padding:0 0 28px"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#FFFFFF;border:1px solid #E7E1D6">
       <tr><td><a href="${link(m.key)}"><img src="${SITE}/assets/email/${img}" width="560" alt="" style="display:block;width:100%;height:auto;border:0"></a></td></tr>
-      <tr><td style="padding:30px 32px 32px">${eyebrow(isPrivate ? 'The Private Stay' : 'The Arranged Stay')}
+      <tr><td style="padding:30px 32px 32px">${eyebrow(isBase ? 'Basecamp' : isPrivate ? 'The Private Stay' : 'The Arranged Stay')}
         <div style="${serif};font-size:26px;line-height:32px;color:#2A2826;margin:0 0 6px">${lead}</div>
         <div style="margin:14px 0 18px"><span style="${serif};font-size:34px;color:#2A2826">${usd(m.cents)}</span> <span style="${sans};font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#7A7268">&nbsp;${unit}</span></div>
         <table role="presentation" cellpadding="0" cellspacing="0" border="0">${li(items)}</table>
-        ${btn(link(m.key), isPrivate ? 'Reserve your host' : 'Arrange my trip', isPrivate)}
+        ${btn(link(m.key), isBase ? 'Plan my trip' : isPrivate ? 'Reserve your host' : 'Arrange my trip', isPrivate)}
       </td></tr></table></td></tr>`;
   };
   const addCell = (m) => `<td width="50%" valign="top" style="padding:0 6px 12px"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#FFFFFF;border:1px solid #E7E1D6"><tr><td style="padding:20px 20px 18px">
@@ -411,7 +427,7 @@ export function upgradeEmailHtml(trip, home, menu) {
 
 export async function sendUpgradeOffer(trip, home) {
   if (!trip.guest_email || trip.status === 'cancelled') return { skipped: 'no email or cancelled' };
-  const menu = menuFor(trip, await paidAddons(trip.id));
+  const menu = menuFor(trip, await paidAddons(trip.id), home);
   if (!menu.length) return { skipped: 'nothing to offer' };
   const subject = trip.package === 'private' ? 'A few last touches for your stay' : `Your Durango trip, handled`;
   await sendEmail({ to: trip.guest_email, subject, html: upgradeEmailHtml(trip, home, menu), replyTo: env('OWNER_INBOX') });

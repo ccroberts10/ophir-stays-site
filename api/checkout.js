@@ -17,7 +17,8 @@ export default async function handler(req, res) {
       if (c.status === 'paid') return json(res, 409, { error: 'Already paid. Thank you.' });
       price = { cents: c.amount_cents, label: c.title }; blurb = c.note || 'Arranged by Ophir Stays for your trip.';
     } else {
-      const onMenu = menuFor(trip, await paidAddons(trip.id)).some((m) => m.key === key);
+      const home = trip.home_id ? await db.one('homes', `id=eq.${trip.home_id}`) : null;
+      const onMenu = menuFor(trip, await paidAddons(trip.id), home).some((m) => m.key === key);
       if (!onMenu && !(trip.offers || []).some((o) => o.key === key)) return json(res, 400, { error: 'This addition is not available for your trip.' });
       price = priceFor(key, trip);
       if (!price || price.cents <= 0) return json(res, 400, { error: 'This addition is priced on request.' });

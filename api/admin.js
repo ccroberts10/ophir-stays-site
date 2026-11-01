@@ -37,7 +37,7 @@ export default async function handler(req, res) {
       case 'replan': return json(res, 200, { ok: true, ...(await planTrip(b.id)) });
       case 'resend_welcome': { const t = await loadTrip(`id=eq.${b.id}`); await sendWelcome(t.trip, t.home); return json(res, 200, { ok: true }); }
       case 'send_upgrade': { const t = await loadTrip(`id=eq.${b.id}`); return json(res, 200, await sendUpgradeOffer(t.trip, t.home)); }
-      case 'preview_upgrade': { const t = await loadTrip(`id=eq.${b.id}`); return json(res, 200, { html: upgradeEmailHtml(t.trip, t.home, menuFor(t.trip, await paidAddons(t.trip.id))) }); }
+      case 'preview_upgrade': { const t = await loadTrip(`id=eq.${b.id}`); return json(res, 200, { html: upgradeEmailHtml(t.trip, t.home, menuFor(t.trip, await paidAddons(t.trip.id), t.home)) }); }
       case 'task': {
         const patch = {};
         if (b.status) patch.status = b.status;
@@ -51,7 +51,7 @@ export default async function handler(req, res) {
         const trip = await createTrip({
           source: 'simulated', external_id: `SIM-${Date.now()}`, guest_name: name,
           guest_email: b.email || process.env.OWNER_INBOX, check_in: addDays(start), check_out: addDays(start + 4),
-          adults: 2, children: 2, package: ['stay', 'arranged', 'private'].includes(b.package) ? b.package : 'arranged',
+          adults: 2, children: 2, package: ['stay', 'arranged', 'basecamp', 'private'].includes(b.package) ? b.package : 'arranged',
         });
         return json(res, 200, { ok: true, id: trip.id, link: `/trip/${trip.access_token}` });
       }

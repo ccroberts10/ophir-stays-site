@@ -40,7 +40,7 @@ export default async function handler(req, res) {
         html: emailShell(`<p><strong>${esc(trip.guest_name)}</strong> paid <strong>$${(pay.amount_cents / 100).toFixed(2)}</strong> for <strong>${esc(title)}</strong>.</p><p>Confirm the booking with the partner. A task is on your list.</p><p><a href="${SITE}/admin">Open admin</a></p>`) });
       return json(res, 200, { ok: true });
     }
-    if (pay.item === 'arranged' || pay.item === 'private') await db.update('trips', `id=eq.${trip.id}`, { package: pay.item });
+    if (pay.item === 'arranged' || pay.item === 'basecamp' || pay.item === 'private') await db.update('trips', `id=eq.${trip.id}`, { package: pay.item });
     // Re-plan so the paid services become real tasks; Casey re-approves.
     let result = null;
     try { result = await planTrip(trip.id); } catch (e) { console.error('replan after payment', e); }

@@ -31,7 +31,7 @@ create table if not exists trips (
   check_out date not null,
   adults int default 2,
   children int default 0,
-  package text not null default 'stay' check (package in ('stay','arranged','private')),
+  package text not null default 'stay' check (package in ('stay','arranged','basecamp','private')),
   status text not null default 'booked' check (status in ('booked','planning','plan_ready','approved','in_stay','complete','cancelled')),
   access_token text unique not null default encode(gen_random_bytes(18), 'hex'),  -- the guest's private link
   created_at timestamptz default now(),

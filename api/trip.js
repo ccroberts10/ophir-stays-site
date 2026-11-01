@@ -29,7 +29,7 @@ export default async function handler(req, res) {
         charges: (await db.select('charges', `trip_id=eq.${trip.id}&status=neq.void&order=created_at.asc`)).map((c) => ({ key: `charge_${c.id}`, title: c.title, note: c.note, cents: c.amount_cents, status: c.status })),
         ask: (await db.select('messages', `trip_id=eq.${trip.id}&subject=eq.Ask%20Ophir&order=created_at.desc&limit=12`)).reverse().map((m) => ({ from: m.direction === 'inbound' ? 'guest' : 'ophir', body: m.body })),
         manual: showPlan && home ? manualForGuest(home.manual) : [],
-        menu: trip.status === 'cancelled' ? [] : menuFor(trip, await paidAddons(trip.id)).map((m) => ({ ...m, price: OFFERS[m.key].price })),
+        menu: trip.status === 'cancelled' ? [] : menuFor(trip, await paidAddons(trip.id), home).map((m) => ({ ...m, price: OFFERS[m.key].price })),
         cause: trip.cause || null,
         nights: Math.round((new Date(trip.check_out) - new Date(trip.check_in)) / 864e5),
         stay: arrived && showPlan && home ? { door_code: home.door_code, wifi_name: home.wifi_name, wifi_password: home.wifi_password } : null,

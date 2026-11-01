@@ -786,7 +786,7 @@ basecamp_body = f'''
       <div class="grid3" style="margin-top:44px">
         <div class="reveal">{photo('basecamp-trail', 'Singletrack across a green alpine meadow toward Engineer Mountain')}<h3 style="margin-top:18px">Bike trip crews</h3><p style="color:var(--muted);margin-top:8px">Four to eight riders, four to seven nights. Spring in the desert-edge trails, summer up high, fall in the aspens.</p></div>
         <div class="reveal">{photo('basecamp-notch', 'A rocky notch high in the San Juans looking down a forested valley')}<h3 style="margin-top:18px">Training camps</h3><p style="color:var(--muted);margin-top:8px">Clubs and teams training at altitude. A quiet house, big volume, fuel and recovery handled.</p></div>
-        <div class="reveal">{photo('hero-ski', 'Four skiers skinning across fresh snow beneath the San Juan peaks')}<h3 style="margin-top:18px">Guided backcountry skiing</h3><p style="color:var(--muted);margin-top:8px">San Juan powder with certified, permitted mountain guides, avalanche gear included. Purgatory on the rest days, skis tuned and boots dry.</p></div>
+        <div class="reveal">{photo('hero-ski', 'Four skiers skinning across fresh snow beneath the San Juan peaks')}<h3 style="margin-top:18px">Guided backcountry skiing</h3><p style="color:var(--muted);margin-top:8px">San Juan powder, always with certified, permitted mountain guides. Purgatory on the rest days, skis tuned and boots dry.</p></div>
       </div>
     </div>
   </section>

@@ -494,18 +494,35 @@ owners_body = f'''
   <section id="basecamp">
     <div class="wrap split top">
       <div class="reveal">
-        <p class="eyebrow">Ophir Basecamp</p>
+        <p class="eyebrow">Now seeking three Basecamp homes</p>
         <h2 class="display">Guests for the weeks that sit empty.</h2>
         <p class="lead">Most Durango homes go quiet in May and October. Basecamp books riders, training camps and race-week athletes into exactly those weeks. We plan their routes, stock their fuel and book their shuttles and guides, so they stay longer and come back.</p>
-        <p class="lead">It's part of the Ophir service, at no extra cost to you.</p>
-      </div>
-      <div class="reveal">
-        <p class="eyebrow" style="margin-bottom:14px">Your home likely qualifies if it has</p>
+        <p class="lead">It's part of the Ophir service, at no extra cost to you. We're choosing the first three homes now.</p>
+        <p class="eyebrow" style="margin:32px 0 14px">Your home likely qualifies if it has</p>
         <ul class="standard">
           <li>A garage or locked bike storage</li><li>A hose or wash station</li><li>A mudroom or gear room</li><li>15 minutes or less to a trailhead or the Purgatory lifts</li>
         </ul>
         <p class="fine" style="margin-top:14px">Missing a stand, a pump or a bike rack? We source them at cost, usually $300 to $600.</p>
         <p style="margin-top:18px"><a class="link" href="/basecamp">See Basecamp as guests see it</a></p>
+      </div>
+      <div class="reveal" id="bco-box">
+        <h3 style="margin-bottom:18px">Think your home qualifies? Send us a message.</h3>
+        <form class="form" id="bco-form" novalidate>
+          <div class="field"><label for="o-name">Your name</label><input id="o-name" name="name" autocomplete="name" required></div>
+          <div class="field"><label for="o-email">Email</label><input id="o-email" name="email" type="email" autocomplete="email" required></div>
+          <div class="field"><label for="o-phone">Phone</label><input id="o-phone" name="phone" type="tel" autocomplete="tel"></div>
+          <div class="field"><label for="o-beds">Bedrooms</label><select id="o-beds" name="bedrooms"><option>2</option><option selected>3</option><option>4</option><option>5</option><option>6 or more</option></select></div>
+          <div class="field full"><label for="o-addr">Home address or neighborhood</label><input id="o-addr" name="address" required></div>
+          <fieldset class="field full roles"><legend>It has</legend>
+            <label class="chip"><input type="checkbox" name="has" value="garage"><span>Garage or bike storage</span></label>
+            <label class="chip"><input type="checkbox" name="has" value="wash"><span>Hose or wash station</span></label>
+            <label class="chip"><input type="checkbox" name="has" value="gear room"><span>Mudroom or gear room</span></label>
+            <label class="chip"><input type="checkbox" name="has" value="near trails"><span>Close to trails or lifts</span></label></fieldset>
+          <div class="field full"><label for="o-notes">Message</label><textarea id="o-notes" name="notes" placeholder="Who manages it now, and anything we should know"></textarea></div>
+          <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+          <div class="field full"><button class="btn btn-rust" type="submit">Send my home</button><p class="form-status" role="status" aria-live="polite"></p></div>
+        </form>
+        <div class="thanks" tabindex="-1"><h3>Thank you.</h3><p style="color:var(--muted);margin-top:8px">Casey will call you within a day to talk about your home.</p></div>
       </div>
     </div>
   </section>
@@ -572,9 +589,27 @@ _faq = [(_html.unescape(_re.sub('<[^>]+>','',q)).strip(), _html.unescape(_re.sub
 POST_LD['/owners'] = '<script type="application/ld+json">' + _json.dumps({"@context":"https://schema.org","@graph":[
   {"@type":"ProfessionalService","name":"Ophir Stays","url":"https://ophirstays.com/owners","description":"Locally owned Durango vacation rental management: pricing, guests, cleaning, trip planning and a first-year income guarantee, for no more than 25 homes.","email":"casey@ophirstays.com","telephone":"+1-970-779-8992","address":{"@type":"PostalAddress","addressLocality":"Durango","addressRegion":"CO","postalCode":"81301","addressCountry":"US"},"areaServed":["Durango, CO","Purgatory, CO","Vallecito Lake, CO","La Plata County, CO"],"serviceType":"Vacation rental management","founder":{"@type":"Person","name":"Casey Roberts"}},
   {"@type":"FAQPage","mainEntity":[{"@type":"Question","name":q,"acceptedAnswer":{"@type":"Answer","text":x}} for q,x in _faq]}]}) + '</script>'
+
+OWNER_BC_JS = '''
+<script>
+(function(){
+  var f=document.getElementById('bco-form');if(!f)return;var st=f.querySelector('.form-status');
+  f.addEventListener('submit',async function(e){
+    e.preventDefault();st.className='form-status';
+    var miss=[].filter.call(f.querySelectorAll('[required]'),function(i){return !i.value.trim()});
+    if(miss.length){st.textContent='Please add your name, email and the home.';st.classList.add('err');miss[0].focus();return}
+    if(!/^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$/.test(f.email.value)){st.textContent='Please check your email address.';st.classList.add('err');f.email.focus();return}
+    var btn=f.querySelector('button');btn.disabled=true;btn.textContent='Sending…';
+    try{var fd=new FormData(f),o=Object.fromEntries(fd);o.has=fd.getAll('has');o.kind='owner';
+      var r=await fetch('/api/basecamp',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(o)});if(!r.ok)throw 0;
+      var bx=document.getElementById('bco-box');bx.classList.add('sent');bx.querySelector('.thanks').focus();
+    }catch(_){st.textContent='Something went wrong. Please email casey@ophirstays.com.';st.classList.add('err');btn.disabled=false;btn.textContent='Send my home'}
+  });
+})();
+</script>'''
 owners = page('Durango Vacation Rental Management · Ophir Stays',
               'Apply to the Ophir Collection: twenty-five Durango homes, one standard, and a first-year income guarantee. Get a free estimate of what your home could earn.',
-              '/owners', 'owners', owners_body, FORM_JS)
+              '/owners', 'owners', owners_body, FORM_JS + OWNER_BC_JS)
 
 
 # ---------------- YOUR STAY (packages) ----------------
@@ -753,6 +788,13 @@ basecamp_body = f'''
         <div class="reveal">{photo('basecamp-notch', 'A rocky notch high in the San Juans looking down a forested valley')}<h3 style="margin-top:18px">Training camps</h3><p style="color:var(--muted);margin-top:8px">Clubs and teams training at altitude. A quiet house, big volume, fuel and recovery handled.</p></div>
         <div class="reveal">{photo('basecamp-ski', 'A groomed run through aspens at Purgatory with snow-covered peaks behind')}<h3 style="margin-top:18px">Ski groups</h3><p style="color:var(--muted);margin-top:8px">First chair at Purgatory, skis tuned and boots dry, and backcountry days booked with certified guides.</p></div>
       </div>
+    </div>
+  </section>
+
+  <section style="padding:44px 0;background:var(--charcoal);color:#ECE4D3">
+    <div class="wrap narrow center reveal">
+      <p class="eyebrow" style="color:#E08A5C">For owners</p>
+      <p class="lead" style="color:#ECE4D3;margin-top:10px">Own a home near the trails or the lifts? We're seeking three Basecamp homes for 2027. <a class="link" style="color:#fff" href="/owners#basecamp">See if yours qualifies</a></p>
     </div>
   </section>
 

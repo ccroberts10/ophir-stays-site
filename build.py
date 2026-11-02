@@ -494,10 +494,10 @@ owners_body = f'''
   <section id="basecamp">
     <div class="wrap split top">
       <div class="reveal">
-        <p class="eyebrow">Now seeking three Basecamp homes</p>
+        <p class="eyebrow">Now seeking five Basecamp homes</p>
         <h2 class="display">Guests for the weeks that sit empty.</h2>
         <p class="lead">Most Durango homes go quiet in May and October. Basecamp books riders, training camps and race-week athletes into exactly those weeks. We plan their routes, stock their fuel and book their shuttles and guides, so they stay longer and come back.</p>
-        <p class="lead">It's part of the Ophir service, at no extra cost to you. We're choosing the first three homes now.</p>
+        <p class="lead">It's part of the Ophir service, at no extra cost to you. We're choosing the first five homes now.</p>
         <p class="eyebrow" style="margin:32px 0 14px">Your home likely qualifies if it has</p>
         <ul class="standard">
           <li>A garage or locked bike storage</li><li>A hose or wash station</li><li>A mudroom or gear room</li><li>A spot in Durango, the Animas Valley, Hermosa or up toward Purgatory</li>
@@ -794,7 +794,7 @@ basecamp_body = f'''
   <section style="padding:44px 0;background:var(--charcoal);color:#ECE4D3">
     <div class="wrap narrow center reveal">
       <p class="eyebrow" style="color:#E08A5C">For owners</p>
-      <p class="lead" style="color:#ECE4D3;margin-top:10px">Own a home near the trails or the lifts? We're seeking three Basecamp homes for 2027. <a class="link" style="color:#fff" href="/owners#basecamp">See if yours qualifies</a></p>
+      <p class="lead" style="color:#ECE4D3;margin-top:10px">Own a home in town, the Animas Valley or up toward Purgatory? We're seeking five Basecamp homes for 2027. <a class="link" style="color:#fff" href="/owners#basecamp">See if yours qualifies</a></p>
     </div>
   </section>
 

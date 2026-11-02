@@ -500,7 +500,7 @@ owners_body = f'''
         <p class="lead">It's part of the Ophir service, at no extra cost to you. We're choosing the first three homes now.</p>
         <p class="eyebrow" style="margin:32px 0 14px">Your home likely qualifies if it has</p>
         <ul class="standard">
-          <li>A garage or locked bike storage</li><li>A hose or wash station</li><li>A mudroom or gear room</li><li>15 minutes or less to a trailhead or the Purgatory lifts</li>
+          <li>A garage or locked bike storage</li><li>A hose or wash station</li><li>A mudroom or gear room</li><li>In Durango, the Animas Valley, Hermosa or up toward Purgatory</li>
         </ul>
         <p class="fine" style="margin-top:14px">Missing a stand, a pump or a bike rack? We source them at cost, usually $300 to $600.</p>
         <p style="margin-top:18px"><a class="link" href="/basecamp">See Basecamp as guests see it</a></p>
@@ -517,7 +517,7 @@ owners_body = f'''
             <label class="chip"><input type="checkbox" name="has" value="garage"><span>Garage or bike storage</span></label>
             <label class="chip"><input type="checkbox" name="has" value="wash"><span>Hose or wash station</span></label>
             <label class="chip"><input type="checkbox" name="has" value="gear room"><span>Mudroom or gear room</span></label>
-            <label class="chip"><input type="checkbox" name="has" value="near trails"><span>Close to trails or lifts</span></label></fieldset>
+            <label class="chip"><input type="checkbox" name="has" value="room for a group"><span>Sleeps 6 or more</span></label></fieldset>
           <div class="field full"><label for="o-notes">Message</label><textarea id="o-notes" name="notes" placeholder="Who manages it now, and anything we should know"></textarea></div>
           <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
           <div class="field full"><button class="btn btn-rust" type="submit">Send my home</button><p class="form-status" role="status" aria-live="polite"></p></div>
@@ -748,7 +748,7 @@ basecamp_body = f'''
           <li>A conditions text by 7am, and plans that move with the weather</li>
           <li>If someone gets hurt, we get the bike to the shop and rearrange the rest of the trip</li>
         </ul>
-        <p class="fine">Basecamp homes have a garage or locked bike storage, a wash station, a gear room, and a short drive to the trails or the lifts.</p>
+        <p class="fine">Basecamp homes have a garage or locked bike storage, a wash station and a gear room, in town, the Animas Valley or up toward Purgatory.</p>
       </div>
     </div>
   </section>

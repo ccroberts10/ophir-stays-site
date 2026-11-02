@@ -1,0 +1,169 @@
+{
+ "note": "Casey-supplied photos and video, Nov 2026. Free to use anywhere on the site. Videos are vertical 9:16, muted.",
+ "photos": [
+  {
+   "file": "/assets/photos/library/casey-sunset-ridge.jpg",
+   "thumb": "/assets/photos/library/t/casey-sunset-ridge.jpg",
+   "w": 2400,
+   "h": 1800,
+   "alt": "Casey on his bike at golden hour on a high ridge, Needle Mountains behind",
+   "use": "Basecamp / About"
+  },
+  {
+   "file": "/assets/photos/library/son-alpine-lake.jpg",
+   "thumb": "/assets/photos/library/t/son-alpine-lake.jpg",
+   "w": 1800,
+   "h": 2400,
+   "alt": "Casey's son resting on a rock beside an alpine lake in fall color below the Needles",
+   "use": "Instagram / About"
+  },
+  {
+   "file": "/assets/photos/library/scree-traverse.jpg",
+   "thumb": "/assets/photos/library/t/scree-traverse.jpg",
+   "w": 2016,
+   "h": 1512,
+   "alt": "Rider stopped on red-dirt singletrack beside a huge scree slope, La Platas on the horizon",
+   "use": "Basecamp routes"
+  },
+  {
+   "file": "/assets/photos/library/lake-campfire.jpg",
+   "thumb": "/assets/photos/library/t/lake-campfire.jpg",
+   "w": 1512,
+   "h": 2016,
+   "alt": "Fire ring above a forested alpine lake beneath the Needle Mountains, aspens turning",
+   "use": "Journal / Instagram"
+  },
+  {
+   "file": "/assets/photos/library/moose-river.jpg",
+   "thumb": "/assets/photos/library/t/moose-river.jpg",
+   "w": 1512,
+   "h": 2016,
+   "alt": "Moose wading a willow-lined river in a high San Juan valley",
+   "use": "Journal / Instagram"
+  },
+  {
+   "file": "/assets/photos/library/kids-camp-overlook.jpg",
+   "thumb": "/assets/photos/library/t/kids-camp-overlook.jpg",
+   "w": 1600,
+   "h": 2400,
+   "alt": "Group of young riders gathered on a meadow singletrack overlooking the West Needles",
+   "use": "Family stays"
+  },
+  {
+   "file": "/assets/photos/library/kids-camp-wide.jpg",
+   "thumb": "/assets/photos/library/t/kids-camp-wide.jpg",
+   "w": 2400,
+   "h": 1600,
+   "alt": "Young riders and coaches at a meadow overlook above the Animas Valley",
+   "use": "Family stays"
+  },
+  {
+   "file": "/assets/photos/library/kids-camp-engineer.jpg",
+   "thumb": "/assets/photos/library/t/kids-camp-engineer.jpg",
+   "w": 2400,
+   "h": 1600,
+   "alt": "Line of young riders on a wildflower meadow, Engineer Mountain behind",
+   "use": "Family stays"
+  },
+  {
+   "file": "/assets/photos/library/engineer-snowfield.jpg",
+   "thumb": "/assets/photos/library/t/engineer-snowfield.jpg",
+   "w": 1512,
+   "h": 2016,
+   "alt": "Rider on meadow singletrack below Engineer Mountain with late snow",
+   "use": "Basecamp"
+  },
+  {
+   "file": "/assets/photos/library/high-country-crew.jpg",
+   "thumb": "/assets/photos/library/t/high-country-crew.jpg",
+   "w": 2400,
+   "h": 1596,
+   "alt": "Four riders crossing golden tundra toward red and orange San Juan peaks",
+   "use": "Basecamp hero option"
+  },
+  {
+   "file": "/assets/photos/library/ridge-crew.jpg",
+   "thumb": "/assets/photos/library/t/ridge-crew.jpg",
+   "w": 2048,
+   "h": 1365,
+   "alt": "Rider descending a golden ridge as three others crest behind, Needles in the distance",
+   "use": "Basecamp"
+  },
+  {
+   "file": "/assets/photos/library/ridge-silhouette.jpg",
+   "thumb": "/assets/photos/library/t/ridge-silhouette.jpg",
+   "w": 2048,
+   "h": 1365,
+   "alt": "Three riders silhouetted on a ridge above layered San Juan ranges",
+   "use": "Basecamp"
+  },
+  {
+   "file": "/assets/photos/library/bike-overlook.jpg",
+   "thumb": "/assets/photos/library/t/bike-overlook.jpg",
+   "w": 1512,
+   "h": 2016,
+   "alt": "Santa Cruz bike leaning on red rock at a high overlook toward Engineer Mountain",
+   "use": "Basecamp / gear"
+  },
+  {
+   "file": "/assets/photos/library/ridge-descent-engineer.jpg",
+   "thumb": "/assets/photos/library/t/ridge-descent-engineer.jpg",
+   "w": 2048,
+   "h": 1365,
+   "alt": "Four riders dropping off a ridge toward Engineer Mountain",
+   "use": "Basecamp"
+  },
+  {
+   "file": "/assets/photos/library/tundra-descent.jpg",
+   "thumb": "/assets/photos/library/t/tundra-descent.jpg",
+   "w": 2048,
+   "h": 1365,
+   "alt": "Riders descending a golden tundra ridge in single file",
+   "use": "Basecamp routes"
+  },
+  {
+   "file": "/assets/photos/library/ridge-top-four.jpg",
+   "thumb": "/assets/photos/library/t/ridge-top-four.jpg",
+   "w": 2048,
+   "h": 1365,
+   "alt": "Four riders small on the crest of a huge golden ridge",
+   "use": "Basecamp / wide banner"
+  },
+  {
+   "file": "/assets/photos/library/engineer-climb.jpg",
+   "thumb": "/assets/photos/library/t/engineer-climb.jpg",
+   "w": 2016,
+   "h": 1512,
+   "alt": "Rider climbing meadow singletrack toward Engineer Mountain in midsummer",
+   "use": "Basecamp / Journal"
+  },
+  {
+   "file": "/assets/photos/library/ice-lake.jpg",
+   "thumb": "/assets/photos/library/t/ice-lake.jpg",
+   "w": 2400,
+   "h": 1800,
+   "alt": "Two hikers walking the shore of Ice Lake in the San Juans",
+   "use": "Ophir / Journal"
+  }
+ ],
+ "video": [
+  {
+   "file": "/assets/video/high-country-pan.mp4",
+   "poster": "/assets/video/high-country-pan.jpg",
+   "w": 1080,
+   "h": 1920,
+   "seconds": 15,
+   "alt": "Slow pan across golden high-country tundra toward the Needle Mountains",
+   "use": "Basecamp background / Instagram Reel"
+  },
+  {
+   "file": "/assets/video/tundra-ride.mp4",
+   "poster": "/assets/video/tundra-ride.jpg",
+   "w": 1080,
+   "h": 1920,
+   "seconds": 8,
+   "alt": "Red-dirt tundra ridge under blue sky with the Needles on the horizon",
+   "use": "Basecamp background / Instagram Reel"
+  }
+ ]
+}

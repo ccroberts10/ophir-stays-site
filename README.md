@@ -78,3 +78,6 @@ The guest trip page has an "Ask Ophir" box once the trip is planned. It answers 
 - The limit is 20 questions per trip per day. Every question and answer is saved in `messages` with subject "Ask Ophir" and shows in the admin trip detail.
 - Answers are only as good as `house_notes`. Fill it in for every home: hot tub, thermostat, trash day, parking, checkout steps.
 - No new SQL or env vars are needed.
+
+## Media library
+`assets/photos/library/` (with 480px thumbs in `t/`) and `assets/video/` hold Casey's own high-country, Basecamp and family photos and two vertical clips, ready to drop into any page. Every file, its alt text and suggested use is listed in `data/media-library.json`. GPS metadata stripped.

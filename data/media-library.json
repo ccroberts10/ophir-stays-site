@@ -144,6 +144,118 @@
    "h": 1800,
    "alt": "Two hikers walking the shore of Ice Lake in the San Juans",
    "use": "Ophir / Journal"
+  },
+  {
+   "file": "/assets/photos/library/son-durango-overlook.jpg",
+   "thumb": "/assets/photos/library/t/son-durango-overlook.jpg",
+   "w": 1800,
+   "h": 2400,
+   "alt": "Young rider on a dirt overlook above Durango and the Animas Valley",
+   "use": "Instagram / About / Journal"
+  },
+  {
+   "file": "/assets/photos/library/son-alpine-push.jpg",
+   "thumb": "/assets/photos/library/t/son-alpine-push.jpg",
+   "w": 1800,
+   "h": 2400,
+   "alt": "Young rider pushing his bike up red alpine singletrack through corn lilies, San Juans behind",
+   "use": "Basecamp / Instagram"
+  },
+  {
+   "file": "/assets/photos/library/son-aspen-drop.jpg",
+   "thumb": "/assets/photos/library/t/son-aspen-drop.jpg",
+   "w": 1206,
+   "h": 2109,
+   "alt": "Young rider dropping a rock ledge through aspens",
+   "use": "Basecamp / Instagram"
+  },
+  {
+   "file": "/assets/photos/library/son-creek-walk.jpg",
+   "thumb": "/assets/photos/library/t/son-creek-walk.jpg",
+   "w": 1800,
+   "h": 2400,
+   "alt": "Young rider walking his bike along a high-country creek under summer clouds",
+   "use": "Instagram / Journal"
+  },
+  {
+   "file": "/assets/photos/library/sunset-slickrock-motion.jpg",
+   "thumb": "/assets/photos/library/t/sunset-slickrock-motion.jpg",
+   "w": 1206,
+   "h": 2144,
+   "alt": "Rider blurring off a sandstone ledge at sunset above Durango (motion blur)",
+   "use": "Instagram only"
+  },
+  {
+   "file": "/assets/photos/library/sunset-slickrock-drop.jpg",
+   "thumb": "/assets/photos/library/t/sunset-slickrock-drop.jpg",
+   "w": 1206,
+   "h": 2144,
+   "alt": "Rider rolling off a sandstone ledge at sunset, Durango and the mesas below",
+   "use": "Basecamp / Instagram"
+  },
+  {
+   "file": "/assets/photos/library/fort-lewis-ledge.jpg",
+   "thumb": "/assets/photos/library/t/fort-lewis-ledge.jpg",
+   "w": 1206,
+   "h": 2144,
+   "alt": "Rider in Fort Lewis kit dropping a sandstone ledge above Durango at golden hour",
+   "use": "Basecamp / About"
+  },
+  {
+   "file": "/assets/photos/library/fort-lewis-snag.jpg",
+   "thumb": "/assets/photos/library/t/fort-lewis-snag.jpg",
+   "w": 1206,
+   "h": 2144,
+   "alt": "Rider in Fort Lewis kit dropping past a juniper snag above Durango",
+   "use": "Basecamp / Instagram"
+  },
+  {
+   "file": "/assets/photos/library/sunset-rear-wheel.jpg",
+   "thumb": "/assets/photos/library/t/sunset-rear-wheel.jpg",
+   "w": 1350,
+   "h": 2400,
+   "alt": "Rider dropping a sandstone ledge at sunset, rear wheel up, valley below",
+   "use": "Basecamp hero option"
+  },
+  {
+   "file": "/assets/photos/library/sunset-front-wheel.jpg",
+   "thumb": "/assets/photos/library/t/sunset-front-wheel.jpg",
+   "w": 1350,
+   "h": 2400,
+   "alt": "Close low angle of a rider rolling sandstone at sunset above Durango",
+   "use": "Instagram / Journal"
+  },
+  {
+   "file": "/assets/photos/library/sunset-sunburst.jpg",
+   "thumb": "/assets/photos/library/t/sunset-sunburst.jpg",
+   "w": 1860,
+   "h": 2400,
+   "alt": "Rider backlit by the setting sun dropping into rocky singletrack above Durango",
+   "use": "Basecamp / wide banner"
+  },
+  {
+   "file": "/assets/photos/library/red-ridge-overlook.jpg",
+   "thumb": "/assets/photos/library/t/red-ridge-overlook.jpg",
+   "w": 1800,
+   "h": 2400,
+   "alt": "Rider resting on a red-dirt ridge facing the San Juan peaks under blue sky",
+   "use": "Basecamp / Instagram (sky room for text)"
+  },
+  {
+   "file": "/assets/photos/library/red-ridge-overlook-2.jpg",
+   "thumb": "/assets/photos/library/t/red-ridge-overlook-2.jpg",
+   "w": 1800,
+   "h": 2400,
+   "alt": "Rider on a red-dirt ridge looking out at the San Juan peaks (alternate)",
+   "use": "Basecamp / Instagram"
+  },
+  {
+   "file": "/assets/photos/library/ridge-singletrack-laplatas.jpg",
+   "thumb": "/assets/photos/library/t/ridge-singletrack-laplatas.jpg",
+   "w": 1800,
+   "h": 2400,
+   "alt": "Rider on narrow ridge singletrack above forested valleys, La Plata peaks in the distance",
+   "use": "Basecamp routes / Journal"
   }
  ],
  "video": [
@@ -164,6 +276,15 @@
    "seconds": 8,
    "alt": "Red-dirt tundra ridge under blue sky with the Needles on the horizon",
    "use": "Basecamp background / Instagram Reel"
+  },
+  {
+   "file": "/assets/video/alpine-singletrack-pass.mp4",
+   "poster": "/assets/video/alpine-singletrack-pass.jpg",
+   "w": 1080,
+   "h": 1920,
+   "seconds": 8,
+   "alt": "Rider passing on red-dirt alpine singletrack through wildflowers, San Juan peaks behind",
+   "use": "Instagram Reel / Basecamp"
   }
  ]
 }

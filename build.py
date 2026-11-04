@@ -764,7 +764,7 @@ basecamp_body = f'''
     <div class="wrap" style="max-width:980px">
       <div class="reveal center"><p class="eyebrow">The high country</p><h2 class="display">The San Juan rides we plan.</h2>
       <p class="lead" style="margin:18px auto 0;max-width:640px">Above 10,000 feet, from Coal Bank and Molas Pass. Ridden from mid-July to early October, started early, off the ridges by noon.</p></div>
-      <table class="data wrap rides reveal" style="margin-top:36px"><thead><tr><th scope="col">Ride</th><th scope="col">Miles</th><th scope="col">Climbing</th><th scope="col">High point</th><th scope="col">Shuttle</th></tr></thead><tbody><tr><th scope="row">Pass Creek to Coal Creek</th><td>7.8</td><td>1,714 ft</td><td>11,884 ft</td><td>No, loop</td></tr><tr><th scope="row">Engineer Mountain Trail from Pass Creek</th><td>8.2</td><td>1,083 ft</td><td>11,731 ft</td><td>Yes</td></tr><tr><th scope="row">Deer Creek</th><td>8.6</td><td>1,558 ft</td><td>11,931 ft</td><td>Yes</td></tr><tr><th scope="row">Engine Creek</th><td>13.2</td><td>1,649 ft</td><td>11,802 ft</td><td>Yes</td></tr><tr><th scope="row">Little Molas to Engineer Mountain</th><td>17.9</td><td>2,449 ft</td><td>12,190 ft</td><td>Yes</td></tr><tr><th scope="row">Blackhawk Pass Loop</th><td>25.7</td><td>3,901 ft</td><td>11,992 ft</td><td>No, loop</td></tr><tr><th scope="row">Colorado Trail: Little Molas to Hermosa</th><td>52.7</td><td>6,675 ft</td><td>12,494 ft</td><td>Yes</td></tr></tbody></table>
+      <table class="data wrap rides reveal" style="margin-top:36px"><thead><tr><th scope="col">Ride</th><th scope="col">Miles</th><th scope="col">Climbing</th><th scope="col">High point</th><th scope="col">Shuttle</th></tr></thead><tbody><tr><th scope="row"><a class="link" href="/trails/pass-creek-coal-creek">Pass Creek to Coal Creek</a></th><td>7.8</td><td>1,714 ft</td><td>11,884 ft</td><td>No, loop</td></tr><tr><th scope="row"><a class="link" href="/trails/pass-creek-engineer-cascade">Engineer Mountain Trail from Pass Creek</a></th><td>8.2</td><td>1,083 ft</td><td>11,731 ft</td><td>Yes</td></tr><tr><th scope="row"><a class="link" href="/trails/deer-creek">Deer Creek</a></th><td>8.6</td><td>1,558 ft</td><td>11,931 ft</td><td>Yes</td></tr><tr><th scope="row"><a class="link" href="/trails/engine-creek">Engine Creek</a></th><td>13.2</td><td>1,649 ft</td><td>11,802 ft</td><td>Yes</td></tr><tr><th scope="row"><a class="link" href="/trails/little-molas-engineer-cascade">Little Molas to Engineer Mountain</a></th><td>17.9</td><td>2,449 ft</td><td>12,190 ft</td><td>Yes</td></tr><tr><th scope="row"><a class="link" href="/trails/blackhawk-loop">Blackhawk Pass Loop</a></th><td>25.7</td><td>3,901 ft</td><td>11,992 ft</td><td>No, loop</td></tr><tr><th scope="row"><a class="link" href="/trails/little-molas-hermosa-corral-draw">Colorado Trail: Little Molas to Hermosa</a></th><td>52.7</td><td>6,675 ft</td><td>12,494 ft</td><td>Yes</td></tr></tbody></table>
       <div class="grid3 reveal" style="margin-top:36px">
         <div class="photo"><img src="/assets/photos/library/ridge-crew.jpg" alt="A rider descending a golden ridge as three others crest behind" loading="lazy"></div>
         <div class="photo"><img src="/assets/photos/library/engineer-climb.jpg" alt="A rider climbing meadow singletrack toward Engineer Mountain" loading="lazy"></div>
@@ -1380,17 +1380,134 @@ def route_card(r):
     return (f'<a class="rcard reveal" href="/trails/{r["slug"]}"><div class="ph"><img src="/assets/routes/{r["slug"]}.jpg" alt="Map of {r["name"]}, Durango" loading="lazy" width="1600" height="1024"></div>'
             f'<p class="post-meta">{r["area"]} · {r["difficulty"]}</p><h3>{r["name"]}</h3><p>{r["miles"]} mi · {r["climb"]:,} ft climbing</p></a>')
 
+
+# ---------------- HIGH-COUNTRY ROUTES ----------------
+import re as _re
+HIGH_COUNTRY = _json.load(open('data/high_country.json'))
+HC_ORDER = ['pass-creek-coal-creek', 'pass-creek-engineer-cascade', 'deer-creek', 'engine-creek', 'little-molas-engineer-cascade', 'blackhawk-loop', 'little-molas-hermosa-corral-draw']
+HIGH_COUNTRY.sort(key=lambda r: HC_ORDER.index(r['slug']))
+HC_GPX_LIVE = False  # flip to True once Casey has checked each line against his own rides
+HC_COPY = {
+ 'pass-creek-coal-creek': 'The best short ride in the high country. Climb Pass Creek from Coal Bank Pass to the meadows under Engineer Mountain, cross on the Engineer Mountain Trail, then drop Coal Creek and spin a short stretch of US 550 back to the car. No shuttle needed.',
+ 'pass-creek-engineer-cascade': 'Climb Pass Creek to the shoulder of Engineer Mountain, then ride the Engineer Mountain Trail almost 2,700 feet down through meadow and spruce to Cascade. Short on climbing and long on descending, with a shuttle back up the pass.',
+ 'deer-creek': 'Up Pass Creek and across the Engineer Mountain Trail to the highest point of the day near 11,900 feet, then down Deer Creek to US 550. A quieter descent with a short shuttle back to Coal Bank.',
+ 'engine-creek': 'A big day for the miles. Climb Pass Creek, cross under Engineer Mountain, then descend Engine Creek and ride out Cascade Creek to Cascade, more than 3,200 feet down in all. Shuttled.',
+ 'little-molas-engineer-cascade': 'The high traverse. From Little Molas Lake the Colorado Trail stays above 11,000 feet for miles, tops out over 12,000, then joins the full Engineer Mountain Trail down to Cascade. Shuttled to Molas Pass.',
+ 'blackhawk-loop': 'A full backcountry loop from Hermosa Park. Climb the road to Bolam Pass, take the Colorado Trail over Blackhawk Pass, and drop Hotel Draw back to the car. Nearly 26 miles and 3,900 feet, with no shuttle.',
+ 'little-molas-hermosa-corral-draw': 'The big one. Fifty-three miles of the Colorado Trail from Little Molas Lake over Rolling Mountain and Bolam Pass, down Corral Draw and out Hermosa Creek. A full day for very fit riders, or two with support.',
+}
+HC_LEVEL = {'little-molas-hermosa-corral-draw': 'Expert', 'blackhawk-loop': 'Expert'}
+
+def hc_track(slug):
+    s = open(f'assets/routes/{slug}.gpx').read()
+    pts = [(round(float(a), 5), round(float(b), 5)) for a, b in _re.findall(r'lat="([-\d.]+)" lon="([-\d.]+)"', s)]
+    step = max(1, len(pts) // 400)
+    return pts[::step] + ([pts[-1]] if (len(pts) - 1) % step else [])
+
+def hc_level(r):
+    return HC_LEVEL.get(r['slug'], 'Advanced')
+
+def hc_page(r):
+    lvl = hc_level(r)
+    la, lo = r['start']; ela, elo = r['end']
+    shuttle = ('Point to point. We book the shuttle with a licensed local company: drop at ' + r['trailhead'] + ', pickup at the finish.') if r['shuttle'] else 'A loop, back to the car. No shuttle needed.'
+    stats = (f'<div class="rstats"><div><span>Distance</span><b>{r["miles"]} mi</b></div><div><span>Climbing</span><b>{r["climb"]:,} ft</b></div>'
+             f'<div><span>High point</span><b>{r["high"]:,} ft</b></div><div><span>Shuttle</span><b>{"Yes" if r["shuttle"] else "No, loop"}</b></div></div>')
+    gpx_btn = (f'<a class="btn" href="/assets/routes/{r["slug"]}.gpx" download>Download GPX</a> ' if HC_GPX_LIVE else '')
+    faqs = [
+        (f"How long is {r['name']}?", f"{r['miles']} miles with about {r['climb']:,} feet of climbing and {r['descent']:,} feet of descending. Most strong riders take {max(1.5, round(r['miles'] / 5 + r['climb'] / 1500, 1))} to {round(r['miles'] / 3.5 + r['climb'] / 1000, 1)} hours."),
+        (f"When can you ride {r['name']}?", 'Usually mid-July to early October, once the snow is gone. Start early and be off the ridges by noon; summer afternoons bring lightning above treeline.'),
+        (f"How hard is {r['name']}?", f"{lvl}. Everything here is above 10,000 feet, so riders coming from sea level should spend a day or two lower first." + (' This is a very long day with few bail-out points.' if lvl == 'Expert' else '')),
+        ("Does it need a shuttle?", shuttle),
+    ]
+    coords = _json.dumps(hc_track(r['slug']), separators=(',', ':'))
+    others = [o for o in HIGH_COUNTRY if o['slug'] != r['slug']]
+    more = ''.join(f'<li><a href="/trails/{o["slug"]}">{o["name"]}</a> · {o["miles"]} mi · {o["climb"]:,} ft</li>' for o in others)
+    body = f"""
+  <section style="padding-bottom:24px">
+    <div class="wrap narrow reveal">
+      <p class="eyebrow"><a href="/trails#high-country" style="text-decoration:none">San Juan high country</a> · {r['area']}</p>
+      <h1 class="display">{r['name']}</h1>
+      <p class="lead">{HC_COPY[r['slug']]}</p>
+      {stats}
+    </div>
+  </section>
+  <section style="padding-top:0">
+    <div class="wrap" style="max-width:1000px">
+      <div id="hcmap" style="width:100%;aspect-ratio:1600/1024;border:1px solid var(--line);background:#F5F0E6"></div>
+      <noscript><img src="/assets/routes/{r['slug']}.jpg" width="1600" height="1024" alt="Map of the {r['name']} route" style="width:100%;height:auto"></noscript>
+      <div style="margin-top:20px">{profile_svg(r)}</div>
+      <p style="margin-top:20px;display:flex;gap:12px;flex-wrap:wrap">{gpx_btn}<a class="btn btn-rust" href="/basecamp#inquire">Plan this ride with us</a> <a class="btn" href="https://www.google.com/maps/dir/?api=1&destination={la:.5f},{lo:.5f}" target="_blank" rel="noopener">Directions to the start</a></p>
+    </div>
+    <div class="wrap narrow article" style="margin-top:24px">
+      <h2>The route</h2>
+      <p>{r['route']}. {r['miles']} miles, about {r['climb']:,} feet up and {r['descent']:,} feet down, between {r['low']:,} and {r['high']:,} feet.</p>
+      <p>{shuttle}</p>
+      <h2>Riding up high</h2>
+      <ul>
+        <li>Start early. Plan to be off the ridges by noon from July through August.</li>
+        <li>Bring a rain shell, a warm layer and more water and food than you think. Weather turns fast above 11,000 feet.</li>
+        <li>Bikes are not allowed in the Weminuche Wilderness. This route stays outside it.</li>
+        <li>New to altitude? Ride something in town on day one.</li>
+      </ul>
+      <h2>Quick answers</h2>
+      {''.join(f'<h3 class="faq-q">{q}</h3><p>{a}</p>' for q, a in faqs)}
+      <h2>More high-country rides</h2>
+      <ul>{more}</ul>
+      <p><a href="/trails">Ten rides closer to town</a> · <a href="/basecamp">Ophir Basecamp</a></p>
+      <p class="fine">Route from OpenStreetMap trail data, elevation from USGS. Map tiles © OpenStreetMap contributors, SRTM, OpenTopoMap (CC-BY-SA). Trails, closures and snow change; check current conditions before you ride.</p>
+    </div>
+  </section>
+"""
+    js = ("<link rel=\"stylesheet\" href=\"https://unpkg.com/leaflet@1.9.4/dist/leaflet.css\">"
+          "<script src=\"https://unpkg.com/leaflet@1.9.4/dist/leaflet.js\"></script><script>(function(){var c=" + coords + ";"
+          "if(!window.L){document.getElementById('hcmap').innerHTML='<img src=\"/assets/routes/" + r['slug'] + ".jpg\" style=\"width:100%;height:auto\" alt=\"\">';return;}"
+          "var m=L.map('hcmap',{scrollWheelZoom:false});"
+          "L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png',{maxZoom:17,attribution:'&copy; OpenStreetMap contributors, SRTM | &copy; OpenTopoMap (CC-BY-SA)'}).addTo(m);"
+          "var l=L.polyline(c,{color:'#B4572B',weight:5,opacity:.95}).addTo(m);m.fitBounds(l.getBounds(),{padding:[24,24]});"
+          "L.circleMarker(c[0],{radius:8,color:'#262422',fillColor:'#262422',fillOpacity:1}).addTo(m).bindTooltip('" + ('Start · finish' if not r['shuttle'] else 'Start') + "',{permanent:true,direction:'right'});"
+          + ("" if not r['shuttle'] else "L.circleMarker(c[c.length-1],{radius:8,color:'#262422',weight:3,fillColor:'#F5F0E6',fillOpacity:1}).addTo(m).bindTooltip('Finish',{permanent:true,direction:'right'});")
+          + "})();</script>")
+    ld = {'@context': 'https://schema.org', '@graph': [
+        {'@type': 'TouristAttraction', 'name': r['name'] + ' mountain bike route', 'description': HC_COPY[r['slug']],
+         'url': 'https://ophirstays.com/trails/' + r['slug'], 'image': ['https://ophirstays.com/assets/routes/' + r['slug'] + '.jpg', 'https://ophirstays.com/assets/routes/' + r['slug'] + '-card.jpg'],
+         'touristType': 'Mountain biking', 'isAccessibleForFree': True,
+         'geo': {'@type': 'GeoCoordinates', 'latitude': la, 'longitude': lo},
+         'containedInPlace': {'@type': 'Place', 'name': 'San Juan Mountains, Colorado'}},
+        {'@type': 'BreadcrumbList', 'itemListElement': [
+            {'@type': 'ListItem', 'position': 1, 'name': 'Ophir Stays', 'item': 'https://ophirstays.com/'},
+            {'@type': 'ListItem', 'position': 2, 'name': 'Durango routes', 'item': 'https://ophirstays.com/trails'},
+            {'@type': 'ListItem', 'position': 3, 'name': r['name'], 'item': 'https://ophirstays.com/trails/' + r['slug']}]},
+        {'@type': 'FAQPage', 'mainEntity': [{'@type': 'Question', 'name': q, 'acceptedAnswer': {'@type': 'Answer', 'text': a}} for q, a in faqs]}]}
+    html = page(f"{r['name']} · San Juan High-Country Mountain Bike Route · Ophir Stays",
+                f"{r['name']} near Durango: {r['miles']} miles, {r['climb']:,} ft of climbing, high point {r['high']:,} ft. Route map, elevation profile and shuttle notes.",
+                '/trails/' + r['slug'], 'journal', body, js, image='/assets/routes/' + r['slug'] + '-card.jpg')
+    return html.replace('</head>', '<script type="application/ld+json">' + _json.dumps(ld) + '</script>\n</head>', 1)
+
+hc_tiles = ''.join(ptile({**r, 'difficulty': hc_level(r)}) for r in HIGH_COUNTRY)
+
 trails_index_body = f"""
   <section style="padding-bottom:32px">
     <div class="wrap narrow center reveal">
       <p class="eyebrow">Ride</p>
       <h1 class="display">Durango mountain bike routes</h1>
-      <p class="lead">Ten rides from town, easy to advanced, each with a map, elevation profile and free GPX download. Every one starts within ten minutes of Main Avenue.</p>
+      <p class="lead">Ten rides from town, easy to advanced, each with a map, elevation profile and free GPX download. Every one starts within ten minutes of Main Avenue. Plus <a href="#high-country">seven high-country rides</a> up north.</p>
       <p style="margin-top:20px"><a class="btn" href="/trail-map">See the full trail map</a></p>
     </div>
   </section>
   <section style="padding-top:0">
     <div class="wrap"><div class="pgrid">{''.join(ptile(r) for r in sorted(ROUTES, key=lambda r: (DIFF_ORDER[r['difficulty']], r['miles'])))}</div></div>
+  </section>
+  <section class="tint" id="high-country">
+    <div class="wrap narrow center reveal" style="margin-bottom:36px">
+      <p class="eyebrow">The high country</p>
+      <h2 class="display">Seven San Juan rides above 10,000 feet</h2>
+      <p class="lead">From Coal Bank Pass, Molas Pass and Hermosa Park, 45 minutes north of town. Ridden mid-July to early October, started early, off the ridges by noon.</p>
+    </div>
+    <div class="wrap"><div class="pgrid">{hc_tiles}</div></div>
+    <p class="fine center" style="margin-top:24px">Planning a trip around these? <a class="link" href="/basecamp">Ophir Basecamp</a> books the shuttles and plans the days.</p>
+  </section>
+  <section style="padding-top:0">
     <div class="wrap narrow article" style="margin-top:48px">
       <p>New to Durango? Start with the Meadow Loop to get used to the altitude, then work up to Telegraph and Sidewinder. Save Raider Ridge and Animas Mountain for when your legs and lungs have caught up.</p>
       <p class="fine">Routes from OpenStreetMap trail data, elevation from USGS. Trails and closures change; check current conditions before you ride.</p>
@@ -1596,8 +1713,8 @@ purg_page = page('Purgatory Vacation Rental Management · Ophir Stays',
                  'Vacation rental management at Purgatory and Durango Mountain: which condos and homes can rent nightly, what they earn, and how a local manager runs them.',
                  '/areas/purgatory', 'owners', purg_body, image='/assets/photos/hero-ski.jpg')
 os.makedirs('areas', exist_ok=True)
-for name, html in [('index.html', home), ('owners.html', owners), ('about.html', about), ('journal.html', journal), ('journal/durango-rides.html', post), ('journal/durango-home-earnings.html', post2), ('journal/where-to-eat-durango.html', post3), ('journal/durango-short-term-rental-rules.html', post4), ('trail-map.html', trailmap), ('trails.html', trails_index), ('guest-app.html', guestapp), ('estimate.html', estimate_page), ('homes.html', homes_page), ('stay.html', stay_page), ('areas/purgatory.html', purg_page), ('basecamp.html', basecamp_page), ('buying.html', buying_page)] + [(f"homes/{h['slug']}.html", home_page(h)) for h in LIVE_HOMES] + [(f"trails/{r['slug']}.html", route_page(r)) for r in ROUTES]:
+for name, html in [('index.html', home), ('owners.html', owners), ('about.html', about), ('journal.html', journal), ('journal/durango-rides.html', post), ('journal/durango-home-earnings.html', post2), ('journal/where-to-eat-durango.html', post3), ('journal/durango-short-term-rental-rules.html', post4), ('trail-map.html', trailmap), ('trails.html', trails_index), ('guest-app.html', guestapp), ('estimate.html', estimate_page), ('homes.html', homes_page), ('stay.html', stay_page), ('areas/purgatory.html', purg_page), ('basecamp.html', basecamp_page), ('buying.html', buying_page)] + [(f"homes/{h['slug']}.html", home_page(h)) for h in LIVE_HOMES] + [(f"trails/{r['slug']}.html", route_page(r)) for r in ROUTES] + [(f"trails/{r['slug']}.html", hc_page(r)) for r in HIGH_COUNTRY]:
     open(name, 'w').write(html)
 open('sitemap.xml', 'w').write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">\n' +
-    ''.join(f'<url><loc>https://ophirstays.com{p}</loc><lastmod>2026-10-18</lastmod>' + ('<image:image><image:loc>https://ophirstays.com/assets/ophir-durango-trail-map.jpg</image:loc></image:image>' if p == '/trail-map' else ''.join(f'<image:image><image:loc>https://ophirstays.com/assets/routes/{p[8:]}{x}.jpg</image:loc></image:image>' for x in ('', '-card')) if p.startswith('/trails/') else '') + '</url>\n' for p in ['/', '/stay', '/homes', '/owners', '/about', '/journal', '/journal/durango-rides', '/journal/durango-home-earnings', '/journal/where-to-eat-durango', '/journal/durango-short-term-rental-rules', '/trail-map', '/trails', '/guest-app', '/estimate', '/areas/purgatory', '/basecamp', '/buying'] + [f"/trails/{r['slug']}" for r in ROUTES] + [f"/homes/{h['slug']}" for h in HOMES if not h['sample']]) + '</urlset>\n')
+    ''.join(f'<url><loc>https://ophirstays.com{p}</loc><lastmod>2026-10-18</lastmod>' + ('<image:image><image:loc>https://ophirstays.com/assets/ophir-durango-trail-map.jpg</image:loc></image:image>' if p == '/trail-map' else ''.join(f'<image:image><image:loc>https://ophirstays.com/assets/routes/{p[8:]}{x}.jpg</image:loc></image:image>' for x in ('', '-card')) if p.startswith('/trails/') else '') + '</url>\n' for p in ['/', '/stay', '/homes', '/owners', '/about', '/journal', '/journal/durango-rides', '/journal/durango-home-earnings', '/journal/where-to-eat-durango', '/journal/durango-short-term-rental-rules', '/trail-map', '/trails', '/guest-app', '/estimate', '/areas/purgatory', '/basecamp', '/buying'] + [f"/trails/{r['slug']}" for r in ROUTES + HIGH_COUNTRY] + [f"/homes/{h['slug']}" for h in HOMES if not h['sample']]) + '</urlset>\n')
 print('built')

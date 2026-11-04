@@ -81,3 +81,12 @@ The guest trip page has an "Ask Ophir" box once the trip is planned. It answers 
 
 ## Media library
 `assets/photos/library/` (with 480px thumbs in `t/`) and `assets/video/` hold Casey's own high-country, Basecamp and family photos and two vertical clips, ready to drop into any page. Every file, its alt text and suggested use is listed in `data/media-library.json`. GPS metadata stripped.
+
+## Partner Hosts (self-managed homes)
+Hosts who run their own Airbnb/Vrbo send their guests to Ophir for the trip; Ophir never touches the house. The host earns `partner_rate` (10%) of Ophir packages and add-ons their guests buy. Pass-through charges (rentals, tickets, guides) are excluded.
+- **Setup once:** run `supabase/partners.sql` in the Supabase SQL editor.
+- **Host applies:** `/partner` → `api/partner.js?action=apply` → a `homes` row with `partner = true`, `partner_status = 'applied'`, and an email to Casey.
+- **Approve:** Supabase → Table editor → homes → set `partner_status` to `active`. The guest link is `https://ophirstays.com/h/<slug>` (the slug is in Casey's email).
+- **Guest starts a trip:** `/h/<slug>` → name, email, dates → a trip with `source = 'partner'` → welcome email → straight to their `/trip/<token>` page. The usual flow follows: pre-trip form, AI plan, Casey approves, upgrade email, Stripe.
+- **What partner guests can buy:** The Arranged Stay and gear fitted and delivered (plus massage, golf and guides on request). No house services: no cleaning, groceries, arrival setup, early check-in or late checkout. The AI planner never creates house tasks for these homes, and Ask Ophir sends house questions back to the host.
+- **Payouts:** Supabase → SQL editor → `select * from partner_payouts;` gives each host's guest spend and payout by month.

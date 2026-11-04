@@ -148,6 +148,18 @@ export const OFFERS = {
   golf: { title: 'A round of golf', price: 'Priced on request', blurb: 'Tee time held, clubs and cart ready.' },
   guide: { title: 'A private guide', price: 'Priced on request', blurb: 'Fly fishing, a guided ride or a backcountry hike with a local.' },
 };
+// ---------- Partner Hosts ----------
+// A Partner Host home is run by its own owner (Airbnb/Vrbo). Ophir plans and books the trip only; the host
+// handles the house (access, Wi-Fi, cleaning, check-in, repairs). Only trip services are sold there.
+export const isPartner = (home) => !!(home && home.partner);
+export const PARTNER_STAY = 'Ophir trip planning (included for guests of an Ophir Partner Host home): a private trip page, weather-aware ideas, Casey\'s restaurant and trail picks, and Ask Ophir for questions about Durango. The home itself is run by its own host: access, Wi-Fi, cleaning and anything about the house go through the host on Airbnb or Vrbo.';
+export const PARTNER_MENU = ['arranged', 'addon_gear'];
+export const PARTNER_OFFER_KEYS = ['arranged', 'addon_gear', 'massage', 'golf', 'guide'];
+export function packageText(trip, home) {
+  return isPartner(home) && trip.package === 'stay' ? PARTNER_STAY : PACKAGES[trip.package];
+}
+const PARTNER_RULES = 'PARTNER HOST HOME: this home is run by its own host, not Ophir. Ophir has no access to the house. Never create cleaning, maintenance, arrival setup, grocery or other house tasks, and never promise anything inside the home (no gear room, no welcome kit, no fire laid). Gear is delivered to the door at a time agreed with the guest. In ready_list, list only trip services Ophir will do.';
+
 export const TEAM = 'Team and partners (assign tasks to these names): "Casey" (owner/host, books everything), "CRC Janitorial" (cleaning and turnover), "James Hillyer" (maintenance/handyman), "Ski shop" (ski and boot rentals), "Bike shop" (bike rentals and delivery), "San Juan Angler" (fly fishing), "Grocery run" (shopping, done by Casey). "Shuttle partner" (licensed shuttle company: trailhead and point-to-point shuttles, bikes and skis carried), "Guide partner" (permitted guide service: guided rides and ski days), "Ride coordinator" (Basecamp backup: route briefings, daily conditions text, mechanical help).';
 export const DURANGO_NOTES = 'Durango, Colorado. Purgatory Resort is about 30 minutes north (ski/ride in winter, bike park and alpine coaster in summer). Downtown Main Avenue for dining. Animas River for rafting and fly fishing. Trails: Horse Gulch, Animas Mountain, Log Chutes, Colorado Trail at Junction Creek, Hermosa Creek. Hot springs north of town. Glacier Club and Dalton Ranch for golf. Afternoon thunderstorms are common in July and August, so plan rides and hikes in the morning.';
 
@@ -189,7 +201,7 @@ export async function sendWelcome(trip, home) {
   const link = `${SITE}/trip/${trip.access_token}`;
   const w = await aiJSON(
     `You are the concierge voice of Ophir Stays, a small luxury vacation home collection in Durango, Colorado. Voice: short, warm, certain. No exclamation marks. Never use the word "luxury". Sign as "Casey, Ophir Stays".`,
-    `Write the welcome email for a new booking. Guest first name: ${firstName(trip.guest_name)}. Home: ${home?.name || 'your home'} (${home?.area || 'Durango'}). Dates: ${fmt(trip.check_in)} to ${fmt(trip.check_out)}. Party: ${trip.adults} adults, ${trip.children} children. Package: ${PACKAGES[trip.package]}
+    `Write the welcome email for a new booking. Guest first name: ${firstName(trip.guest_name)}. Home: ${home?.name || 'your home'} (${home?.area || 'Durango'}). Dates: ${fmt(trip.check_in)} to ${fmt(trip.check_out)}. Party: ${trip.adults} adults, ${trip.children} children. Package: ${packageText(trip, home)}
 The email must invite them to tell us about their trip at a private link (a button is added for you; do not include the URL). Explain in one sentence what we'll do with it (sizes for gear, groceries, the itinerary). 90 to 140 words.
 JSON: {"subject": "...", "body": "plain text, paragraphs separated by blank lines"}`, 800);
   w.body = String(w.body || '').replace(/!+/g, '.'); w.subject = String(w.subject || 'Your Durango trip').replace(/!+/g, '');
@@ -216,10 +228,11 @@ export async function planTrip(tripId) {
   const restaurants = await db.select('restaurants', 'active=eq.true&order=name').catch(() => []);
   const dining = (answers && answers.raw && answers.raw.dining) || {};
   const offerKeys = Object.keys(OFFERS).filter((k) => !(k === 'arranged' && trip.package !== 'stay') && !(k === 'basecamp' && !(trip.package === 'stay' && basecampOk(home))) && !(k === 'private' && trip.package === 'private') && !addons.includes(k)
-    && !(OFFERS[k].grants && granted.has(OFFERS[k].grants)));
+    && !(OFFERS[k].grants && granted.has(OFFERS[k].grants)))
+    .filter((k) => !isPartner(home) || PARTNER_OFFER_KEYS.includes(k));
   const plan = await aiJSON(
     `You are the head concierge of Ophir Stays in Durango, Colorado. You plan trips with local precision and create the behind-the-scenes task list for the team. ${DURANGO_NOTES} ${TEAM}
-VOICE for anything the guest reads: short, warm, certain, understated. Never use exclamation marks. Never say "luxury". Never mention packages, prices, upgrades or what is "not included" inside the itinerary.
+${isPartner(home) ? PARTNER_RULES + '\n' : ''}VOICE for anything the guest reads: short, warm, certain, understated. Never use exclamation marks. Never say "luxury". Never mention packages, prices, upgrades or what is "not included" inside the itinerary.
 PACKAGE RULES (strict):
 - What Ophir will actually do for this guest: ${[...granted].join(', ') || 'nothing beyond the home and local tips'}.
 - Only promise or create tasks for those. "gear" = sizing and delivering skis/boots/bikes. "shuttles" = booking trailhead shuttles with the Shuttle partner. "fuel" = stocking Tailwind and recovery basics for every rider. "bookings" = guides, tickets, rafting, fishing, golf. "dinners" = holding tables and the first round. "groceries" = shopping and stocking the fridge. "arrival_setup" = fire, wine, flowers. "wellness" = massage, chef, sitter.
@@ -242,7 +255,7 @@ Return JSON: {"summary": "2-4 sentences for Casey: shape of the trip, anything t
 "offers": [{"key": "one allowed offer key", "reason": "one short sentence tied to this guest, e.g. 'For your anniversary evening'"}]}`, 6000);
 
   // Guard: drop any task the package doesn't cover (house tasks like cleaning are always allowed).
-  const tasks = (plan.tasks || []).filter((k) => !k.needs || k.needs === 'house' || granted.has(k.needs))
+  const tasks = (plan.tasks || []).filter((k) => !k.needs || (k.needs === 'house' ? !isPartner(home) : granted.has(k.needs)))
     .map((k) => ({ trip_id: trip.id, title: k.title, assignee: k.assignee || 'Casey', due_at: k.due_at || null, created_by: 'ai', approved: false }));
   const items = (plan.days || []).flatMap((d) => (d.items || []).map((it, i) => ({ trip_id: trip.id, day: d.date, start_time: it.time || null, title: noBang(it.title),
     details: noBang(it.details) || null, kind: it.kind || null, partner: it.place || null, weather_note: noBang(it.weather_note) || null, position: i })));
@@ -347,6 +360,7 @@ const COVERED = { // what each package already includes, so we never sell it twi
 export function menuFor(trip, paid = [], home = null) {
   const covered = COVERED[trip.package] || [];
   return MENU_ORDER.filter((k) => !covered.includes(k) && !paid.includes(k))
+    .filter((k) => !isPartner(home) || PARTNER_MENU.includes(k))
     .filter((k) => k !== 'addon_midclean' || nightsOf(trip) >= 4)
     .filter((k) => !(k === 'arranged' && (paid.includes('private') || paid.includes('basecamp'))))
     .filter((k) => k !== 'basecamp' || (basecampOk(home) && !paid.includes('arranged') && !paid.includes('private')))
@@ -375,7 +389,7 @@ export function upgradeEmailHtml(trip, home, menu) {
       ? ['A ride or ski plan for each rider, with GPX files', 'Tailwind and recovery basics stocked for every rider', 'Shuttles, guides and lift tickets booked', 'Bikes or skis fitted and delivered, mechanical help the same day', 'A conditions text every morning, and if anyone gets hurt, we handle the bike and the rest of the trip']
       : isPrivate
       ? ['Your own host, on call for the whole stay', 'Groceries shopped and the fridge stocked to your list', 'Fire laid, wine chosen, music on when you walk in', 'Private chef, in-home massage or a sitter booked for you', 'Airport transfer booked, and a mid-stay refresh']
-      : [snow ? 'Skis and boots sized to each guest, waiting in the gear room' : 'Bikes fitted to each rider and delivered to the house', snow ? 'Lift tickets, lessons and guides booked' : 'Guides, rafting and fly fishing booked', 'Dinner reservations held, first round on the house at our partner restaurants', 'A planning call, then every day built around the forecast', 'Two Ophir tumblers to keep'];
+      : [snow ? (isPartner(home) ? 'Skis and boots sized to each guest, delivered to the door' : 'Skis and boots sized to each guest, waiting in the gear room') : 'Bikes fitted to each rider and delivered to the house', snow ? 'Lift tickets, lessons and guides booked' : 'Guides, rafting and fly fishing booked', 'Dinner reservations held, first round on the house at our partner restaurants', 'A planning call, then every day built around the forecast', 'Two Ophir tumblers to keep'];
     const unit = isPrivate ? (trip.package === 'arranged' || trip.package === 'basecamp' ? `upgrade, your ${trip.package === 'basecamp' ? 'Basecamp' : 'Arranged Stay'} credited` : `per stay${nightsOf(trip) > 5 ? `, ${nightsOf(trip)} nights` : ', up to five nights'}`) : `per stay, ${partyOf(trip)} guests`;
     const lead = isBase ? 'Come to ride. We handle everything else.' : isPrivate ? 'A dedicated host. Nothing left for you to do.' : 'Tell us what you love. We plan the trip around it.';
     return `<tr><td style="padding:0 0 28px"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#FFFFFF;border:1px solid #E7E1D6">
@@ -397,6 +411,7 @@ export function upgradeEmailHtml(trip, home, menu) {
   for (let i = 0; i < adds.length; i += 2) addRows += `<tr>${addCell(adds[i])}${adds[i + 1] ? addCell(adds[i + 1]) : '<td width="50%"></td>'}</tr>`;
   const intro = trip.package === 'private'
     ? `Your Private Stay is set. A few last touches are below if you want them, all booked directly with us.`
+    : isPartner(home) ? `Your host has the house ready. If you would like us to take care of the trip itself, it is all below: gear fitted and delivered, guides and tickets booked, tables held. Everything is booked directly with Ophir, and you can add to it any time before you arrive.`
     : `Your home is ready for you. If you would like us to take care of the rest of the trip, it is all below. Choose a package, add a single touch, or simply arrive. Everything is booked directly with us, and you can add to it any time before you arrive.`;
   return `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light"><title>Your stay</title></head>
 <body style="margin:0;padding:0;background:#F3EFE7">

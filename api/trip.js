@@ -1,5 +1,5 @@
 // Guest trip API. GET /api/trip?t=<token> returns the guest's trip; POST saves pre-trip answers and runs the AI planner.
-import { db, json, readBody, loadTrip, planTrip, aiJSON, PACKAGES, OFFERS, priceFor, sendEmail, emailShell, esc, SITE, manualForGuest, menuFor, paidAddons } from './_lib.js';
+import { db, json, readBody, loadTrip, planTrip, aiJSON, PACKAGES, OFFERS, priceFor, sendEmail, emailShell, esc, SITE, manualForGuest, menuFor, paidAddons, packageText, isPartner } from './_lib.js';
 
 const clip = (s, n) => (s == null ? null : String(s).trim().slice(0, n) || null);
 const num = (v, lo, hi) => { const n = parseInt(v, 10); return Number.isFinite(n) && n >= lo && n <= hi ? n : null; };
@@ -20,7 +20,7 @@ export default async function handler(req, res) {
         guest_first: String(trip.guest_name).split(/\s+/)[0],
         home: home ? { name: home.name, area: home.area, sleeps: home.sleeps } : null,
         check_in: trip.check_in, check_out: trip.check_out, adults: trip.adults, children: trip.children,
-        package: trip.package, package_text: PACKAGES[trip.package], status: trip.status,
+        package: trip.package, package_text: packageText(trip, home), partner: isPartner(home), status: trip.status,
         party: t.party.map(({ name, age_group, height_cm, weight_kg, boot_size, ski_level, bike_level, notes }) => ({ name, age_group, height_cm, weight_kg, boot_size, ski_level, bike_level, notes })),
         answers: t.answers ? { dining: (t.answers.raw && t.answers.raw.dining) || null, interests: t.answers.interests, pace: t.answers.pace, groceries: t.answers.groceries, dietary: t.answers.dietary, coffee: t.answers.coffee, arrival_time: t.answers.arrival_time, celebrations: t.answers.celebrations, notes: t.answers.notes } : null,
         itinerary: showPlan ? t.itinerary.map(({ day, start_time, title, details, kind, weather_note, partner }) => ({ day, start_time, title, details, kind, weather_note, place: partner })) : [],
@@ -48,7 +48,7 @@ export default async function handler(req, res) {
       const arrived = today() >= trip.check_in;
       const ctx = {
         today: today(), guest: trip.guest_name, check_in: trip.check_in, check_out: trip.check_out, adults: trip.adults, children: trip.children,
-        package: PACKAGES[trip.package] || trip.package,
+        package: packageText(trip, home) || trip.package,
         home: home ? { name: home.name, area: home.area, beds: home.beds, baths: home.baths, sleeps: home.sleeps, house_notes: home.house_notes, house_manual: manualForGuest(home.manual),
           ...(arrived ? { door_code: home.door_code, wifi_name: home.wifi_name, wifi_password: home.wifi_password } : {}) } : null,
         itinerary: (['approved', 'in_stay', 'complete'].includes(trip.status) ? t.itinerary : []).map(({ day, start_time, title, details }) => ({ day, start_time, title, details })),
@@ -65,7 +65,8 @@ Rules:
 - Bookings, changes, refunds, prices not in the context, early check-in, late checkout, extra guests, pets: never promise anything. Say Casey will confirm, and set notify_casey true.
 - Anything unsafe or broken (no heat, a leak, lockout, a smoke or carbon monoxide alarm, hot tub fault, damage, injury): set notify_casey true and urgent true. For fire, gas smell, a carbon monoxide alarm or a medical emergency, tell them to leave if needed and call 911 first. Then give the host phone if there is one.
 - Trail, river and road conditions change. Give general guidance and say to check current conditions. Never state today's conditions as fact.
-- If the question is unrelated to their trip, answer briefly if harmless, or steer back politely.
+- If the question is unrelated to their trip, answer briefly if harmless, or steer back politely.${isPartner(home) ? `
+- PARTNER HOST HOME: this house is run by its own host, not Ophir, and Ophir has no house manual, codes or access. For any question about the house itself (getting in, Wi-Fi, parking, appliances, heat, cleaning, checkout, anything broken), tell the guest to message their host through Airbnb or Vrbo, and set notify_casey false unless it is unsafe. For fire, gas, carbon monoxide or a medical emergency, they call 911 first. Ophir handles the trip: gear, guides, tickets, dinners and Durango questions.` : ''}
 Return JSON: {"answer": string, "notify_casey": boolean, "urgent": boolean, "summary": string (under 12 words, what Casey needs to know; empty when notify_casey is false)}.
 Trip context: ${JSON.stringify(ctx)}`;
       const convo = history.map((m) => `${m.direction === 'inbound' ? 'Guest' : 'Ask Ophir'}: ${m.body}`).join('\n');

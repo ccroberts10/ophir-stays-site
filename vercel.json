@@ -11,6 +11,10 @@
       "destination": "/report"
     },
     {
+      "source": "/h/:slug",
+      "destination": "/h"
+    },
+    {
       "source": "/upgrade/:token",
       "destination": "/upgrade"
     }
@@ -28,7 +32,7 @@
   },
   "headers": [
     {
-      "source": "/(trip|admin|report|upgrade)(.*)",
+      "source": "/(trip|admin|report|upgrade|h)(/.*)?",
       "headers": [
         {
           "key": "X-Robots-Tag",

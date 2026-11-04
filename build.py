@@ -128,7 +128,7 @@ FOOT = '''<footer class="site-foot">
       <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
       <p class="nl-status" role="status" aria-live="polite"></p>
     </form>
-    <nav class="foot-links" aria-label="Footer"><a href="/stay">Your Stay</a><a href="/basecamp">Basecamp</a><a href="/owners">Owners</a><a href="/buying">Buying a Rental</a><a href="/journal">Journal</a><a href="/trails">Bike Routes</a><a href="/trail-map">Trail Map</a><a href="/about">About</a><a href="mailto:casey@ophirstays.com">casey@ophirstays.com</a></nav>
+    <nav class="foot-links" aria-label="Footer"><a href="/stay">Your Stay</a><a href="/basecamp">Basecamp</a><a href="/owners">Owners</a><a href="/partner">Partner Hosts</a><a href="/buying">Buying a Rental</a><a href="/journal">Journal</a><a href="/trails">Bike Routes</a><a href="/trail-map">Trail Map</a><a href="/about">About</a><a href="mailto:casey@ophirstays.com">casey@ophirstays.com</a></nav>
     <div class="foot-base"><span>© 2026 Ophir Stays</span><span>Guest booking opens 2027</span></div>
   </div>
 </footer>
@@ -1712,9 +1712,186 @@ purg_body = f"""
 purg_page = page('Purgatory Vacation Rental Management · Ophir Stays',
                  'Vacation rental management at Purgatory and Durango Mountain: which condos and homes can rent nightly, what they earn, and how a local manager runs them.',
                  '/areas/purgatory', 'owners', purg_body, image='/assets/photos/hero-ski.jpg')
+
+# ---------------- PARTNER HOSTS (/partner) and the guest landing page (/h/<slug>) ----------------
+partner_body = f'''
+  <section class="center" style="padding-bottom:48px">
+    <div class="wrap narrow reveal">
+      <p class="eyebrow">Ophir Partner Hosts</p>
+      <h1 class="display">You run the house. We plan the trip.</h1>
+      <hr class="rule">
+      <p class="lead">For Durango hosts who manage their own home on Airbnb or Vrbo. Your guests get a local concierge for the rest of their trip, and you earn 10% of what they book with us. Free to join, nothing to manage.</p>
+      <p style="margin-top:28px"><a class="btn btn-rust" href="#apply">Become a Partner Host</a></p>
+    </div>
+  </section>
+
+  <section style="padding-top:0">
+    <div class="wrap">
+      <div class="reveal"><p class="eyebrow">How it works</p><h2 class="display">One link. That's the whole job.</h2></div>
+      <ol class="steps reveal">
+        <li><h3>Join</h3><p>Tell us about your home below. Casey calls within a day and sets you up.</p></li>
+        <li><h3>Share</h3><p>You get your home's own Ophir link and a card for the counter. Add the link to your check-in message.</p></li>
+        <li><h3>We plan</h3><p>Your guests tell us what they love. We build their days around the forecast and book what they want.</p></li>
+        <li><h3>You earn</h3><p>10% of every Ophir package and add-on your guests buy, paid monthly with a simple statement.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="tint">
+    <div class="wrap">
+      <div class="reveal center"><p class="eyebrow">What your guests get</p><h2 class="display">Durango, handled by a local.</h2></div>
+      <div class="grid3" style="margin-top:44px">
+        <div class="reveal">{photo('ski', 'Skis lined up in fresh snow at Purgatory')}<h3 style="margin-top:18px">Gear at the door</h3><p style="color:var(--muted);margin-top:8px">Skis, boots or bikes fitted at a Durango shop and delivered to your door. Lift tickets and lessons booked.</p></div>
+        <div class="reveal">{photo('coffee', 'A coffee on a Main Avenue counter in downtown Durango')}<h3 style="margin-top:18px">Tables and the first round</h3><p style="color:var(--muted);margin-top:8px">Dinner reservations held at the right places, with the first round on Ophir at our partner restaurants.</p></div>
+        <div class="reveal">{photo('bike', 'A rider on singletrack above Durango at golden hour')}<h3 style="margin-top:18px">Days that fit the weather</h3><p style="color:var(--muted);margin-top:8px">A private trip page with a plan built around the forecast, plus guides, fly fishing and rides booked.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap narrow reveal">
+      <p class="eyebrow">Questions</p>
+      <h2 class="display">The fine print, in plain words.</h2>
+      <div class="faq">
+        <details><summary>What does it cost me?</summary><p>Nothing. There is no fee and no contract. Leave any time.</p></details>
+        <details><summary>Does anything change about how I run my listing?</summary><p>No. You keep your listing, your calendar, your cleaner and your pricing. Ophir never touches the house.</p></details>
+        <details><summary>Will you market to my guests or try to book them elsewhere?</summary><p>Never. We only contact your guests about the trip they've already booked with you. We will not invite them to book another home or book direct. That's in writing in our partner agreement.</p></details>
+        <details><summary>What do I earn?</summary><p>10% of every Ophir package and add-on your guests buy, such as The Arranged Stay or gear fitted and delivered. Rentals, lift tickets and guides are billed at the shop's own rate with no markup, so they're not included. You get a statement and a payment each month.</p></details>
+        <details><summary>Who handles questions about the house?</summary><p>You do, as always. Your guests' trip page tells them to message you on Airbnb or Vrbo for anything about the home. We handle the trip.</p></details>
+        <details><summary>Where does the link go?</summary><p>In your check-in message, your house guide or on the card we give you for the counter. Airbnb and Vrbo don't allow outside links in the listing itself, so keep it to messages sent after booking.</p></details>
+      </div>
+    </div>
+  </section>
+
+  <section class="tint" id="apply">
+    <div class="wrap split top">
+      <div class="reveal">
+        <p class="eyebrow">Join</p>
+        <h2 class="display">Become a Partner Host.</h2>
+        <p class="lead">We're setting up fifteen Durango homes before ski season. Casey reads every application and calls within a day.</p>
+        <p class="fine">Prefer to talk first? Email <a href="mailto:casey@ophirstays.com">casey@ophirstays.com</a>.</p>
+      </div>
+      <div class="reveal" id="ph-box">
+        <form class="form" id="ph-form" novalidate>
+          <div class="field"><label for="p-name">Your name</label><input id="p-name" name="name" autocomplete="name" required></div>
+          <div class="field"><label for="p-email">Email</label><input id="p-email" name="email" type="email" autocomplete="email" required></div>
+          <div class="field"><label for="p-phone">Phone</label><input id="p-phone" name="phone" type="tel" autocomplete="tel"></div>
+          <div class="field"><label for="p-home">What guests call the home</label><input id="p-home" name="home_name" placeholder="The Boulevard Cottage"></div>
+          <div class="field full"><label for="p-addr">Home address</label><input id="p-addr" name="address" autocomplete="street-address" required></div>
+          <div class="field"><label for="p-area">Area</label><select id="p-area" name="area">{''.join(f'<option value="{v}">{t}</option>' for v, t in AREA_OPTS)}</select></div>
+          <div class="field"><label for="p-beds">Bedrooms</label><select id="p-beds" name="bedrooms">{''.join(f'<option>{n}</option>' for n in range(1, 9))}</select></div>
+          <div class="field"><label for="p-sleeps">Sleeps</label><input id="p-sleeps" name="sleeps" type="number" min="1" max="30"></div>
+          <div class="field"><label for="p-url">Listing link</label><input id="p-url" name="listing_url" placeholder="airbnb.com/rooms/…"></div>
+          <div class="field full"><label for="p-notes">Anything else</label><textarea id="p-notes" name="notes" placeholder="How often it books, who your guests usually are, what they ask you for"></textarea></div>
+          <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+          <div class="field full"><button class="btn btn-rust" type="submit">Apply</button><p class="form-status" role="status" aria-live="polite"></p></div>
+        </form>
+        <div class="thanks" tabindex="-1"><h3>Thank you.</h3><p style="color:var(--muted);margin-top:8px">Casey will call or email within a day to set you up.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section style="padding:44px 0;background:var(--charcoal);color:#ECE4D3">
+    <div class="wrap narrow center reveal">
+      <p class="eyebrow" style="color:#E08A5C">Ready to hand off the house too?</p>
+      <p class="lead" style="color:#ECE4D3;margin-top:10px">Our first ten managed homes keep a founding rate of 22% for life. <a class="link" style="color:#fff" href="/owners">See full management</a></p>
+    </div>
+  </section>
+'''
+PARTNER_JS = '''
+<script>
+(function(){
+  var f=document.getElementById('ph-form'),st=f.querySelector('.form-status');
+  f.addEventListener('submit',async function(e){
+    e.preventDefault();st.className='form-status';
+    var miss=[].filter.call(f.querySelectorAll('[required]'),function(i){return !i.value.trim()});
+    if(miss.length){st.textContent='Please add your name, email and the home address.';st.classList.add('err');miss[0].focus();return}
+    if(!/^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$/.test(f.email.value)){st.textContent='Please check your email address.';st.classList.add('err');f.email.focus();return}
+    var btn=f.querySelector('button');btn.disabled=true;btn.textContent='Sending…';
+    try{var r=await fetch('/api/partner?action=apply',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(Object.fromEntries(new FormData(f)))});if(!r.ok)throw 0;
+      var bx=document.getElementById('ph-box');bx.classList.add('sent');bx.querySelector('.thanks').focus();
+    }catch(_){st.textContent='Something went wrong. Please email casey@ophirstays.com and we\\'ll reply today.';st.classList.add('err');btn.disabled=false;btn.textContent='Apply'}
+  });
+})();
+</script>'''
+partner_page = page('Partner Hosts: A Durango Concierge for Your Guests · Ophir Stays',
+  'For Durango hosts who run their own Airbnb or Vrbo: give your guests a local concierge for gear, guides and dinners, and earn 10% of what they book. Free to join.',
+  '/partner', 'owners', partner_body, PARTNER_JS, image='/assets/photos/hero-fireplace.jpg')
+
+# Guest landing page for one Partner Host home. /h/<slug> is rewritten to /h (vercel.json); the script reads the slug.
+h_body = '''
+  <section class="center" style="padding-bottom:40px">
+    <div class="wrap narrow">
+      <p class="eyebrow" id="h-eyebrow">Your Durango trip</p>
+      <h1 class="display" id="h-title">Your stay, with Ophir.</h1>
+      <hr class="rule">
+      <p class="lead" id="h-lead">Your host has partnered with Ophir, a local Durango concierge, so the rest of your trip is as easy as the house. Tell us when you're coming and we'll open your private trip page.</p>
+    </div>
+  </section>
+  <section class="tint" id="start">
+    <div class="wrap split top">
+      <div>
+        <p class="eyebrow">What we do</p>
+        <h2 class="display">Tell us what you love. We handle the rest.</h2>
+        <ul class="days" style="list-style:none;padding:0;margin:24px 0 0">
+          <li>A day-by-day plan built around the forecast, free</li>
+          <li>Skis, boots or bikes fitted and delivered to the door</li>
+          <li>Lift tickets, guides, rafting and fly fishing booked</li>
+          <li>Dinner reservations held, the first round on us at partner restaurants</li>
+          <li>Ask Ophir, for anything about Durango, any time</li>
+        </ul>
+        <p class="fine">Planning is free. Pay only for what you add, and only if you want it. For anything about the house itself, message your host as usual.</p>
+      </div>
+      <div id="h-box">
+        <form class="form" id="h-form" novalidate>
+          <div class="field"><label for="g-name">Your name</label><input id="g-name" name="name" autocomplete="name" required></div>
+          <div class="field"><label for="g-email">Email</label><input id="g-email" name="email" type="email" autocomplete="email" required></div>
+          <div class="field"><label for="g-in">Check-in</label><input id="g-in" name="check_in" type="date" required></div>
+          <div class="field"><label for="g-out">Check-out</label><input id="g-out" name="check_out" type="date" required></div>
+          <div class="field"><label for="g-ad">Adults</label><select id="g-ad" name="adults">''' + ''.join(f'<option{" selected" if n == 2 else ""}>{n}</option>' for n in range(1, 17)) + '''</select></div>
+          <div class="field"><label for="g-ch">Children</label><select id="g-ch" name="children">''' + ''.join(f'<option>{n}</option>' for n in range(0, 11)) + '''</select></div>
+          <div class="field full"><label for="g-ph">Mobile (optional)</label><input id="g-ph" name="phone" type="tel" autocomplete="tel"></div>
+          <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+          <div class="field full"><button class="btn btn-rust" type="submit">Plan my trip</button><p class="form-status" role="status" aria-live="polite"></p></div>
+        </form>
+        <div class="thanks" tabindex="-1"><h3>Check your email.</h3><p style="color:var(--muted);margin-top:8px">Your private trip page is on its way.</p></div>
+      </div>
+    </div>
+  </section>
+'''
+H_JS = '''
+<script>
+(function(){
+  var slug=(location.pathname.split('/')[2]||'').toLowerCase(),f=document.getElementById('h-form'),st=f.querySelector('.form-status');
+  var esc=function(s){return String(s||'').replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})};
+  var t=new Date().toLocaleDateString('en-CA');f.check_in.min=t;f.check_out.min=t;
+  f.check_in.addEventListener('change',function(){f.check_out.min=f.check_in.value||t});
+  fetch('/api/partner?h='+encodeURIComponent(slug)).then(function(r){return r.ok?r.json():Promise.reject()}).then(function(h){
+    document.title='Your stay at '+h.name+' · Ophir Stays';
+    document.getElementById('h-eyebrow').textContent=h.area||'Durango';
+    document.getElementById('h-title').textContent='Your stay at '+h.name+'.';
+    document.getElementById('h-lead').innerHTML=esc(h.host_first)+' has partnered with Ophir, a local Durango concierge, so the rest of your trip is as easy as the house. Tell us when you\\'re coming and we\\'ll open your private trip page.';
+  }).catch(function(){document.getElementById('h-lead').textContent='This link isn\\'t active yet. Email casey@ophirstays.com and we\\'ll help you plan your trip.';f.style.display='none'});
+  f.addEventListener('submit',async function(e){
+    e.preventDefault();st.className='form-status';
+    var miss=[].filter.call(f.querySelectorAll('[required]'),function(i){return !i.value.trim()});
+    if(miss.length){st.textContent='Please add your name, email and dates.';st.classList.add('err');miss[0].focus();return}
+    if(!/^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$/.test(f.email.value)){st.textContent='Please check your email address.';st.classList.add('err');f.email.focus();return}
+    if(f.check_out.value<=f.check_in.value){st.textContent='Check-out must be after check-in.';st.classList.add('err');f.check_out.focus();return}
+    var btn=f.querySelector('button');btn.disabled=true;btn.textContent='Opening your trip…';
+    try{var r=await fetch('/api/partner?action=trip&h='+encodeURIComponent(slug),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(Object.fromEntries(new FormData(f)))});
+      var d=await r.json().catch(function(){return {}});if(!r.ok)throw d.error||0;
+      if(d.url){location.href=d.url;return}
+      var bx=document.getElementById('h-box');bx.classList.add('sent');bx.querySelector('.thanks').focus();
+    }catch(err){st.textContent=typeof err==='string'?err:'Something went wrong. Please email casey@ophirstays.com and we\\'ll reply today.';st.classList.add('err');btn.disabled=false;btn.textContent='Plan my trip'}
+  });
+})();
+</script>'''
+h_page = page('Your Durango trip · Ophir Stays', 'Plan your Durango trip with Ophir, a local concierge.', '/h', 'stay', h_body, H_JS).replace('<meta name="description"', '<meta name="robots" content="noindex, nofollow">\n<meta name="description"', 1)
+
 os.makedirs('areas', exist_ok=True)
-for name, html in [('index.html', home), ('owners.html', owners), ('about.html', about), ('journal.html', journal), ('journal/durango-rides.html', post), ('journal/durango-home-earnings.html', post2), ('journal/where-to-eat-durango.html', post3), ('journal/durango-short-term-rental-rules.html', post4), ('trail-map.html', trailmap), ('trails.html', trails_index), ('guest-app.html', guestapp), ('estimate.html', estimate_page), ('homes.html', homes_page), ('stay.html', stay_page), ('areas/purgatory.html', purg_page), ('basecamp.html', basecamp_page), ('buying.html', buying_page)] + [(f"homes/{h['slug']}.html", home_page(h)) for h in LIVE_HOMES] + [(f"trails/{r['slug']}.html", route_page(r)) for r in ROUTES] + [(f"trails/{r['slug']}.html", hc_page(r)) for r in HIGH_COUNTRY]:
+for name, html in [('index.html', home), ('owners.html', owners), ('about.html', about), ('journal.html', journal), ('journal/durango-rides.html', post), ('journal/durango-home-earnings.html', post2), ('journal/where-to-eat-durango.html', post3), ('journal/durango-short-term-rental-rules.html', post4), ('trail-map.html', trailmap), ('trails.html', trails_index), ('guest-app.html', guestapp), ('estimate.html', estimate_page), ('homes.html', homes_page), ('stay.html', stay_page), ('areas/purgatory.html', purg_page), ('basecamp.html', basecamp_page), ('buying.html', buying_page), ('partner.html', partner_page), ('h.html', h_page)] + [(f"homes/{h['slug']}.html", home_page(h)) for h in LIVE_HOMES] + [(f"trails/{r['slug']}.html", route_page(r)) for r in ROUTES] + [(f"trails/{r['slug']}.html", hc_page(r)) for r in HIGH_COUNTRY]:
     open(name, 'w').write(html)
 open('sitemap.xml', 'w').write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">\n' +
-    ''.join(f'<url><loc>https://ophirstays.com{p}</loc><lastmod>2026-10-18</lastmod>' + ('<image:image><image:loc>https://ophirstays.com/assets/ophir-durango-trail-map.jpg</image:loc></image:image>' if p == '/trail-map' else ''.join(f'<image:image><image:loc>https://ophirstays.com/assets/routes/{p[8:]}{x}.jpg</image:loc></image:image>' for x in ('', '-card')) if p.startswith('/trails/') else '') + '</url>\n' for p in ['/', '/stay', '/homes', '/owners', '/about', '/journal', '/journal/durango-rides', '/journal/durango-home-earnings', '/journal/where-to-eat-durango', '/journal/durango-short-term-rental-rules', '/trail-map', '/trails', '/guest-app', '/estimate', '/areas/purgatory', '/basecamp', '/buying'] + [f"/trails/{r['slug']}" for r in ROUTES + HIGH_COUNTRY] + [f"/homes/{h['slug']}" for h in HOMES if not h['sample']]) + '</urlset>\n')
+    ''.join(f'<url><loc>https://ophirstays.com{p}</loc><lastmod>2026-10-18</lastmod>' + ('<image:image><image:loc>https://ophirstays.com/assets/ophir-durango-trail-map.jpg</image:loc></image:image>' if p == '/trail-map' else ''.join(f'<image:image><image:loc>https://ophirstays.com/assets/routes/{p[8:]}{x}.jpg</image:loc></image:image>' for x in ('', '-card')) if p.startswith('/trails/') else '') + '</url>\n' for p in ['/', '/stay', '/homes', '/owners', '/about', '/journal', '/journal/durango-rides', '/journal/durango-home-earnings', '/journal/where-to-eat-durango', '/journal/durango-short-term-rental-rules', '/trail-map', '/trails', '/guest-app', '/estimate', '/areas/purgatory', '/basecamp', '/buying', '/partner'] + [f"/trails/{r['slug']}" for r in ROUTES + HIGH_COUNTRY] + [f"/homes/{h['slug']}" for h in HOMES if not h['sample']]) + '</urlset>\n')
 print('built')

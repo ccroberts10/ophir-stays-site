@@ -128,7 +128,7 @@ FOOT = '''<footer class="site-foot">
       <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
       <p class="nl-status" role="status" aria-live="polite"></p>
     </form>
-    <nav class="foot-links" aria-label="Footer"><a href="/stay">Your Stay</a><a href="/basecamp">Basecamp</a><a href="/owners">Owners</a><a href="/journal">Journal</a><a href="/trails">Bike Routes</a><a href="/trail-map">Trail Map</a><a href="/about">About</a><a href="mailto:casey@ophirstays.com">casey@ophirstays.com</a></nav>
+    <nav class="foot-links" aria-label="Footer"><a href="/stay">Your Stay</a><a href="/basecamp">Basecamp</a><a href="/owners">Owners</a><a href="/buying">Buying a Rental</a><a href="/journal">Journal</a><a href="/trails">Bike Routes</a><a href="/trail-map">Trail Map</a><a href="/about">About</a><a href="mailto:casey@ophirstays.com">casey@ophirstays.com</a></nav>
     <div class="foot-base"><span>© 2026 Ophir Stays</span><span>Guest booking opens 2027</span></div>
   </div>
 </footer>
@@ -354,13 +354,16 @@ AREA_OPTS = [('downtown','Downtown Durango'),('valley','Animas Valley'),('purgat
 ESTIMATE_FORM = f"""<form class="form" id="estimate-form" novalidate>
           <fieldset class="field full roles"><legend>I am</legend>
             <label class="chip"><input type="radio" name="role" value="owner" checked><span>The owner</span></label>
-            <label class="chip"><input type="radio" name="role" value="agent"><span>A real estate agent</span></label></fieldset>
+            <label class="chip"><input type="radio" name="role" value="agent"><span>A real estate agent</span></label>
+            <label class="chip"><input type="radio" name="role" value="buyer"><span>Buying a home</span></label></fieldset>
           <div class="field"><label for="f-name">Your name</label><input id="f-name" name="name" autocomplete="name" required></div>
           <div class="field"><label for="f-email">Email</label><input id="f-email" name="email" type="email" autocomplete="email" required></div>
           <div class="field"><label for="f-phone">Phone</label><input id="f-phone" name="phone" type="tel" autocomplete="tel"></div>
           <div class="field agent-only"><label for="f-brk">Brokerage</label><input id="f-brk" name="brokerage" autocomplete="organization"></div>
           <div class="field agent-only"><label for="f-own">Owner's name</label><input id="f-own" name="owner_name"><span class="hint">Shown on the report.</span></div>
-          <div class="field full"><label for="f-addr">Home address</label><input id="f-addr" name="address" autocomplete="street-address" required></div>
+          <div class="field full"><label for="f-addr">Home address</label><input id="f-addr" name="address" autocomplete="street-address" required><span class="hint buyer-only">The home you're looking at, or paste the listing link.</span></div>
+          <div class="field buyer-only"><label for="f-price">Asking price</label><input id="f-price" name="asking_price" inputmode="numeric" placeholder="e.g. $1,250,000"></div>
+          <div class="field buyer-only"><label for="f-bagent">Your agent</label><input id="f-bagent" name="buyer_agent" placeholder="Optional"><span class="hint">We'll copy them if you like.</span></div>
           <div class="field"><label for="f-area">Area</label><select id="f-area" name="area">{''.join(f'<option value="{k}">{v}</option>' for k,v in AREA_OPTS)}</select></div>
           <div class="field"><label for="f-type">Type of home</label><select id="f-type" name="home_type"><option value="house">House</option><option value="cabin">Cabin</option><option value="townhome">Townhome</option><option value="condo">Condo</option></select></div>
           <div class="field"><label for="f-beds">Bedrooms</label><select id="f-beds" name="bedrooms" required><option value="">Select</option>{''.join(f'<option>{n}</option>' for n in range(1,9))}</select></div>
@@ -369,7 +372,7 @@ ESTIMATE_FORM = f"""<form class="form" id="estimate-form" novalidate>
           <div class="field"><label for="f-hoa">HOA</label><select id="f-hoa" name="hoa"><option value="">Not sure</option><option>No HOA</option><option>HOA allows nightly rentals</option><option>HOA restricts rentals</option></select></div>
           <fieldset class="field full"><legend>Features</legend><div class="chips">{''.join(f'<label class="chip"><input type="checkbox" name="features" value="{k}"><span>{v}</span></label>' for k,v in FEATURE_OPTS)}</div></fieldset>
           <div class="field"><label for="f-use">Rented now?</label><select id="f-use" name="current_use"><option value="">Select</option><option>Yes, I manage it myself</option><option>Yes, with a manager</option><option>Long-term rental</option><option>Not yet, personal use only</option></select></div>
-          <div class="field"><label for="f-rev">Last 12 months' rent</label><input id="f-rev" name="current_rent" inputmode="numeric" placeholder="Optional"><span class="hint">Sets the year-one guarantee baseline.</span></div>
+          <div class="field"><label for="f-rev">Last 12 months' rent</label><input id="f-rev" name="current_rent" inputmode="numeric" placeholder="Optional"><span class="hint not-buyer">Sets the year-one guarantee baseline.</span><span class="hint buyer-only">The seller's numbers, if you have them.</span></div>
           <div class="field full"><label for="f-src">How did you hear about us?</label><input id="f-src" name="source" placeholder="A friend, an agent, a letter…"></div>
           <div class="field full"><label for="f-notes">Anything we should know?</label><textarea id="f-notes" name="notes"></textarea></div>
           <div class="hp" aria-hidden="true"><label for="f-web">Website</label><input id="f-web" name="website" tabindex="-1" autocomplete="off"></div>
@@ -564,8 +567,8 @@ FORM_JS = '''
 <script>
 (function(){
   var f=document.getElementById('estimate-form'),box=document.getElementById('estimate-box'),st=f.querySelector('.form-status');
-  var setRole=function(){var ag=f.role.value==='agent';f.querySelectorAll('.agent-only').forEach(function(el){el.hidden=!ag})};[].forEach.call(f.role,function(r){r.onchange=setRole});setRole();
-  var q=new URLSearchParams(location.search);if(q.get('role')==='agent'){f.role.value='agent';setRole()}
+  var setRole=function(){var v=f.role.value;f.querySelectorAll('.agent-only').forEach(function(el){el.hidden=v!=='agent'});f.querySelectorAll('.buyer-only').forEach(function(el){el.hidden=v!=='buyer'});f.querySelectorAll('.not-buyer').forEach(function(el){el.hidden=v==='buyer'})};[].forEach.call(f.role,function(r){r.onchange=setRole});
+  var q=new URLSearchParams(location.search),r0=q.get('role')||f.dataset.role;if(r0==='agent'||r0==='buyer')f.role.value=r0;setRole();
   f.addEventListener('submit',async function(e){
     e.preventDefault();st.className='form-status';
     var miss=[].filter.call(f.querySelectorAll('[required]'),function(i){return !i.value.trim()});
@@ -1090,7 +1093,7 @@ post4_body = f"""
       </ul>
 
       <h2>How Ophir handles it</h2>
-      <p>Before we sign a home, we check its zoning and HOA documents with the owner. Once it's live, we register for and remit taxes on direct bookings, act as the local contact, and keep occupancy and parking inside the county's guidelines. If you're not sure where your home stands, we'll look it up for you.</p>
+      <p>Before we sign a home, we check its zoning and HOA documents with the owner. Once it's live, we register for and remit taxes on direct bookings, act as the local contact, and keep occupancy and parking inside the county's guidelines. If you're not sure where your home stands, we'll look it up for you. Buying? We'll <a href="/buying">check a home and estimate its earnings</a> before you offer.</p>
       <p style="margin-top:32px"><a class="btn btn-rust" href="/owners#estimate">Get your free estimate</a></p>
 
       <h2 style="font-size:20px;margin-top:56px">Sources</h2>
@@ -1438,6 +1441,69 @@ estimate_body = f'''
 '''
 estimate_page = page('Free Durango Vacation Rental Earnings Estimate · Ophir Stays', 'Owners and agents: tell us about a Durango home and get a free three-page earnings report within 24 hours, with monthly rent, what the owner keeps and comparable homes.', '/estimate', 'owners', estimate_body, FORM_JS)
 
+# ---------------- BUYERS ----------------
+BUY_FAQ = [
+ ('Does it cost anything?', 'No. The estimate and the rental check are free, and you owe nothing unless you buy the home and sign with Ophir.'),
+ ('Can you tell me if a home can rent nightly?', 'We check the parcel (city or county), the city permit status if it is in town, and the HOA covenants we can get. We tell you what we find and what to confirm in writing during your inspection period. It is not legal advice, and the final word is the HOA and the city.'),
+ ('How fast can the home take guests after closing?', 'Usually two to four weeks: photos, linens, a smart lock, the gear room and listings. If you tell us your closing date early, we can have most of it lined up before you get the keys.'),
+ ('I already have an agent. Does this change anything?', 'No. Keep your agent. We send the report to you, and to them if you like. Agents can also request it for you.'),
+]
+buy_faq_html = ''.join(f'<details><summary>{q}</summary><p>{a}</p></details>' for q,a in BUY_FAQ)
+POST_LD['/buying'] = '<script type="application/ld+json">' + _json.dumps({"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":q,"acceptedAnswer":{"@type":"Answer","text":a}} for q,a in BUY_FAQ]}) + '</script>'
+buying_body = f"""
+  <section class="center" style="padding-bottom:48px">
+    <div class="wrap narrow reveal">
+      <p class="eyebrow">For buyers</p>
+      <h1 class="display">Buying a vacation rental in Durango?</h1>
+      <hr class="rule">
+      <p class="lead">Know what it will earn before you make an offer. Tell us about the home and within 24 hours you get a free earnings report from a local manager: rent month by month, what you keep after every cost, and whether the home can rent nightly at all.</p>
+      <p style="margin-top:32px"><a class="btn btn-rust" href="#estimate">Get a free estimate</a></p>
+    </div>
+  </section>
+  <div class="wrap">{photo('hero-fireplace', 'A great room with the fire lit at dusk in a Durango mountain home')}</div>
+
+  <section>
+    <div class="wrap narrow article">
+      <h2>Three things to check before you offer</h2>
+      <p><strong>1. City or county.</strong> Inside Durango city limits, nightly rentals need a city permit, the residential permits are capped with waitlists, and <strong>a permit ends when the home sells</strong>. If the listing says "great rental," ask whether the permit survives the sale. It doesn't. In unincorporated La Plata County there is no rental permit, only lodging and sales tax.</p>
+      <p><strong>2. The HOA.</strong> In the county, the covenants are usually the real answer. Some of the area's best neighborhoods, including the Glacier Club, Edgemont and Sky Ridge, don't allow short-term rentals at all. Get it in writing from the HOA during your inspection period.</p>
+      <p><strong>3. The seller's numbers.</strong> A seller's rental history reflects their manager, their pricing and how often they used the home themselves. We build your estimate from comparable Durango homes, then check it against the seller's numbers if you have them.</p>
+      <p class="fine">More detail in <a href="/journal/durango-short-term-rental-rules">the full city and county rental rules</a>. A plain-English summary, not legal advice.</p>
+
+      <h2>What you get</h2>
+      <ul>
+        <li><strong>A three-page earnings report within 24 hours.</strong> Expected rent by month, a range, and what you keep after booking fees, management, utilities, supplies and a repair reserve. <a href="/assets/ophir-earnings-estimate-sample.pdf">See a sample.</a></li>
+        <li><strong>A rental check.</strong> City or county, permit status, and what we know about the HOA.</li>
+        <li><strong>A setup list.</strong> What the home needs to rent well (hot tub, gear room, beds for a group) and roughly what it costs.</li>
+        <li><strong>A manager lined up at closing.</strong> If you buy and choose Ophir, the home can be ready for guests within weeks of getting the keys, at our founding rate of 22% for the first ten homes.</li>
+      </ul>
+      <p>Casey Roberts runs Ophir and checks every number himself. He's lived in Durango for 23 years and rides, skis and fishes the places your guests will come for.</p>
+
+      <h2>Questions buyers ask</h2>
+      <div class="faq">{buy_faq_html}</div>
+      <p class="fine" style="margin-top:20px">Agents: request a report for your buyer <a href="/estimate?role=agent">here</a>, or send them this page.</p>
+    </div>
+  </section>
+
+  <section class="tint" id="estimate">
+    <div class="wrap split top">
+      <div class="reveal">
+        <p class="eyebrow">Free earnings estimate</p>
+        <h2 class="display">What could this home earn?</h2>
+        <p class="lead">The address or listing link, bedrooms and asking price are enough to start. The more you tell us, the sharper the numbers.</p>
+        <p class="fine" style="margin-top:20px">Questions? <a href="mailto:casey@ophirstays.com">casey@ophirstays.com</a> or 970-779-8992.</p>
+      </div>
+      <div class="reveal" id="estimate-box">
+        {ESTIMATE_FORM.replace('id="estimate-form"', 'id="estimate-form" data-role="buyer"', 1)}
+        <div class="thanks" tabindex="-1"><svg aria-hidden="true"><use href="#summit"/></svg><h3>Thank you. We have your request.</h3><p style="color:var(--muted);margin:12px 0 0">Casey will check the numbers and email your report within 24 hours.</p></div>
+      </div>
+    </div>
+  </section>
+"""
+buying_page = page('Buying a Vacation Rental in Durango? Free Earnings Estimate · Ophir Stays',
+                   'Buying a short-term rental in Durango, Colorado? Get a free earnings report within 24 hours from a local manager: monthly rent, what you keep, and whether the home can rent nightly.',
+                   '/buying', 'owners', buying_body, FORM_JS, image='/assets/photos/hero-fireplace.jpg')
+
 os.makedirs('journal', exist_ok=True); os.makedirs('homes', exist_ok=True); os.makedirs('trails', exist_ok=True)
 
 # ---------------- AREA: PURGATORY ----------------
@@ -1530,8 +1596,8 @@ purg_page = page('Purgatory Vacation Rental Management · Ophir Stays',
                  'Vacation rental management at Purgatory and Durango Mountain: which condos and homes can rent nightly, what they earn, and how a local manager runs them.',
                  '/areas/purgatory', 'owners', purg_body, image='/assets/photos/hero-ski.jpg')
 os.makedirs('areas', exist_ok=True)
-for name, html in [('index.html', home), ('owners.html', owners), ('about.html', about), ('journal.html', journal), ('journal/durango-rides.html', post), ('journal/durango-home-earnings.html', post2), ('journal/where-to-eat-durango.html', post3), ('journal/durango-short-term-rental-rules.html', post4), ('trail-map.html', trailmap), ('trails.html', trails_index), ('guest-app.html', guestapp), ('estimate.html', estimate_page), ('homes.html', homes_page), ('stay.html', stay_page), ('areas/purgatory.html', purg_page), ('basecamp.html', basecamp_page)] + [(f"homes/{h['slug']}.html", home_page(h)) for h in LIVE_HOMES] + [(f"trails/{r['slug']}.html", route_page(r)) for r in ROUTES]:
+for name, html in [('index.html', home), ('owners.html', owners), ('about.html', about), ('journal.html', journal), ('journal/durango-rides.html', post), ('journal/durango-home-earnings.html', post2), ('journal/where-to-eat-durango.html', post3), ('journal/durango-short-term-rental-rules.html', post4), ('trail-map.html', trailmap), ('trails.html', trails_index), ('guest-app.html', guestapp), ('estimate.html', estimate_page), ('homes.html', homes_page), ('stay.html', stay_page), ('areas/purgatory.html', purg_page), ('basecamp.html', basecamp_page), ('buying.html', buying_page)] + [(f"homes/{h['slug']}.html", home_page(h)) for h in LIVE_HOMES] + [(f"trails/{r['slug']}.html", route_page(r)) for r in ROUTES]:
     open(name, 'w').write(html)
 open('sitemap.xml', 'w').write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">\n' +
-    ''.join(f'<url><loc>https://ophirstays.com{p}</loc><lastmod>2026-10-18</lastmod>' + ('<image:image><image:loc>https://ophirstays.com/assets/ophir-durango-trail-map.jpg</image:loc></image:image>' if p == '/trail-map' else ''.join(f'<image:image><image:loc>https://ophirstays.com/assets/routes/{p[8:]}{x}.jpg</image:loc></image:image>' for x in ('', '-card')) if p.startswith('/trails/') else '') + '</url>\n' for p in ['/', '/stay', '/homes', '/owners', '/about', '/journal', '/journal/durango-rides', '/journal/durango-home-earnings', '/journal/where-to-eat-durango', '/journal/durango-short-term-rental-rules', '/trail-map', '/trails', '/guest-app', '/estimate', '/areas/purgatory', '/basecamp'] + [f"/trails/{r['slug']}" for r in ROUTES] + [f"/homes/{h['slug']}" for h in HOMES if not h['sample']]) + '</urlset>\n')
+    ''.join(f'<url><loc>https://ophirstays.com{p}</loc><lastmod>2026-10-18</lastmod>' + ('<image:image><image:loc>https://ophirstays.com/assets/ophir-durango-trail-map.jpg</image:loc></image:image>' if p == '/trail-map' else ''.join(f'<image:image><image:loc>https://ophirstays.com/assets/routes/{p[8:]}{x}.jpg</image:loc></image:image>' for x in ('', '-card')) if p.startswith('/trails/') else '') + '</url>\n' for p in ['/', '/stay', '/homes', '/owners', '/about', '/journal', '/journal/durango-rides', '/journal/durango-home-earnings', '/journal/where-to-eat-durango', '/journal/durango-short-term-rental-rules', '/trail-map', '/trails', '/guest-app', '/estimate', '/areas/purgatory', '/basecamp', '/buying'] + [f"/trails/{r['slug']}" for r in ROUTES] + [f"/homes/{h['slug']}" for h in HOMES if not h['sample']]) + '</urlset>\n')
 print('built')

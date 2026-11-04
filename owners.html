@@ -216,13 +216,16 @@
         <form class="form" id="estimate-form" novalidate>
           <fieldset class="field full roles"><legend>I am</legend>
             <label class="chip"><input type="radio" name="role" value="owner" checked><span>The owner</span></label>
-            <label class="chip"><input type="radio" name="role" value="agent"><span>A real estate agent</span></label></fieldset>
+            <label class="chip"><input type="radio" name="role" value="agent"><span>A real estate agent</span></label>
+            <label class="chip"><input type="radio" name="role" value="buyer"><span>Buying a home</span></label></fieldset>
           <div class="field"><label for="f-name">Your name</label><input id="f-name" name="name" autocomplete="name" required></div>
           <div class="field"><label for="f-email">Email</label><input id="f-email" name="email" type="email" autocomplete="email" required></div>
           <div class="field"><label for="f-phone">Phone</label><input id="f-phone" name="phone" type="tel" autocomplete="tel"></div>
           <div class="field agent-only"><label for="f-brk">Brokerage</label><input id="f-brk" name="brokerage" autocomplete="organization"></div>
           <div class="field agent-only"><label for="f-own">Owner's name</label><input id="f-own" name="owner_name"><span class="hint">Shown on the report.</span></div>
-          <div class="field full"><label for="f-addr">Home address</label><input id="f-addr" name="address" autocomplete="street-address" required></div>
+          <div class="field full"><label for="f-addr">Home address</label><input id="f-addr" name="address" autocomplete="street-address" required><span class="hint buyer-only">The home you're looking at, or paste the listing link.</span></div>
+          <div class="field buyer-only"><label for="f-price">Asking price</label><input id="f-price" name="asking_price" inputmode="numeric" placeholder="e.g. $1,250,000"></div>
+          <div class="field buyer-only"><label for="f-bagent">Your agent</label><input id="f-bagent" name="buyer_agent" placeholder="Optional"><span class="hint">We'll copy them if you like.</span></div>
           <div class="field"><label for="f-area">Area</label><select id="f-area" name="area"><option value="downtown">Downtown Durango</option><option value="valley">Animas Valley</option><option value="purgatory">Purgatory and Durango Mountain</option><option value="vallecito">Vallecito Lake and Bayfield</option><option value="west">West of Durango (Hesperus, Lightner Creek)</option><option value="east">East of Durango (Florida Road, Florida Mesa)</option><option value="other">Somewhere else in La Plata County</option></select></div>
           <div class="field"><label for="f-type">Type of home</label><select id="f-type" name="home_type"><option value="house">House</option><option value="cabin">Cabin</option><option value="townhome">Townhome</option><option value="condo">Condo</option></select></div>
           <div class="field"><label for="f-beds">Bedrooms</label><select id="f-beds" name="bedrooms" required><option value="">Select</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option></select></div>
@@ -231,7 +234,7 @@
           <div class="field"><label for="f-hoa">HOA</label><select id="f-hoa" name="hoa"><option value="">Not sure</option><option>No HOA</option><option>HOA allows nightly rentals</option><option>HOA restricts rentals</option></select></div>
           <fieldset class="field full"><legend>Features</legend><div class="chips"><label class="chip"><input type="checkbox" name="features" value="hot_tub"><span>Hot tub</span></label><label class="chip"><input type="checkbox" name="features" value="views"><span>Mountain views</span></label><label class="chip"><input type="checkbox" name="features" value="water"><span>On the river or lake</span></label><label class="chip"><input type="checkbox" name="features" value="ski_in"><span>Ski-in, ski-out</span></label><label class="chip"><input type="checkbox" name="features" value="gear"><span>Garage or gear room</span></label><label class="chip"><input type="checkbox" name="features" value="ac"><span>Air conditioning</span></label><label class="chip"><input type="checkbox" name="features" value="game"><span>Game or media room</span></label><label class="chip"><input type="checkbox" name="features" value="acreage"><span>Private acreage</span></label><label class="chip"><input type="checkbox" name="features" value="pets"><span>Pet friendly</span></label></div></fieldset>
           <div class="field"><label for="f-use">Rented now?</label><select id="f-use" name="current_use"><option value="">Select</option><option>Yes, I manage it myself</option><option>Yes, with a manager</option><option>Long-term rental</option><option>Not yet, personal use only</option></select></div>
-          <div class="field"><label for="f-rev">Last 12 months' rent</label><input id="f-rev" name="current_rent" inputmode="numeric" placeholder="Optional"><span class="hint">Sets the year-one guarantee baseline.</span></div>
+          <div class="field"><label for="f-rev">Last 12 months' rent</label><input id="f-rev" name="current_rent" inputmode="numeric" placeholder="Optional"><span class="hint not-buyer">Sets the year-one guarantee baseline.</span><span class="hint buyer-only">The seller's numbers, if you have them.</span></div>
           <div class="field full"><label for="f-src">How did you hear about us?</label><input id="f-src" name="source" placeholder="A friend, an agent, a letter…"></div>
           <div class="field full"><label for="f-notes">Anything we should know?</label><textarea id="f-notes" name="notes"></textarea></div>
           <div class="hp" aria-hidden="true"><label for="f-web">Website</label><input id="f-web" name="website" tabindex="-1" autocomplete="off"></div>
@@ -274,7 +277,7 @@
       <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
       <p class="nl-status" role="status" aria-live="polite"></p>
     </form>
-    <nav class="foot-links" aria-label="Footer"><a href="/stay">Your Stay</a><a href="/basecamp">Basecamp</a><a href="/owners">Owners</a><a href="/journal">Journal</a><a href="/trails">Bike Routes</a><a href="/trail-map">Trail Map</a><a href="/about">About</a><a href="mailto:casey@ophirstays.com">casey@ophirstays.com</a></nav>
+    <nav class="foot-links" aria-label="Footer"><a href="/stay">Your Stay</a><a href="/basecamp">Basecamp</a><a href="/owners">Owners</a><a href="/buying">Buying a Rental</a><a href="/journal">Journal</a><a href="/trails">Bike Routes</a><a href="/trail-map">Trail Map</a><a href="/about">About</a><a href="mailto:casey@ophirstays.com">casey@ophirstays.com</a></nav>
     <div class="foot-base"><span>© 2026 Ophir Stays</span><span>Guest booking opens 2027</span></div>
   </div>
 </footer>
@@ -293,8 +296,8 @@ b.disabled=false;});})();
 <script>
 (function(){
   var f=document.getElementById('estimate-form'),box=document.getElementById('estimate-box'),st=f.querySelector('.form-status');
-  var setRole=function(){var ag=f.role.value==='agent';f.querySelectorAll('.agent-only').forEach(function(el){el.hidden=!ag})};[].forEach.call(f.role,function(r){r.onchange=setRole});setRole();
-  var q=new URLSearchParams(location.search);if(q.get('role')==='agent'){f.role.value='agent';setRole()}
+  var setRole=function(){var v=f.role.value;f.querySelectorAll('.agent-only').forEach(function(el){el.hidden=v!=='agent'});f.querySelectorAll('.buyer-only').forEach(function(el){el.hidden=v!=='buyer'});f.querySelectorAll('.not-buyer').forEach(function(el){el.hidden=v==='buyer'})};[].forEach.call(f.role,function(r){r.onchange=setRole});
+  var q=new URLSearchParams(location.search),r0=q.get('role')||f.dataset.role;if(r0==='agent'||r0==='buyer')f.role.value=r0;setRole();
   f.addEventListener('submit',async function(e){
     e.preventDefault();st.className='form-status';
     var miss=[].filter.call(f.querySelectorAll('[required]'),function(i){return !i.value.trim()});

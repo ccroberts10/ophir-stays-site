@@ -122,7 +122,7 @@ export default async function handler(req, res) {
         if (!e) return json(res, 404, { error: 'Not found' });
         const m = e.model, link = `${SITE}/report/${e.token}`, first = String(e.requester_name || '').split(/\s+/)[0] || 'Hello';
         const note = e.personal_note ? String(e.personal_note).split(/\n{2,}/).map((x) => `<p>${esc(x).replace(/\n/g, '<br>')}</p>`).join('') : '';
-        const forWho = e.requester_role === 'agent' && e.owner_name ? `your client ${esc(e.owner_name)}'s home at ` : '';
+        const forWho = e.requester_role === 'agent' && e.owner_name ? `your client ${esc(e.owner_name)}'s home at ` : e.requester_role === 'buyer' ? 'the home you\'re looking at, ' : '';
         await sendEmail({ to: e.requester_email, replyTo: process.env.OWNER_INBOX, subject: `Your Ophir earnings estimate: ${e.address}`,
           html: emailShell(`<p>${esc(first)},</p><p>Here is the earnings estimate for ${forWho}${esc(e.address)}.</p>${note}
             <table style="width:100%;border-top:2px solid #2A2826;margin:18px 0;font-family:Arial,sans-serif"><tr>

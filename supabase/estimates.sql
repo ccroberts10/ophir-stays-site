@@ -5,7 +5,7 @@ create table if not exists estimates (
   token text unique not null default encode(gen_random_bytes(16), 'hex'),
   created_at timestamptz not null default now(),
   status text not null default 'new',            -- new, sent, signed, closed
-  requester_role text,                            -- owner | agent
+  requester_role text,                            -- owner | agent | buyer
   requester_name text, requester_email text, requester_phone text, brokerage text,
   owner_name text, owner_email text,
   address text, area text, home_type text, bedrooms int, baths numeric, sleeps int,

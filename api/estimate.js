@@ -33,14 +33,15 @@ export default async function handler(req, res) {
 
   const b = readBody(req);
   if (b.website) return json(res, 200, { ok: true }); // honeypot
-  const role = b.role === 'agent' ? 'agent' : 'owner';
+  const role = ['agent', 'buyer'].includes(b.role) ? b.role : 'owner';
+  const buyerNote = role === 'buyer' ? [b.asking_price && `Asking price: ${clip(b.asking_price, 40)}`, b.buyer_agent && `Buyer's agent: ${clip(b.buyer_agent, 120)}`].filter(Boolean).join('\n') : '';
   const d = {
     requester_role: role, requester_name: clip(b.name, 120), requester_email: clip(b.email, 160).toLowerCase(), requester_phone: clip(b.phone, 40),
     brokerage: role === 'agent' ? clip(b.brokerage, 120) : null, owner_name: role === 'agent' ? clip(b.owner_name, 120) : null,
     address: clip(b.address, 200), area: AREAS[b.area] ? b.area : 'other', home_type: ['house', 'cabin', 'townhome', 'condo'].includes(b.home_type) ? b.home_type : 'house',
     bedrooms: Math.max(1, Math.min(10, parseInt(b.bedrooms, 10) || 0)) || null, baths: parseFloat(b.baths) || null, sleeps: parseInt(b.sleeps, 10) || null,
     features: [].concat(b.features || []).filter((f) => FEATURES[f]).slice(0, 12), hoa: clip(b.hoa, 40), current_use: clip(b.current_use, 60),
-    current_rent: parseInt(String(b.current_rent || '').replace(/[^\d]/g, ''), 10) || null, source: clip(b.source, 120), notes: clip(b.notes, 2000),
+    current_rent: parseInt(String(b.current_rent || '').replace(/[^\d]/g, ''), 10) || null, source: clip(b.source, 120), notes: clip([buyerNote, clip(b.notes, 2000)].filter(Boolean).join('\n'), 2200),
   };
   if (!d.requester_name || !d.address || !d.bedrooms || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(d.requester_email)) {
     return json(res, 400, { error: 'Please add your name, email, the home address and bedrooms.' });
@@ -61,7 +62,7 @@ export default async function handler(req, res) {
   try {
     await sendEmail({
       to: env('OWNER_INBOX'), replyTo: d.requester_email,
-      subject: `Estimate request: ${d.address}${role === 'agent' ? ' (from ' + d.requester_name + ')' : ''}`,
+      subject: `${role === 'buyer' ? 'BUYER estimate' : 'Estimate request'}: ${d.address}${role === 'agent' ? ' (from ' + d.requester_name + ')' : ''}`,
       html: emailShell(`${draft}<table style="font-size:14px">${lines}</table>${row ? `<p style="margin-top:20px"><a href="${SITE}/admin#estimate-${row.id}">Review and send the report</a> · <a href="${SITE}/report/${row.token}">Preview</a></p>` : '<p style="color:#9B2C1C">Not saved to the database (run supabase/estimates.sql). Reply by email.</p>'}`),
     });
   } catch (err) { console.error('notify', err.message); if (!row) return json(res, 502, { error: 'Could not send' }); }
@@ -70,7 +71,7 @@ export default async function handler(req, res) {
     const first = d.requester_name.split(/\s+/)[0];
     await sendEmail({
       to: d.requester_email, replyTo: env('OWNER_INBOX'), subject: `Your earnings estimate for ${d.address}`,
-      html: emailShell(`<p>${esc(first)},</p><p>Thank you. I have everything I need for ${esc(d.address)}. I'll check the numbers myself and send your report within 24 hours.</p><p>If there's anything about the home I should know, just reply to this email.</p><p>Casey Roberts<br>Ophir Stays · 970-779-8992</p>`),
+      html: emailShell(`<p>${esc(first)},</p><p>Thank you. I have everything I need for ${esc(d.address)}. I'll check the numbers myself and send your report within 24 hours${role === 'buyer' ? ', along with anything I know about whether the home can rent nightly' : ''}.</p><p>If there's anything about the home I should know, just reply to this email.</p><p>Casey Roberts<br>Ophir Stays · 970-779-8992</p>`),
     });
   } catch (err) { console.error('ack', err.message); }
   return json(res, 200, { ok: true });

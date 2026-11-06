@@ -256,6 +256,22 @@
    "h": 2400,
    "alt": "Casey on narrow ridge singletrack above forested valleys, La Plata peaks in the distance",
    "use": "Basecamp routes / Journal"
+  },
+  {
+   "file": "/assets/photos/library/arnica-meadow-bike.jpg",
+   "thumb": "/assets/photos/library/t/arnica-meadow-bike.jpg",
+   "w": 1512,
+   "h": 2016,
+   "alt": "Bike parked on singletrack through a meadow of yellow alpine wildflowers, high San Juan ridges under blue sky",
+   "use": "Basecamp / Instagram"
+  },
+  {
+   "file": "/assets/photos/library/alpine-lake-cirque.jpg",
+   "thumb": "/assets/photos/library/t/alpine-lake-cirque.jpg",
+   "w": 1800,
+   "h": 2400,
+   "alt": "Green alpine lake beneath a towering San Juan cirque under building clouds",
+   "use": "Basecamp routes / Journal"
   }
  ],
  "video": [
@@ -284,6 +300,24 @@
    "h": 1920,
    "seconds": 8,
    "alt": "Rider passing on red-dirt alpine singletrack through wildflowers, San Juan peaks behind",
+   "use": "Instagram Reel / Basecamp"
+  },
+  {
+   "file": "/assets/video/lizard-head-pan.mp4",
+   "poster": "/assets/video/lizard-head-pan.jpg",
+   "w": 1080,
+   "h": 1920,
+   "seconds": 13,
+   "alt": "Pan from Lizard Head across fall high country to a parked bike and the San Juan peaks",
+   "use": "Instagram Reel / Basecamp background"
+  },
+  {
+   "file": "/assets/video/fall-singletrack-pov.mp4",
+   "poster": "/assets/video/fall-singletrack-pov.jpg",
+   "w": 1080,
+   "h": 1920,
+   "seconds": 7,
+   "alt": "Rider's-eye view down red-dirt singletrack through fall grass toward San Juan peaks",
    "use": "Instagram Reel / Basecamp"
   }
  ]

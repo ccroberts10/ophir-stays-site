@@ -743,7 +743,7 @@ basecamp_body = f'''
 
   <section style="padding-top:0">
     <div class="wrap split">
-      <div class="reveal">{photo('basecamp-hero', 'A mountain biker climbing alpine singletrack above treeline in the San Juan Mountains', 'photo tall')}</div>
+      <div class="reveal"><div class="photo tall"><video class="bg-video" src="/assets/video/lizard-head-pan.mp4" poster="/assets/video/lizard-head-pan.jpg" autoplay muted loop playsinline preload="metadata" aria-label="Pan from Lizard Head across fall high country to a parked bike and the San Juan peaks"></video></div></div>
       <div class="reveal">
         <p class="eyebrow">What Basecamp handles</p>
         <h2 class="display">Every day planned around your riders.</h2>
@@ -788,7 +788,7 @@ basecamp_body = f'''
         </ol>
         <p class="fine">Every plan moves with the forecast and the group. Riders new to altitude start lower.</p>
       </div>
-      <div class="reveal"><div class="photo tall"><video class="bg-video" src="/assets/video/tundra-ride.mp4" poster="/assets/video/tundra-ride.jpg" autoplay muted loop playsinline preload="metadata" aria-label="Red-dirt tundra ridge under blue sky with the Needle Mountains on the horizon"></video></div></div><script>if(matchMedia('(prefers-reduced-motion:reduce)').matches){{var v=document.querySelector('.bg-video');v.removeAttribute('autoplay');v.pause();}}</script>
+      <div class="reveal"><div class="photo tall"><video class="bg-video" src="/assets/video/tundra-ride.mp4" poster="/assets/video/tundra-ride.jpg" autoplay muted loop playsinline preload="metadata" aria-label="Red-dirt tundra ridge under blue sky with the Needle Mountains on the horizon"></video></div></div><script>if(matchMedia('(prefers-reduced-motion:reduce)').matches){{document.querySelectorAll('.bg-video').forEach(function(v){{v.removeAttribute('autoplay');v.pause();}});}}</script>
     </div>
   </section>
 

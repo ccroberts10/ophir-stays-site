@@ -390,7 +390,7 @@ owners_body = f'''
       <p style="margin-top:32px"><a class="btn btn-rust" href="#estimate">Get your free estimate</a></p>
     </div>
   </section>
-  <div class="wrap">{photo('home-1', 'A Collection home in the mountains above Durango')}</div>
+  <div class="wrap">{photo('hero-golf', 'A golfer reading a putt at sunset, with the cliffs and peaks north of Durango behind')}</div>
 
   <section>
     <div class="wrap">

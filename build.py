@@ -699,7 +699,7 @@ stay_body = f'''
         <p class="eyebrow">Attention to detail</p>
         <h2 class="display">The small things are the whole thing.</h2>
         <ul class="standard" style="columns:1;margin-top:24px">
-          <li>Boots warmed in the dryer on powder mornings</li>
+          <li>Tomorrow's snow report texted to you the night before</li>
           <li>Each guest's gear labeled with their name</li>
           <li>Your coffee order, already in the kitchen</li>
           <li>Kids' bikes and helmets in the right sizes</li>

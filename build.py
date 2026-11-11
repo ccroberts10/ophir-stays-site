@@ -448,7 +448,7 @@ owners_body = f'''
       </div>
       <ul class="standard reveal">
         <li>Professional photography</li><li>Hotel-grade mattresses and white linens</li><li>A hot tub or a real view</li>
-        <li>A gear room: bikes, skis, boot dryers</li><li>Fast Wi-Fi and a smart lock</li><li>A kitchen stocked for a real dinner</li>
+        <li>Room for gear: bikes, skis and boots</li><li>Fast Wi-Fi and a smart lock</li><li>A kitchen stocked for a real dinner</li>
         <li>No deferred maintenance</li><li>Within 45 minutes of town or Purgatory</li><li>Permitted for short-term rental</li>
       </ul>
     </div>
@@ -1684,7 +1684,7 @@ purg_body = f"""
       </ul>
 
       <h2>Homes we take here</h2>
-      <p>Every Ophir home meets one standard. At Purgatory that also means a ski room or closet with a boot dryer, a plowed and reliable winter driveway, Wi-Fi of at least 100 Mbps, and beds for a group: most winter guests are families of six or more.</p>
+      <p>Every Ophir home meets one standard. At Purgatory that also means a ski room or closet for boots and gear, a plowed and reliable winter driveway, Wi-Fi of at least 100 Mbps, and beds for a group: most winter guests are families of six or more.</p>
 
       <h2>How we run a Purgatory home</h2>
       <ul>

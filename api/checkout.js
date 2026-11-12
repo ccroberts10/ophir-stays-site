@@ -27,6 +27,8 @@ export default async function handler(req, res) {
     const already = await db.select('payments', `trip_id=eq.${trip.id}&item=eq.${key}&status=eq.paid`);
     if (already.length) return json(res, 409, { error: 'Already added to your trip.' });
 
+    const d = (x, y) => new Date(x + 'T12:00:00').toLocaleDateString('en-US', y ? { month: 'short', day: 'numeric', year: 'numeric' } : { month: 'short', day: 'numeric' });
+    const dates = `${d(trip.check_in)} to ${d(trip.check_out, 1)}`;
     const session = await stripe('checkout/sessions', {
       mode: 'payment',
       success_url: `${SITE}/trip/${token}?paid=${encodeURIComponent(key)}`,
@@ -36,7 +38,7 @@ export default async function handler(req, res) {
       'line_items[0][price_data][currency]': 'usd',
       'line_items[0][price_data][unit_amount]': price.cents,
       'line_items[0][price_data][product_data][name]': `${price.label} · Ophir Stays`,
-      'line_items[0][price_data][product_data][description]': `${blurb} ${trip.check_in} to ${trip.check_out}.`,
+      'line_items[0][price_data][product_data][description]': `${blurb} Your stay: ${dates}.`,
       metadata: { trip_id: trip.id, item: key },
       payment_intent_data: { metadata: { trip_id: trip.id, item: key }, statement_descriptor_suffix: 'OPHIR STAYS' },
     });

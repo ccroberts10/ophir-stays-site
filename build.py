@@ -876,7 +876,7 @@ about_body = f'''
   </section>
   <section style="padding-top:0">
     <div class="wrap split">
-      <div class="reveal">{photo('casey', 'Casey Roberts and his son at an alpine lake in the San Juan Mountains above Durango', 'photo tall')}</div>
+      <div class="reveal">{photo('casey', 'Casey Roberts laughing as he opens a bottle of champagne in the mountains', 'photo tall')}</div>
       <div class="reveal">
         <p class="eyebrow">The founder</p>
         <h2 class="display">Casey Roberts</h2>

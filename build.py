@@ -215,7 +215,7 @@ home_body = f'''
         <p class="hero-sub">Locally owned and capped at twenty-five homes.</p>
         <div class="hero-btns">
           <a class="btn btn-rust" href="/owners#estimate">Owners: free estimate</a>
-          <a class="btn btn-light" href="#guest-list">Guests: opening 2027, join the list</a>
+          <a class="btn btn-light" href="#guest-list">Guests: join the 2027 list</a>
         </div>
       </div>
     </div>

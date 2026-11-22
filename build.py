@@ -187,8 +187,9 @@ def collection_grid():
 #   hero-ski.jpg  - hazy, flat snow shot. Replace with a crisp bluebird Purgatory or backcountry photo, landscape, 2400px+.
 #   hero-golf.jpg, golf.jpg - weak golf shots. Replace before golf goes back on any page.
 # The homepage hero uses library/engineer-climb.jpg until a sharp winter photo is in.
-HERO_IMG = '/assets/photos/library/engineer-climb.jpg'
-HERO_ALT = 'A rider climbing singletrack toward Engineer Mountain under a clear blue sky'
+HERO_IMG = '/assets/photos/library/purg-storm-over-valley.jpg'
+HERO_IMG_WIDE = '/assets/photos/library/purg-aspen-turn.jpg'  # wide screens: skier on the right, room for text on the left
+HERO_ALT = 'A young skier on a Purgatory groomer below Twilight Peak and the snowy Animas Valley as a storm clears'
 
 EXPS = [('ski', 'Ski Purgatory', '/areas/purgatory', 'Thirty minutes up the valley. What a ski day from Durango looks like, and how we set one up.'),
         ('bike', 'Ride from town', '/trails', 'Ten mountain bike routes, easy to advanced, each with a map, elevation profile and free GPX.'),
@@ -207,7 +208,7 @@ CHECKLIST = [('What the fee is charged on.', 'Nightly rent only, or cleaning and
 
 home_body = f'''
   <section class="hero">
-    <img src="{HERO_IMG}" alt="{HERO_ALT}" fetchpriority="high">
+    <picture><source media="(min-width:721px)" srcset="{HERO_IMG_WIDE}"><img src="{HERO_IMG}" alt="{HERO_ALT}" fetchpriority="high"></picture>
     <div class="hero-in">
       <div class="wrap">
         <p class="eyebrow">Durango · Colorado</p>

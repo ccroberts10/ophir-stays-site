@@ -396,3 +396,73 @@ table.data.wrap th[scope=row]{white-space:normal;padding-right:24px}
 
 .days li{padding:16px 0;border-bottom:1px solid var(--line);color:var(--muted)}.days li b{display:inline-block;min-width:76px;color:var(--charcoal);font-weight:500;letter-spacing:.06em}
 .rides td{white-space:nowrap}@media(max-width:600px){.rides{font-size:13px}.rides th,.rides td{padding-left:4px;padding-right:4px}}
+
+/* ---- Nov 2026 refresh: compact header ---- */
+.masthead{position:sticky;top:0;z-index:30;background:var(--white);border-bottom:1px solid var(--line);padding:0;text-align:left}
+.masthead .mh{display:flex;align-items:center;justify-content:space-between;gap:24px;height:68px}
+.masthead .logo{flex-direction:row;align-items:center;gap:12px}
+.masthead .logo svg{width:32px;height:32px}
+.masthead .logo .word{font-size:19px;letter-spacing:.42em;padding-left:0}
+.masthead .logo .sub{font-size:10px;letter-spacing:.42em;padding-left:0;margin-left:-2px}
+.masthead .mainnav{border:0;position:static;background:none}
+.masthead .mainnav ul{margin:0;max-width:none}
+.masthead .mainnav li+li{border-left:0}
+.masthead .mainnav a{padding:10px 13px}
+.masthead .mainnav b{font-size:12px;letter-spacing:.18em}
+@media (max-width:980px){.masthead .mainnav a{padding:10px 8px}.masthead .mainnav b{font-size:11px;letter-spacing:.12em}}
+@media (max-width:720px){
+  .masthead .mh{height:60px;gap:12px}
+  .masthead .logo .word{font-size:17px}
+  .masthead .menu-btn{display:flex;width:auto;height:44px;padding:0 2px}
+  .masthead .mainnav{position:absolute;top:60px;left:0;right:0;background:var(--white)}
+  .masthead .mainnav ul{display:none;flex-direction:column;border-bottom:1px solid var(--line)}
+  .masthead .mainnav ul.open{display:flex}
+  .masthead .mainnav li+li{border-top:1px solid var(--line)}
+  .masthead .mainnav a{padding:15px 16px}
+  .masthead .mainnav b{font-size:13px}
+}
+
+/* hero: full-width photo, headline on it */
+.hero{position:relative;padding:0;min-height:min(78vh,760px);display:flex;align-items:flex-end;color:#fff;background:var(--charcoal)}
+.hero>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.hero-in{position:relative;width:100%;padding:140px 0 clamp(44px,6vw,80px);background:linear-gradient(180deg,rgba(30,28,26,0) 0%,rgba(30,28,26,.35) 40%,rgba(30,28,26,.7) 100%)}
+.hero .eyebrow{color:#F2C3A4}
+.hero h1{max-width:780px;font-size:clamp(38px,5.4vw,70px);text-shadow:0 2px 20px rgba(0,0,0,.25)}
+.hero-sub{font-size:clamp(17px,1.6vw,20px);margin:16px 0 0;opacity:.92}
+.hero-btns{display:flex;flex-wrap:wrap;gap:12px;margin-top:30px}
+.btn-light{border-color:#fff;color:#fff}.btn-light:hover{background:#fff;color:var(--charcoal)}
+@media (max-width:720px){.hero{min-height:88vh}.hero-btns .btn{width:100%;padding:0 16px;letter-spacing:.14em}}
+
+/* owner offer */
+.offer-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}
+.ocard{border:1px solid var(--line);padding:clamp(28px,3.5vw,48px)}
+.ocard h3{font-size:clamp(26px,2.6vw,34px);font-weight:500;margin:0 0 14px}
+.ocard p:not(.eyebrow){color:var(--muted);margin:0 0 24px}
+@media (max-width:720px){.offer-grid{grid-template-columns:1fr}}
+
+/* who it's for */
+.fit{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}
+.fit>div{border-top:1px solid var(--charcoal);padding-top:22px}
+.fit h3{font-family:var(--serif);font-size:26px;font-weight:500;margin-bottom:12px}
+.fit ul{list-style:none;padding:0;margin:0}
+.fit li{padding:12px 0 12px 26px;border-bottom:1px solid var(--line);position:relative;color:var(--muted);font-size:16px}
+.fit li::before{content:"";position:absolute;left:0;top:23px;width:12px;height:1px;background:var(--rust)}
+@media (max-width:720px){.fit{grid-template-columns:1fr;gap:40px}}
+
+/* signups */
+.signups{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}
+.su{border:1px solid var(--line);padding:clamp(28px,3.5vw,48px)}
+.su h2{font-size:clamp(26px,2.6vw,34px)}
+.su>p:not(.eyebrow):not(.nl-status){color:var(--muted);margin:12px 0 20px}
+.su .nl-row{justify-content:flex-start}
+.su .nl-status a{color:var(--rust)}
+@media (max-width:720px){.signups{grid-template-columns:1fr}.su .nl-row .btn{width:100%}}
+
+/* founding band: two columns, stacks on small screens */
+.band.two{grid-template-columns:1fr auto}
+@media (max-width:980px){.band.two{grid-template-columns:1fr}}
+
+/* checklist page */
+.cklist{padding-left:22px;margin:0}
+.cklist li{padding:10px 0;border-bottom:1px solid var(--line);color:var(--muted)}
+.cklist b{color:var(--charcoal);font-weight:500}

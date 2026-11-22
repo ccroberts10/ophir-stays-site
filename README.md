@@ -18,6 +18,11 @@ Styles: `assets/styles.css`. Form handler: `api/estimate.js`.
    Redeploy. Submit a test request on /owners.
 
 ## Photos (the most important part)
+
+**To replace (flagged Nov 2026):**
+- `hero-ski.jpg` is hazy and flat. Replace with a crisp bluebird Purgatory or backcountry shot, landscape, 2400 px+. The homepage hero uses `library/engineer-climb.jpg` until then.
+- `hero-golf.jpg` and `golf.jpg` are weak. Replace before golf goes back on any page.
+
 Every photo is a file in `assets/photos/`. Save your photo over the placeholder with the **same name** and it appears everywhere. Shoot landscape, at least 2400 px wide, natural light, no filters.
 
 | File | Shot | Shape |

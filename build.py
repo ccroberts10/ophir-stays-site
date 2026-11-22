@@ -98,20 +98,19 @@ def head(title, desc, path, image='/assets/og.jpg'):
 
 def masthead(current):
     items = ''.join(
-        f'<li><a href="{h}"{" aria-current=\"page\"" if k == current else ""}><b>{t}</b><i>{s}</i></a></li>'
+        f'<li><a href="{h}"{" aria-current=\"page\"" if k == current else ""}><b>{t}</b></a></li>'
         for h, t, s, k in NAV)
-    return f'''<div class="topbar"><div class="wrap"><span>Durango · Colorado</span><a href="/owners#estimate">Owner inquiry →</a></div></div>
-<header class="masthead">
-  <a class="logo" href="/" aria-label="Ophir Stays, home">
-    <svg aria-hidden="true"><use href="#summit"/></svg>
-    <span class="word">OPHIR</span>
-    <span class="sub">STAYS</span>
-  </a>
-</header>
-<nav class="mainnav" aria-label="Main">
-  <button class="menu-btn" aria-expanded="false" aria-controls="navlist">MENU</button>
-  <ul id="navlist">{items}</ul>
-</nav>'''
+    return f'''<header class="masthead">
+  <div class="wrap mh">
+    <a class="logo" href="/" aria-label="Ophir Stays, home">
+      <svg aria-hidden="true"><use href="#summit"/></svg>
+      <span class="word">OPHIR</span>
+      <span class="sub">STAYS</span>
+    </a>
+    <button class="menu-btn" aria-expanded="false" aria-controls="navlist">MENU</button>
+    <nav class="mainnav" aria-label="Main"><ul id="navlist">{items}</ul></nav>
+  </div>
+</header>'''
 
 FOOT = '''<footer class="site-foot">
   <div class="wrap">
@@ -175,7 +174,7 @@ def home_card(h):
     return f'''<a class="card reveal" href="/homes/{h['slug']}">{hphoto(h['slug'], 1, h['name'] + ', ' + h['area'], 'ph')}{tag}
         <p class="post-meta">{h['area']} · {h['beds']} bedrooms · sleeps {h['sleeps']}</p><h3><span class="ital">{h['name']}</span></h3><p>{h['line']}</p></a>'''
 
-FOUNDING = '''<div class="band reveal" style="grid-template-columns:1fr auto">
+FOUNDING = '''<div class="band two reveal">
         <div><p class="eyebrow">Founding homes</p><h2 class="display">The first homes join the Collection in 2027.</h2>
         <p>Twenty-five places, chosen one at a time. Own a home in Durango that meets the standard?</p></div>
         <a class="btn btn-rust" href="/owners#estimate">Apply</a></div>'''
@@ -184,168 +183,166 @@ def collection_grid():
     return f'<div class="grid3">{"".join(home_card(h) for h in LIVE_HOMES)}</div>' if LIVE_HOMES else FOUNDING
 
 # ---------------- HOME ----------------
-SLIDES = [('hero-ski', 'Winter', 'Fresh tracks, big peaks, home by the fire.', 'Four skiers skinning across fresh snow beneath the San Juan peaks'),
-          ('hero-bike', 'Summer', 'High passes, big days, home for dinner.', 'A mountain biker climbing a high pass in the San Juan Mountains'),
-          ('hero-golf', 'Play', 'Tee times held, clubs waiting.', 'A golfer reading a putt at sunset, with the cliffs and peaks north of Durango behind'),
-          ('hero-fireplace', 'Evenings', 'The fire is lit before you arrive.', 'A great room with a stone fireplace lit at dusk'),
-          ('hero-spa', 'Restore', 'A hot tub, a view and nowhere to be.', 'A steaming wood-fired hot tub on a deck at sunset'),
-          ('hero-coffee', 'Mornings', 'Your coffee order, already known.', 'A latte and pastry by the fire in a mountain café')]
+# PHOTOS TO REPLACE (flagged Nov 2026):
+#   hero-ski.jpg  - hazy, flat snow shot. Replace with a crisp bluebird Purgatory or backcountry photo, landscape, 2400px+.
+#   hero-golf.jpg, golf.jpg - weak golf shots. Replace before golf goes back on any page.
+# The homepage hero uses library/engineer-climb.jpg until a sharp winter photo is in.
+HERO_IMG = '/assets/photos/library/engineer-climb.jpg'
+HERO_ALT = 'A rider climbing singletrack toward Engineer Mountain under a clear blue sky'
 
-slides = ''.join(f'''<figure class="slide{' on' if i == 0 else ''}" aria-roledescription="slide" aria-label="{i+1} of {len(SLIDES)}">
-      <img src="/assets/photos/{n}.jpg" alt="{alt}"{' fetchpriority="high"' if i == 0 else ' loading="lazy"'}>
-      <figcaption class="cap"><span>{k}</span><p>{c}</p></figcaption></figure>''' for i, (n, k, c, alt) in enumerate(SLIDES))
-thumbs = ''.join(f'<button type="button" aria-label="Show slide {i+1}: {k}"{" aria-current=\"true\"" if i == 0 else ""}><img src="/assets/photos/t/{n}.jpg" alt="" loading="lazy"></button>' for i, (n, k, c, a) in enumerate(SLIDES))
-
-EXPS = [('ski', 'Ski', 'Purgatory is thirty minutes up the valley. Rentals fitted at the house, lift tickets waiting, boots warm in the dryer.'),
-        ('spa', 'Spa', 'Hot springs, in-home massage and a hot tub at every home. We book the treatments; you choose the hour.'),
-        ('golf', 'Golf', 'Tee times arranged at the best courses in the valley, with a cart and a cooler ready when you arrive.'),
-        ('bike', 'Mountain bike', 'Some of the best singletrack in the West. Bikes sized to each rider and delivered, routes picked for your level.'),
-        ('coffee', 'Coffee & town', 'Main Avenue, its cafés and its kitchens. Your table is held, often with the first round on the house.'),
-        ('fireplace', 'Fireside', 'Evenings at the house: firewood stacked, blankets out, a bottle chosen for the night.')]
-exps = ''.join(f'''<a class="card reveal" href="/owners#estimate" style="pointer-events:none">
+EXPS = [('ski', 'Ski Purgatory', '/areas/purgatory', 'Thirty minutes up the valley. What a ski day from Durango looks like, and how we set one up.'),
+        ('bike', 'Ride from town', '/trails', 'Ten mountain bike routes, easy to advanced, each with a map, elevation profile and free GPX.'),
+        ('coffee', 'Eat on Main', '/journal/where-to-eat-durango', 'Where we actually eat in Durango, from coffee to a late table downtown.')]
+exps = ''.join(f'''<a class="card reveal" href="{u}">
         {photo(n, t + ' in Durango', 'ph')}
-        <h3><span class="ital">{t}</span></h3><p>{d}</p></a>''' for n, t, d in EXPS)
+        <h3><span class="ital">{t}</span></h3><p>{d}</p><span class="link">Read more</span></a>''' for n, t, u, d in EXPS)
+
+CHECKLIST = [('What the fee is charged on.', 'Nightly rent only, or cleaning and other guest fees too?'),
+             ('Cleaning.', 'What the guest pays, what the cleaner is paid, and who keeps the difference.'),
+             ('Maintenance.', 'Any markup on repairs, and any call-out fee for small jobs.'),
+             ('Pass-through charges.', 'Linens, supplies, card processing and booking-site fees: which ones land on you?'),
+             ('Your calendar.', 'Nights rented, nights you used, and nights that were blocked without a reason.'),
+             ('Event pricing.', 'Compare the rate on Snowdown or Iron Horse weekend with an ordinary weekend. If they match, money was left behind.'),
+             ('Your contract.', 'The notice period, any exit fee, and who owns the listing and its reviews if you leave.')]
 
 home_body = f'''
-  <div class="wrap">
-    <div class="show" id="show" aria-roledescription="carousel" aria-label="Life at Ophir">
-      <div class="slides">{slides}
-        <button class="arrow prev" type="button" aria-label="Previous slide"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M15 5l-7 7 7 7"/></svg></button>
-        <button class="arrow next" type="button" aria-label="Next slide"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M9 5l7 7-7 7"/></svg></button>
+  <section class="hero">
+    <img src="{HERO_IMG}" alt="{HERO_ALT}" fetchpriority="high">
+    <div class="hero-in">
+      <div class="wrap">
+        <p class="eyebrow">Durango · Colorado</p>
+        <h1 class="display">Durango homes, run by someone who lives here.</h1>
+        <p class="hero-sub">Locally owned and capped at twenty-five homes.</p>
+        <div class="hero-btns">
+          <a class="btn btn-rust" href="/owners#estimate">Owners: free estimate</a>
+          <a class="btn btn-light" href="#guest-list">Guests: opening 2027, join the list</a>
+        </div>
       </div>
-      <div class="thumbs">{thumbs}</div>
     </div>
-  </div>
+  </section>
 
-  <section class="center">
+  <section class="offer">
+    <div class="wrap">
+      <div class="center reveal" style="margin-bottom:44px">
+        <p class="eyebrow">For homeowners</p>
+        <h2 class="display">Ten founding homes. A guarantee in writing.</h2>
+      </div>
+      <div class="offer-grid reveal">
+        <div class="ocard">
+          <p class="eyebrow">The guarantee</p>
+          <h3 class="display">You keep more than last year, or we refund the difference.</h3>
+          <p>If you take home less in your first twelve months with Ophir than in the twelve before, we refund the difference, up to our full fee.</p>
+          <a class="link" href="/owners#guarantee">How the guarantee works</a>
+        </div>
+        <div class="ocard">
+          <p class="eyebrow">Founding homes</p>
+          <h3 class="display">22%, locked for as long as you stay.</h3>
+          <p>The first ten homes keep our founding rate for life. We are taking on five before summer 2027, slowly and on purpose. Thirty days' notice to leave.</p>
+          <a class="btn btn-rust" href="/owners#estimate">Get a free estimate</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="center tint">
     <div class="wrap narrow reveal">
-      <p class="eyebrow">Durango · Colorado</p>
-      <h1 class="display">A private collection of mountain homes.</h1>
+      <p class="eyebrow">Small on purpose</p>
+      <h2 class="display">One local, never more than twenty-five homes.</h2>
       <hr class="rule">
-      <p class="lead">Twenty-five homes in the San Juans, each kept to one standard, each stay with the whole trip handled. Locally owned, by people who live here.</p>
-    </div>
-    <div class="wrap">
-      <div class="pillars reveal">
-        <div class="pillar"><div class="num">i.</div><h3>THE HOMES</h3><p>Hotel-grade linens, a hot tub or a view, a gear room. Inspected before every arrival.</p></div>
-        <div class="pillar"><div class="num">ii.</div><h3>THE TRIP</h3><p>Tell us what you love. Gear delivered, guides booked, tables held. The plan moves with the weather.</p></div>
-        <div class="pillar"><div class="num">iii.</div><h3>THE CARE</h3><p>A real person, twenty-three years in Durango, answering within fifteen minutes from 7am to 10pm.</p></div>
-      </div>
+      <p class="lead">Owners get a direct line to the person running their home. Guests get a trip planned by someone who has skied, ridden and eaten here for twenty-three years, and a local they can text from 7am to 10pm.</p>
     </div>
   </section>
 
-  <section id="collection" style="padding-top:0">
+  <section id="fit">
     <div class="wrap">
-      <div class="center reveal" style="margin-bottom:52px">
-        <p class="eyebrow">The Collection</p>
-        <h2 class="display">Homes worth the trip.</h2>
+      <div class="center reveal" style="margin-bottom:44px">
+        <p class="eyebrow">Who Ophir is for</p>
+        <h2 class="display">A good fit, and not.</h2>
       </div>
-      {collection_grid()}
-      <p class="center reveal" style="margin-top:44px"><a class="link" href="/homes">View the Collection</a></p>
-    </div>
-  </section>
-
-  <section>
-    <div class="wrap">
-      <div class="center reveal" style="margin-bottom:56px">
-        <p class="eyebrow">Before you arrive</p>
-        <h2 class="display">Every detail, already done.</h2>
-        <hr class="rule">
-        <p class="lead">We plan everything. You arrive, and the trip begins.</p>
+      <div class="fit reveal">
+        <div>
+          <h3>Ophir is a good fit if</h3>
+          <ul>
+            <li>You want one person to call, and you want that person to live in Durango.</li>
+            <li>Your home is in town, the Animas Valley, Hermosa or near Purgatory, and nightly rentals are allowed there.</li>
+            <li>You care how guests are treated as much as what they pay.</li>
+            <li>You want the quiet weeks on your calendar working harder.</li>
+          </ul>
+        </div>
+        <div>
+          <h3>Ophir is probably not for you if</h3>
+          <ul>
+            <li>You are looking for the lowest fee in town and nothing else.</li>
+            <li>You want to approve every booking yourself.</li>
+            <li>You would rather not put anything back into the home: photos, linens, repairs.</li>
+            <li>You need a manager with hundreds of homes and a call center. We will never be that.</li>
+          </ul>
+        </div>
       </div>
-      <div class="details reveal">
-        <div><span class="ital">i.</span><h3>Skis and boots, waiting</h3><p>Sized to each guest before you land, in the gear room with your name on them.</p></div>
-        <div><span class="ital">ii.</span><h3>Bikes, fitted</h3><p>The right frame for every rider, tuned and ready by the door.</p></div>
-        <div><span class="ital">iii.</span><h3>The fridge, stocked</h3><p>Your list, shopped that morning. Coffee the way you take it.</p></div>
-        <div><span class="ital">iv.</span><h3>The fire, laid</h3><p>Firewood stacked, blankets out, a bottle chosen for the first night.</p></div>
-        <div><span class="ital">v.</span><h3>Every booking, made</h3><p>Lift tickets, guides, tee times and tables, all confirmed in the app.</p></div>
-        <div><span class="ital">vi.</span><h3>The plan, flexible</h3><p>Storms after one? Your ride moves to tomorrow, and we tell you first.</p></div>
-      </div>
-      <p class="center reveal" style="margin-top:52px"><a class="btn" href="/stay">See how a stay works</a></p>
     </div>
   </section>
 
   <section class="tint" id="experiences">
     <div class="wrap">
-      <div class="center reveal" style="margin-bottom:52px">
-        <p class="eyebrow">Experiences</p>
-        <h2 class="display">Every season, arranged.</h2>
+      <div class="center reveal" style="margin-bottom:44px">
+        <p class="eyebrow">For guests</p>
+        <h2 class="display">Durango, from a local.</h2>
       </div>
       <div class="grid3">{exps}</div>
     </div>
   </section>
 
-  <section>
+  <section id="signup">
     <div class="wrap">
-      <div class="band reveal">
-        <svg role="img" aria-label="Ophir Stays seal"><use href="#seal"/></svg>
-        <div>
-          <p class="eyebrow">For homeowners</p>
-          <h2 class="display">You keep more than last year, or we refund the difference.</h2>
-          <p>If you take home less in your first twelve months with Ophir than you did the twelve before, we refund the difference, up to our fee. Twenty-five homes only.</p>
-        </div>
-        <a class="btn btn-rust" href="/owners">Apply</a>
-      </div>
-    </div>
-  </section>
-
-  <section class="tint">
-    <div class="wrap split">
-      <div class="reveal">{photo('ophir', 'Ice Lake Basin in the San Juan Mountains near Ophir')}</div>
-      <div class="reveal">
-        <p class="eyebrow">The name</p>
-        <h2 class="display">Why Ophir</h2>
-        <p class="lead">Ophir was the legendary land of gold. Miners carried the name into the San Juans and gave it to a town and a high pass between the peaks. They came for riches and found something better: country that stops you in your tracks. We named our homes for that feeling.</p>
-        <p style="margin-top:28px"><a class="link" href="/about">Our story</a></p>
-      </div>
-    </div>
-  </section>
-
-  <section style="background:var(--paper)">
-    <div class="wrap">
-      <div class="center reveal" style="margin-bottom:44px">
-        <p class="eyebrow">Ride Durango</p>
-        <h2 class="display">Ten rides from the front door</h2>
-        <p class="lead" style="max-width:640px;margin:16px auto 0">Our Durango mountain bike routes, easy to advanced, each with a map, elevation profile and free GPX.</p>
-      </div>
-      <div class="pgrid">{ptile(RBY['meadow-loop'])}{ptile(RBY['telegraph-sidewinder'])}{ptile(RBY['animas-mountain-loop'])}</div>
-      <p class="center reveal" style="margin-top:36px"><a class="btn" href="/trails">All ten routes</a> &nbsp; <a class="btn" href="/trail-map">Trail map</a></p>
-    </div>
-  </section>
-  <section>
-    <div class="wrap">
-      <div class="center reveal" style="margin-bottom:52px">
-        <p class="eyebrow">The Journal</p>
-        <h2 class="display">Notes from Durango</h2>
-      </div>
-      <div class="grid3">
-        <a class="card reveal" href="/journal/durango-rides">{photo('journal-1', 'Singletrack below Engineer Mountain', 'ph')}<p class="post-meta">Ride</p><h3>Five rides that show you Durango</h3><span class="link">Read</span></a>
-        <a class="card reveal" href="/journal/where-to-eat-durango">{photo('coffee', 'A latte at a Durango café table', 'ph')}<p class="post-meta">Eat</p><h3>Where to eat in Durango, from a local</h3><span class="link">Read</span></a>
-        <a class="card reveal" href="/journal/durango-home-earnings">{photo('journal-3', 'Gold aspens below Mount Sneffels', 'ph')}<p class="post-meta">Owners</p><h3>What a Durango vacation home earns</h3><span class="link">Read</span></a>
+      <div class="signups">
+        <form class="su reveal" id="checklist-form" data-list="owner" data-source="checklist" novalidate>
+          <p class="eyebrow">For owners</p>
+          <h2 class="display">Seven things to check on your manager's statement</h2>
+          <p>A one-page checklist from a local manager. Free, and useful even if you never call us.</p>
+          <div class="nl-row">
+            <label class="sr" for="ck-email">Email</label><input id="ck-email" name="email" type="email" autocomplete="email" placeholder="Your email" required>
+            <button class="btn btn-rust" type="submit">Send me the checklist</button>
+          </div>
+          <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+          <p class="nl-status" role="status" aria-live="polite"></p>
+        </form>
+        <form class="su reveal" id="guest-list" data-list="guest" data-source="guest-2027" novalidate>
+          <p class="eyebrow">For guests</p>
+          <h2 class="display">Booking opens in 2027.</h2>
+          <p>Join the list and hear first when our homes open, with first pick of dates.</p>
+          <div class="nl-row">
+            <label class="sr" for="gl-email">Email</label><input id="gl-email" name="email" type="email" autocomplete="email" placeholder="Your email" required>
+            <button class="btn" type="submit">Join the list</button>
+          </div>
+          <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+          <p class="nl-status" role="status" aria-live="polite"></p>
+        </form>
       </div>
     </div>
   </section>
 '''
 
-SLIDE_JS = '''
+SIGNUP_JS = '''
 <script>
-(function(){
-  var root=document.getElementById('show');if(!root)return;
-  var s=root.querySelectorAll('.slide'),t=root.querySelectorAll('.thumbs button'),i=0,timer;
-  var still=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  function go(n){s[i].classList.remove('on');t[i]&&t[i].removeAttribute('aria-current');i=(n+s.length)%s.length;s[i].classList.add('on');t[i]&&t[i].setAttribute('aria-current','true')}
-  function play(){if(still)return;clearInterval(timer);timer=setInterval(function(){go(i+1)},6000)}
-  root.querySelector('.prev').onclick=function(){go(i-1);play()};
-  root.querySelector('.next').onclick=function(){go(i+1);play()};
-  t.forEach(function(b,k){b.onclick=function(){go(k);play()}});
-  root.addEventListener('mouseenter',function(){clearInterval(timer)});root.addEventListener('mouseleave',play);
-  root.addEventListener('keydown',function(e){if(e.key==='ArrowLeft'){go(i-1);play()}if(e.key==='ArrowRight'){go(i+1);play()}});
-  play();
-})();
+document.querySelectorAll('form.su').forEach(function(f){var st=f.querySelector('.nl-status');
+f.addEventListener('submit',async function(e){e.preventDefault();
+if(!/^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$/.test(f.email.value)){st.textContent='Please check your email address.';return}
+var b=f.querySelector('button');b.disabled=true;
+try{var r=await fetch('/api/subscribe',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:f.email.value,list:f.dataset.list,source:f.dataset.source,website:f.website.value})});if(!r.ok)throw 0;
+st.innerHTML=f.dataset.list==='owner'?'Thank you. <a href="/owner-checklist">Open the checklist</a>.':'Thank you. You will hear from us first.';f.email.value='';}catch(_){st.textContent='Something went wrong. Please email casey@ophirstays.com.';}
+b.disabled=false;});});
 </script>'''
 
-home = page('Ophir Stays · Durango Vacation Rentals, Every Trip Planned',
-            'Twenty-five homes in Durango, Colorado, each kept to one standard, each stay with the whole trip handled: ski, spa, golf and mountain biking. Locally owned.',
-            '/', 'home', home_body, SLIDE_JS)
+home = page('Ophir Stays · Durango Vacation Rental Management, Locally Owned',
+            'A locally owned Durango vacation rental manager, capped at twenty-five homes. Founding owners keep 22% for life, with a written first-year guarantee. Guest booking opens in 2027.',
+            '/', 'home', home_body, SIGNUP_JS, image=HERO_IMG)
+
+checklist_body = '<section><div class="wrap narrow"><p class="eyebrow">For owners</p><h1 class="display">Seven things to check on your manager\'s statement</h1><hr class="rule" style="margin-left:0"><ol class="cklist">' + ''.join(f'<li><b>{t}</b> {d}</li>' for t, d in CHECKLIST) + '''</ol>
+<p class="lead">Want a second opinion? Send us last year's statements and we will review them at no cost.</p>
+<p style="margin-top:28px"><a class="btn btn-rust" href="/owners#estimate">Get a free estimate</a> &nbsp; <a class="link" href="mailto:casey@ophirstays.com">casey@ophirstays.com</a></p></div></section>'''
+checklist_page = page("Seven Things to Check on Your Rental Manager's Statement · Ophir Stays",
+                      "A one-page checklist for Durango vacation rental owners: fees, cleaning, repairs, pass-through charges, your calendar, event pricing and your contract.",
+                      '/owner-checklist', 'owners', checklist_body)
 
 # ---------------- OWNERS ----------------
 
@@ -386,7 +383,7 @@ owners_body = f'''
       <p class="eyebrow">For homeowners</p>
       <h1 class="display">Your home, cared for like ours.</h1>
       <hr class="rule">
-      <p class="lead">Owners don't hire Ophir. They apply. Twenty-five homes, one standard, and your first year's income guaranteed.</p>
+      <p class="lead">A small local manager, capped at twenty-five homes, with your first year's take-home guaranteed in writing.</p>
       <p style="margin-top:32px"><a class="btn btn-rust" href="#estimate">Get your free estimate</a></p>
     </div>
   </section>
@@ -433,7 +430,7 @@ owners_body = f'''
       <div class="details four reveal">
         <div><span class="ital">i.</span><h3>Damage, covered</h3><p>Every guest pays a damage waiver. It covers your home up to $2,500 a stay, and you never file a claim.</p></div>
         <div><span class="ital">ii.</span><h3>Small fixes, included</h3><p>Bulbs, batteries, filters, a loose handle: fixed and never billed. Bigger repairs are billed at cost, with no markup and with photos, and nothing over $300 happens without your yes.</p></div>
-        <div><span class="ital">iii.</span><h3>Fifteen minutes</h3><p>Guests and owners hear back within fifteen minutes, 7am to 10pm. Someone is at your house within an hour, any hour.</p></div>
+        <div><span class="ital">iii.</span><h3>A local who answers</h3><p>You and your guests text Casey directly, 7am to 10pm. Urgent problems get a response any hour, and someone local comes to the house.</p></div>
         <div><span class="ital">iv.</span><h3>Priced every day</h3><p>Nightly rates move daily with the season, events and demand, set by live Durango data and checked by someone who lives here.</p></div>
       </div>
       <p class="fine reveal" style="margin-top:28px">Every stay in your home also gives $10 to Durango: our trails, adaptive skiing at Purgatory, and local housing. It comes from our fee, never yours. <a href="/about#give">How we give back</a>.</p>
@@ -620,7 +617,7 @@ owners = page('Durango Vacation Rental Management · Ophir Stays',
 TIERS = [
   dict(name='The Stay', price='Included', unit='with every booking', lead='A beautiful home, kept to our standard, with a local on call.',
        items=['Home inspected before every arrival', 'Hotel-grade linens, robes and toiletries', 'A welcome kit: local coffee, chocolate and a card with our favorite spots',
-              'Door code and house guide in the app', 'Weather-aware ideas for every day', 'A local host by text, replies within 15 minutes, 7am to 10pm. Urgent issues any hour']),
+              'Door code and house guide in the app', 'Weather-aware ideas for every day', 'A local host by text, 7am to 10pm. Urgent issues any hour']),
   dict(name='The Arranged Stay', price='$395', unit='per stay, up to 6 guests', lead='Tell us what you love. We plan the trip around it.', feature=True,
        items=['Everything in The Stay', 'Two Ophir tumblers to keep', 'A planning call before you arrive', 'Skis and boots sized to each guest and waiting in the gear room (rental extra)',
               'Bikes fitted to each rider and delivered (rental extra)', 'Lift tickets, guides, rafting and fly fishing booked (paid at partner rates)',
@@ -1714,7 +1711,7 @@ purg_page = page('Purgatory Vacation Rental Management · Ophir Stays',
                  'Vacation rental management at Purgatory and Durango Mountain: which condos and homes can rent nightly, what they earn, and how a local manager runs them.',
                  '/areas/purgatory', 'owners', purg_body, image='/assets/photos/hero-ski.jpg')
 os.makedirs('areas', exist_ok=True)
-for name, html in [('index.html', home), ('owners.html', owners), ('about.html', about), ('journal.html', journal), ('journal/durango-rides.html', post), ('journal/durango-home-earnings.html', post2), ('journal/where-to-eat-durango.html', post3), ('journal/durango-short-term-rental-rules.html', post4), ('trail-map.html', trailmap), ('trails.html', trails_index), ('guest-app.html', guestapp), ('estimate.html', estimate_page), ('homes.html', homes_page), ('stay.html', stay_page), ('areas/purgatory.html', purg_page), ('basecamp.html', basecamp_page), ('buying.html', buying_page)] + [(f"homes/{h['slug']}.html", home_page(h)) for h in LIVE_HOMES] + [(f"trails/{r['slug']}.html", route_page(r)) for r in ROUTES] + [(f"trails/{r['slug']}.html", hc_page(r)) for r in HIGH_COUNTRY]:
+for name, html in [('index.html', home), ('owners.html', owners), ('about.html', about), ('journal.html', journal), ('journal/durango-rides.html', post), ('journal/durango-home-earnings.html', post2), ('journal/where-to-eat-durango.html', post3), ('journal/durango-short-term-rental-rules.html', post4), ('trail-map.html', trailmap), ('trails.html', trails_index), ('guest-app.html', guestapp), ('estimate.html', estimate_page), ('homes.html', homes_page), ('stay.html', stay_page), ('areas/purgatory.html', purg_page), ('basecamp.html', basecamp_page), ('buying.html', buying_page), ('owner-checklist.html', checklist_page)] + [(f"homes/{h['slug']}.html", home_page(h)) for h in LIVE_HOMES] + [(f"trails/{r['slug']}.html", route_page(r)) for r in ROUTES] + [(f"trails/{r['slug']}.html", hc_page(r)) for r in HIGH_COUNTRY]:
     open(name, 'w').write(html)
 open('sitemap.xml', 'w').write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">\n' +
     ''.join(f'<url><loc>https://ophirstays.com{p}</loc><lastmod>2026-10-18</lastmod>' + ('<image:image><image:loc>https://ophirstays.com/assets/ophir-durango-trail-map.jpg</image:loc></image:image>' if p == '/trail-map' else ''.join(f'<image:image><image:loc>https://ophirstays.com/assets/routes/{p[8:]}{x}.jpg</image:loc></image:image>' for x in ('', '-card')) if p.startswith('/trails/') else '') + '</url>\n' for p in ['/', '/stay', '/homes', '/owners', '/about', '/journal', '/journal/durango-rides', '/journal/durango-home-earnings', '/journal/where-to-eat-durango', '/journal/durango-short-term-rental-rules', '/trail-map', '/trails', '/guest-app', '/estimate', '/areas/purgatory', '/basecamp', '/buying'] + [f"/trails/{r['slug']}" for r in ROUTES + HIGH_COUNTRY] + [f"/homes/{h['slug']}" for h in HOMES if not h['sample']]) + '</urlset>\n')

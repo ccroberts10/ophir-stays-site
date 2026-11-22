@@ -1,632 +1,640 @@
 {
- "note": "Casey-supplied photos and video, Nov 2026. Free to use anywhere on the site. Videos are vertical 9:16, muted.",
- "photos": [
-  {
-   "file": "/assets/photos/library/casey-sunset-ridge.jpg",
-   "thumb": "/assets/photos/library/t/casey-sunset-ridge.jpg",
-   "w": 2400,
-   "h": 1800,
-   "alt": "Rider at golden hour on a high ridge, Needle Mountains behind",
-   "use": "Basecamp / About"
-  },
-  {
-   "file": "/assets/photos/library/son-alpine-lake.jpg",
-   "thumb": "/assets/photos/library/t/son-alpine-lake.jpg",
-   "w": 1800,
-   "h": 2400,
-   "alt": "Casey's son resting on a rock beside an alpine lake in fall color below the Needles",
-   "use": "Instagram / About"
-  },
-  {
-   "file": "/assets/photos/library/scree-traverse.jpg",
-   "thumb": "/assets/photos/library/t/scree-traverse.jpg",
-   "w": 2016,
-   "h": 1512,
-   "alt": "Rider stopped on red-dirt singletrack beside a huge scree slope, La Platas on the horizon",
-   "use": "Basecamp routes"
-  },
-  {
-   "file": "/assets/photos/library/lake-campfire.jpg",
-   "thumb": "/assets/photos/library/t/lake-campfire.jpg",
-   "w": 1512,
-   "h": 2016,
-   "alt": "Fire ring above a forested alpine lake beneath the Needle Mountains, aspens turning",
-   "use": "Journal / Instagram"
-  },
-  {
-   "file": "/assets/photos/library/moose-river.jpg",
-   "thumb": "/assets/photos/library/t/moose-river.jpg",
-   "w": 1512,
-   "h": 2016,
-   "alt": "Moose wading a willow-lined river in a high San Juan valley",
-   "use": "Journal / Instagram"
-  },
-  {
-   "file": "/assets/photos/library/kids-camp-overlook.jpg",
-   "thumb": "/assets/photos/library/t/kids-camp-overlook.jpg",
-   "w": 1600,
-   "h": 2400,
-   "alt": "Group of young riders gathered on a meadow singletrack overlooking the West Needles",
-   "use": "Family stays"
-  },
-  {
-   "file": "/assets/photos/library/kids-camp-wide.jpg",
-   "thumb": "/assets/photos/library/t/kids-camp-wide.jpg",
-   "w": 2400,
-   "h": 1600,
-   "alt": "Young riders and coaches at a meadow overlook above the Animas Valley",
-   "use": "Family stays"
-  },
-  {
-   "file": "/assets/photos/library/kids-camp-engineer.jpg",
-   "thumb": "/assets/photos/library/t/kids-camp-engineer.jpg",
-   "w": 2400,
-   "h": 1600,
-   "alt": "Line of young riders on a wildflower meadow, Engineer Mountain behind",
-   "use": "Family stays"
-  },
-  {
-   "file": "/assets/photos/library/engineer-snowfield.jpg",
-   "thumb": "/assets/photos/library/t/engineer-snowfield.jpg",
-   "w": 1512,
-   "h": 2016,
-   "alt": "Rider on meadow singletrack below Engineer Mountain with late snow",
-   "use": "Basecamp"
-  },
-  {
-   "file": "/assets/photos/library/high-country-crew.jpg",
-   "thumb": "/assets/photos/library/t/high-country-crew.jpg",
-   "w": 2400,
-   "h": 1596,
-   "alt": "Four riders crossing golden tundra toward red and orange San Juan peaks",
-   "use": "Basecamp hero option"
-  },
-  {
-   "file": "/assets/photos/library/ridge-crew.jpg",
-   "thumb": "/assets/photos/library/t/ridge-crew.jpg",
-   "w": 2048,
-   "h": 1365,
-   "alt": "Rider descending a golden ridge as three others crest behind, Needles in the distance",
-   "use": "Basecamp"
-  },
-  {
-   "file": "/assets/photos/library/ridge-silhouette.jpg",
-   "thumb": "/assets/photos/library/t/ridge-silhouette.jpg",
-   "w": 2048,
-   "h": 1365,
-   "alt": "Three riders silhouetted on a ridge above layered San Juan ranges",
-   "use": "Basecamp"
-  },
-  {
-   "file": "/assets/photos/library/bike-overlook.jpg",
-   "thumb": "/assets/photos/library/t/bike-overlook.jpg",
-   "w": 1512,
-   "h": 2016,
-   "alt": "Santa Cruz bike leaning on red rock at a high overlook toward Engineer Mountain",
-   "use": "Basecamp / gear"
-  },
-  {
-   "file": "/assets/photos/library/ridge-descent-engineer.jpg",
-   "thumb": "/assets/photos/library/t/ridge-descent-engineer.jpg",
-   "w": 2048,
-   "h": 1365,
-   "alt": "Four riders dropping off a ridge toward Engineer Mountain",
-   "use": "Basecamp"
-  },
-  {
-   "file": "/assets/photos/library/tundra-descent.jpg",
-   "thumb": "/assets/photos/library/t/tundra-descent.jpg",
-   "w": 2048,
-   "h": 1365,
-   "alt": "Riders descending a golden tundra ridge in single file",
-   "use": "Basecamp routes"
-  },
-  {
-   "file": "/assets/photos/library/ridge-top-four.jpg",
-   "thumb": "/assets/photos/library/t/ridge-top-four.jpg",
-   "w": 2048,
-   "h": 1365,
-   "alt": "Four riders small on the crest of a huge golden ridge",
-   "use": "Basecamp / wide banner"
-  },
-  {
-   "file": "/assets/photos/library/engineer-climb.jpg",
-   "thumb": "/assets/photos/library/t/engineer-climb.jpg",
-   "w": 2016,
-   "h": 1512,
-   "alt": "Rider climbing meadow singletrack toward Engineer Mountain in midsummer",
-   "use": "Basecamp / Journal"
-  },
-  {
-   "file": "/assets/photos/library/ice-lake.jpg",
-   "thumb": "/assets/photos/library/t/ice-lake.jpg",
-   "w": 2400,
-   "h": 1800,
-   "alt": "Two hikers walking the shore of Ice Lake in the San Juans",
-   "use": "Ophir / Journal"
-  },
-  {
-   "file": "/assets/photos/library/son-durango-overlook.jpg",
-   "thumb": "/assets/photos/library/t/son-durango-overlook.jpg",
-   "w": 1800,
-   "h": 2400,
-   "alt": "Young rider on a dirt overlook above Durango and the Animas Valley",
-   "use": "Instagram / About / Journal"
-  },
-  {
-   "file": "/assets/photos/library/son-alpine-push.jpg",
-   "thumb": "/assets/photos/library/t/son-alpine-push.jpg",
-   "w": 1800,
-   "h": 2400,
-   "alt": "Young rider pushing his bike up red alpine singletrack through corn lilies, San Juans behind",
-   "use": "Basecamp / Instagram"
-  },
-  {
-   "file": "/assets/photos/library/son-aspen-drop.jpg",
-   "thumb": "/assets/photos/library/t/son-aspen-drop.jpg",
-   "w": 1206,
-   "h": 2109,
-   "alt": "Young rider dropping a rock ledge through aspens",
-   "use": "Basecamp / Instagram"
-  },
-  {
-   "file": "/assets/photos/library/son-creek-walk.jpg",
-   "thumb": "/assets/photos/library/t/son-creek-walk.jpg",
-   "w": 1800,
-   "h": 2400,
-   "alt": "Young rider walking his bike along a high-country creek under summer clouds",
-   "use": "Instagram / Journal"
-  },
-  {
-   "file": "/assets/photos/library/sunset-slickrock-motion.jpg",
-   "thumb": "/assets/photos/library/t/sunset-slickrock-motion.jpg",
-   "w": 1206,
-   "h": 2144,
-   "alt": "Casey blurring off a sandstone ledge at sunset above Durango (motion blur)",
-   "use": "Instagram only"
-  },
-  {
-   "file": "/assets/photos/library/sunset-slickrock-drop.jpg",
-   "thumb": "/assets/photos/library/t/sunset-slickrock-drop.jpg",
-   "w": 1206,
-   "h": 2144,
-   "alt": "Casey rolling off a sandstone ledge at sunset, Durango and the mesas below",
-   "use": "Basecamp / Instagram"
-  },
-  {
-   "file": "/assets/photos/library/fort-lewis-ledge.jpg",
-   "thumb": "/assets/photos/library/t/fort-lewis-ledge.jpg",
-   "w": 1206,
-   "h": 2144,
-   "alt": "Casey's friend in Fort Lewis kit dropping a sandstone ledge above Durango at golden hour",
-   "use": "Basecamp / About"
-  },
-  {
-   "file": "/assets/photos/library/fort-lewis-snag.jpg",
-   "thumb": "/assets/photos/library/t/fort-lewis-snag.jpg",
-   "w": 1206,
-   "h": 2144,
-   "alt": "Casey's friend in Fort Lewis kit dropping past a juniper snag above Durango",
-   "use": "Basecamp / Instagram"
-  },
-  {
-   "file": "/assets/photos/library/sunset-rear-wheel.jpg",
-   "thumb": "/assets/photos/library/t/sunset-rear-wheel.jpg",
-   "w": 1350,
-   "h": 2400,
-   "alt": "Casey dropping a sandstone ledge at sunset, rear wheel up, valley below",
-   "use": "Basecamp hero option"
-  },
-  {
-   "file": "/assets/photos/library/sunset-front-wheel.jpg",
-   "thumb": "/assets/photos/library/t/sunset-front-wheel.jpg",
-   "w": 1350,
-   "h": 2400,
-   "alt": "Close low angle of Casey rolling sandstone at sunset above Durango",
-   "use": "Instagram / Journal"
-  },
-  {
-   "file": "/assets/photos/library/sunset-sunburst.jpg",
-   "thumb": "/assets/photos/library/t/sunset-sunburst.jpg",
-   "w": 1860,
-   "h": 2400,
-   "alt": "Casey backlit by the setting sun dropping into rocky singletrack above Durango",
-   "use": "Basecamp / wide banner"
-  },
-  {
-   "file": "/assets/photos/library/red-ridge-overlook.jpg",
-   "thumb": "/assets/photos/library/t/red-ridge-overlook.jpg",
-   "w": 1800,
-   "h": 2400,
-   "alt": "Casey resting on a red-dirt ridge facing the San Juan peaks under blue sky",
-   "use": "Basecamp / Instagram (sky room for text)"
-  },
-  {
-   "file": "/assets/photos/library/red-ridge-overlook-2.jpg",
-   "thumb": "/assets/photos/library/t/red-ridge-overlook-2.jpg",
-   "w": 1800,
-   "h": 2400,
-   "alt": "Casey on a red-dirt ridge looking out at the San Juan peaks (alternate)",
-   "use": "Basecamp / Instagram"
-  },
-  {
-   "file": "/assets/photos/library/ridge-singletrack-laplatas.jpg",
-   "thumb": "/assets/photos/library/t/ridge-singletrack-laplatas.jpg",
-   "w": 1800,
-   "h": 2400,
-   "alt": "Casey on narrow ridge singletrack above forested valleys, La Plata peaks in the distance",
-   "use": "Basecamp routes / Journal"
-  },
-  {
-   "file": "/assets/photos/library/arnica-meadow-bike.jpg",
-   "thumb": "/assets/photos/library/t/arnica-meadow-bike.jpg",
-   "w": 1512,
-   "h": 2016,
-   "alt": "Bike parked on singletrack through a meadow of yellow alpine wildflowers, high San Juan ridges under blue sky",
-   "use": "Basecamp / Instagram"
-  },
-  {
-   "file": "/assets/photos/library/alpine-lake-cirque.jpg",
-   "thumb": "/assets/photos/library/t/alpine-lake-cirque.jpg",
-   "w": 1800,
-   "h": 2400,
-   "alt": "Green alpine lake beneath a towering San Juan cirque under building clouds",
-   "use": "Basecamp routes / Journal"
-  },
-  {
-   "file": "/assets/photos/library/purg-storm-over-valley.jpg",
-   "thumb": "/assets/photos/library/t/purg-storm-over-valley.jpg",
-   "w": 1800,
-   "h": 2400,
-   "alt": "Young skier carving a groomed run at Purgatory with a snow squall filling the Animas valley and snowy San Juan peaks beyond",
-   "use": "Winter hero option / Instagram / Family stays"
-  },
-  {
-   "file": "/assets/photos/library/purg-aspen-turn.jpg",
-   "thumb": "/assets/photos/library/t/purg-aspen-turn.jpg",
-   "w": 1800,
-   "h": 2400,
-   "alt": "Young skier mid-turn on soft chopped snow beside a stand of bare aspens under deep blue sky at Purgatory",
-   "use": "Winter / Family stays / Instagram"
-  },
-  {
-   "file": "/assets/photos/library/purg-groomer-chase.jpg",
-   "thumb": "/assets/photos/library/t/purg-groomer-chase.jpg",
-   "w": 1800,
-   "h": 2400,
-   "alt": "Following a young skier down a fresh-snow run at Purgatory, snow-loaded spruce and a chairlift line ahead",
-   "use": "Winter / Family stays / Journal"
-  },
-  {
-   "file": "/assets/photos/library/purg-ski-tips-pov.jpg",
-   "thumb": "/assets/photos/library/t/purg-ski-tips-pov.jpg",
-   "w": 1800,
-   "h": 2400,
-   "alt": "Skier's-eye view over ski tips, following a young skier down a fresh-snow run at Purgatory",
-   "use": "Instagram / Journal"
-  },
-  {
-   "file": "/assets/photos/library/purg-cat-track-tuck.jpg",
-   "thumb": "/assets/photos/library/t/purg-cat-track-tuck.jpg",
-   "w": 1800,
-   "h": 2400,
-   "alt": "Young skier in a tuck on a sun-dappled cat track through snowy spruce at Purgatory",
-   "use": "Instagram / Journal"
-  },
-  {
-   "file": "/assets/photos/library/purg-ski-school-lineup.jpg",
-   "thumb": "/assets/photos/library/t/purg-ski-school-lineup.jpg",
-   "w": 1800,
-   "h": 2400,
-   "alt": "Line of kids in ski school at the top of Purgatory with the West Needle peaks behind",
-   "use": "HOLD - other families' kids; get parent consent before any public use"
-  },
-  {
-   "file": "/assets/photos/library/purg-chairlift-selfie.jpg",
-   "thumb": "/assets/photos/library/t/purg-chairlift-selfie.jpg",
-   "w": 1800,
-   "h": 2400,
-   "alt": "Dad and son grinning on a Purgatory chairlift in helmets and mirrored goggles, bluebird day",
-   "use": "HOLD - Casey's face; About / Family stays once he is ready to appear"
-  },
-  {
-   "file": "/assets/photos/library/purg-storm-day-chair.jpg",
-   "thumb": "/assets/photos/library/t/purg-storm-day-chair.jpg",
-   "w": 1800,
-   "h": 2400,
-   "alt": "Skier on a Purgatory chairlift in a snowstorm, yellow storm lens and snow-dusted shell",
-   "use": "HOLD - Casey's face; About / storm-day Journal once he is ready to appear"
-  },
-  {
-   "file": "/assets/photos/library/ski-storm-lift-tower.jpg",
-   "thumb": "/assets/photos/library/t/ski-storm-lift-tower.jpg",
-   "w": 1512,
-   "h": 2016,
-   "alt": "Chairlift tower and snow-loaded spruce disappearing into a heavy snowstorm",
-   "use": "Instagram / Journal (storm day)"
-  },
-  {
-   "file": "/assets/photos/library/kid-snow-faceplant.jpg",
-   "thumb": "/assets/photos/library/t/kid-snow-faceplant.jpg",
-   "w": 1512,
-   "h": 2016,
-   "alt": "Small skier face-down and spread-eagle in the snow after a tumble, skis splayed",
-   "use": "Instagram (humor / family stays) - face not visible"
-  },
-  {
-   "file": "/assets/photos/library/ski-early-season-chair-aspens.jpg",
-   "thumb": "/assets/photos/library/t/ski-early-season-chair-aspens.jpg",
-   "w": 1512,
-   "h": 2016,
-   "alt": "Chairlift riders passing bare aspens and snow-dusted spruce in an early-season storm",
-   "use": "Instagram / Journal (opening day)"
-  },
-  {
-   "file": "/assets/photos/library/ski-local-hill-sunburst.jpg",
-   "thumb": "/assets/photos/library/t/ski-local-hill-sunburst.jpg",
-   "w": 1512,
-   "h": 2016,
-   "alt": "Sunburst over a small local ski hill seen from the chairlift, tracked snow below",
-   "use": "Instagram / Journal (local hill)"
-  },
-  {
-   "file": "/assets/photos/library/ski-powder-day-chair.jpg",
-   "thumb": "/assets/photos/library/t/ski-powder-day-chair.jpg",
-   "w": 1512,
-   "h": 2016,
-   "alt": "Two riders on a chairlift above fresh powder tracks in falling snow",
-   "use": "Instagram / Journal (powder day)"
-  },
-  {
-   "file": "/assets/photos/library/ski-bluebird-lift-tower.jpg",
-   "thumb": "/assets/photos/library/t/ski-bluebird-lift-tower.jpg",
-   "w": 1512,
-   "h": 2016,
-   "alt": "Sun flaring over a lift tower above untracked powder and a mogul face, deep blue sky",
-   "use": "Site ski section / Instagram"
-  },
-  {
-   "file": "/assets/photos/library/ski-powder-tip-pov.jpg",
-   "thumb": "/assets/photos/library/t/ski-powder-tip-pov.jpg",
-   "w": 1800,
-   "h": 2400,
-   "alt": "Neon ski tip poking out of deep powder in a snow-loaded aspen and spruce glade",
-   "use": "Instagram / Journal (powder day)"
-  },
-  {
-   "file": "/assets/photos/library/ski-powder-aspen-glade.jpg",
-   "thumb": "/assets/photos/library/t/ski-powder-aspen-glade.jpg",
-   "w": 1800,
-   "h": 2400,
-   "alt": "Untracked powder rolling through aspens and snow-plastered spruce",
-   "use": "Site ski section / Instagram"
-  },
-  {
-   "file": "/assets/photos/library/purg-storm-skier-bull-run.jpg",
-   "thumb": "/assets/photos/library/t/purg-storm-skier-bull-run.jpg",
-   "w": 2400,
-   "h": 1800,
-   "alt": "Skier in goggles looking back on a storm day at Purgatory near the Bull Run sign",
-   "use": "Instagram / Journal - friend in frame (goggles on); confirm he is fine with it"
-  },
-  {
-   "file": "/assets/photos/library/bc-skin-track-red-hat.jpg",
-   "thumb": "/assets/photos/library/t/bc-skin-track-red-hat.jpg",
-   "w": 1800,
-   "h": 2400,
-   "alt": "Backcountry skier in a red hat skinning across a powder slope toward San Juan peaks",
-   "use": "Basecamp backcountry / Instagram"
-  },
-  {
-   "file": "/assets/photos/library/bc-skinner-valley-view.jpg",
-   "thumb": "/assets/photos/library/t/bc-skinner-valley-view.jpg",
-   "w": 1800,
-   "h": 2400,
-   "alt": "Backcountry skier pausing on the skin track to look across a deep San Juan valley",
-   "use": "Basecamp backcountry / Instagram"
-  },
-  {
-   "file": "/assets/photos/library/bc-poles-peaks.jpg",
-   "thumb": "/assets/photos/library/t/bc-poles-peaks.jpg",
-   "w": 1800,
-   "h": 2400,
-   "alt": "Two ski poles planted in untracked snow below cloud-wrapped San Juan peaks",
-   "use": "Basecamp backcountry / Instagram"
-  },
-  {
-   "file": "/assets/photos/library/bc-skin-track-trio.jpg",
-   "thumb": "/assets/photos/library/t/bc-skin-track-trio.jpg",
-   "w": 1800,
-   "h": 2400,
-   "alt": "Three backcountry skiers climbing a skin track up a wide open powder slope",
-   "use": "Basecamp backcountry / Instagram"
-  },
-  {
-   "file": "/assets/photos/library/bc-pack-helmet-summit.jpg",
-   "thumb": "/assets/photos/library/t/bc-pack-helmet-summit.jpg",
-   "w": 1800,
-   "h": 2400,
-   "alt": "Orange touring pack and helmet resting in the snow above a snowbound San Juan basin",
-   "use": "Basecamp backcountry / Instagram"
-  },
-  {
-   "file": "/assets/photos/library/bc-touring-party-wide.jpg",
-   "thumb": "/assets/photos/library/t/bc-touring-party-wide.jpg",
-   "w": 2400,
-   "h": 1800,
-   "alt": "Four backcountry skiers crossing a snowfield below sunlit San Juan peaks",
-   "use": "Basecamp backcountry banner / site"
-  },
-  {
-   "file": "/assets/photos/library/bc-touring-party-tall.jpg",
-   "thumb": "/assets/photos/library/t/bc-touring-party-tall.jpg",
-   "w": 1800,
-   "h": 2400,
-   "alt": "Backcountry skiers crossing a snowfield below sunlit San Juan peaks, vertical",
-   "use": "Basecamp backcountry / Instagram"
-  },
-  {
-   "file": "/assets/photos/library/bc-skin-track-solo.jpg",
-   "thumb": "/assets/photos/library/t/bc-skin-track-solo.jpg",
-   "w": 1800,
-   "h": 2400,
-   "alt": "Lone skier climbing a fresh skin track between spruce toward a rounded summit",
-   "use": "Basecamp backcountry / Instagram"
-  }
- ],
- "video": [
-  {
-   "file": "/assets/video/high-country-pan.mp4",
-   "poster": "/assets/video/high-country-pan.jpg",
-   "w": 1080,
-   "h": 1920,
-   "seconds": 15,
-   "alt": "Slow pan across golden high-country tundra toward the Needle Mountains",
-   "use": "Basecamp background / Instagram Reel"
-  },
-  {
-   "file": "/assets/video/tundra-ride.mp4",
-   "poster": "/assets/video/tundra-ride.jpg",
-   "w": 1080,
-   "h": 1920,
-   "seconds": 8,
-   "alt": "Red-dirt tundra ridge under blue sky with the Needles on the horizon",
-   "use": "Basecamp background / Instagram Reel"
-  },
-  {
-   "file": "/assets/video/alpine-singletrack-pass.mp4",
-   "poster": "/assets/video/alpine-singletrack-pass.jpg",
-   "w": 1080,
-   "h": 1920,
-   "seconds": 8,
-   "alt": "Rider passing on red-dirt alpine singletrack through wildflowers, San Juan peaks behind",
-   "use": "Instagram Reel / Basecamp"
-  },
-  {
-   "file": "/assets/video/lizard-head-pan.mp4",
-   "poster": "/assets/video/lizard-head-pan.jpg",
-   "w": 1080,
-   "h": 1920,
-   "seconds": 13,
-   "alt": "Pan from Lizard Head across fall high country to a parked bike and the San Juan peaks",
-   "use": "Instagram Reel / Basecamp background"
-  },
-  {
-   "file": "/assets/video/fall-singletrack-pov.mp4",
-   "poster": "/assets/video/fall-singletrack-pov.jpg",
-   "w": 1080,
-   "h": 1920,
-   "seconds": 7,
-   "alt": "Rider's-eye view down red-dirt singletrack through fall grass toward San Juan peaks",
-   "use": "Instagram Reel / Basecamp"
-  },
-  {
-   "file": "/assets/video/purg-follow-cam-side-hits.mp4",
-   "poster": "/assets/video/purg-follow-cam-side-hits.jpg",
-   "w": 1080,
-   "h": 1920,
-   "seconds": 46,
-   "alt": "Follow-cam lap down a Purgatory groomer with the West Needles ahead, young skier popping side hits along the trees",
-   "use": "Instagram Reel source (cut down) / Family stays"
-  },
-  {
-   "file": "/assets/video/purg-jan-2025-edit.mp4",
-   "poster": "/assets/video/purg-jan-2025-edit.jpg",
-   "w": 1080,
-   "h": 1920,
-   "seconds": 45,
-   "alt": "Edited Purgatory day: chairlift ride, groomers with West Needle views, side hits and a terrain-park rail",
-   "use": "Instagram Reel (already cut) - note two other skiers in frame early"
-  },
-  {
-   "file": "/assets/video/purg-groomer-flyby.mp4",
-   "poster": "/assets/video/purg-groomer-flyby.jpg",
-   "w": 1080,
-   "h": 1920,
-   "seconds": 13,
-   "alt": "Young skier flies past the camera on a wide Purgatory groomer, panning to the West Needles and base village",
-   "use": "Instagram Reel / winter background"
-  },
-  {
-   "file": "/assets/video/purg-run-to-base.mp4",
-   "poster": "/assets/video/purg-run-to-base.jpg",
-   "w": 1080,
-   "h": 1920,
-   "seconds": 9,
-   "alt": "Young skier carves past on a tree-lined run that opens to Purgatory base village and the West Needles",
-   "use": "Instagram Reel / winter background"
-  },
-  {
-   "file": "/assets/video/purg-cat-track-air.mp4",
-   "poster": "/assets/video/purg-cat-track-air.jpg",
-   "w": 1080,
-   "h": 1920,
-   "seconds": 11,
-   "alt": "Young skier pops a small air off a roller on a tree-lined Purgatory run",
-   "use": "Instagram Reel"
-  },
-  {
-   "file": "/assets/video/purg-rock-drop.mp4",
-   "poster": "/assets/video/purg-rock-drop.jpg",
-   "w": 1080,
-   "h": 1920,
-   "seconds": 9,
-   "alt": "Young skier drops a snow-covered rock under the chairlift and skis out past the camera",
-   "use": "Instagram Reel"
-  },
-  {
-   "file": "/assets/video/purg-tree-bank-drop.mp4",
-   "poster": "/assets/video/purg-tree-bank-drop.jpg",
-   "w": 1080,
-   "h": 1920,
-   "seconds": 14,
-   "alt": "Young skier drops off a powder bank out of the trees and skis away under the chairlift",
-   "use": "Instagram Reel"
-  },
-  {
-   "file": "/assets/video/purg-sunlit-roller.mp4",
-   "poster": "/assets/video/purg-sunlit-roller.jpg",
-   "w": 1080,
-   "h": 1920,
-   "seconds": 8,
-   "alt": "Backlit young skier crests a roller into the sun and skis into the trees at Purgatory",
-   "use": "Instagram Reel"
-  },
-  {
-   "file": "/assets/video/purg-lift-line-roller.mp4",
-   "poster": "/assets/video/purg-lift-line-roller.jpg",
-   "w": 1080,
-   "h": 1920,
-   "seconds": 26,
-   "alt": "Young skier and a coach take turns off a roller under the lift line at Purgatory",
-   "use": "Instagram Reel source - second skier in frame, shown from behind"
-  },
-  {
-   "file": "/assets/video/purg-park-rail-follow.mp4",
-   "poster": "/assets/video/purg-park-rail-follow.jpg",
-   "w": 1080,
-   "h": 1920,
-   "seconds": 25,
-   "alt": "Follow-cam through the Purgatory terrain park past a rail and down a tree-lined run",
-   "use": "Instagram Reel source (cut down)"
-  },
-  {
-   "file": "/assets/video/purg-terrain-park-lap.mp4",
-   "poster": "/assets/video/purg-terrain-park-lap.jpg",
-   "w": 1080,
-   "h": 1920,
-   "seconds": 26,
-   "alt": "Young skier laps the Purgatory terrain park toward a box feature",
-   "use": "Instagram Reel source - a snowboarder is in frame in the first seconds"
-  },
-  {
-   "file": "/assets/video/purg-chairlift-selfie-clip.mp4",
-   "poster": "/assets/video/purg-chairlift-selfie-clip.jpg",
-   "w": 1080,
-   "h": 1920,
-   "seconds": 11,
-   "alt": "Dad and son goofing on a Purgatory chairlift in helmets and goggles",
-   "use": "HOLD - Casey's face; Family stays / Instagram once he is ready to appear"
-  }
- ]
+  "note": "Casey-supplied photos and video, Nov 2026. Free to use anywhere on the site. Videos are vertical 9:16, muted.",
+  "photos": [
+    {
+      "file": "/assets/photos/library/needles-alpenglow-purgatory.jpg",
+      "thumb": "/assets/photos/library/t/needles-alpenglow-purgatory.jpg",
+      "w": 2016,
+      "h": 1512,
+      "alt": "Alpenglow on the snowy West Needles above Purgatory homes at dusk",
+      "use": "Homepage hero / Instagram"
+    },
+    {
+      "file": "/assets/photos/library/casey-sunset-ridge.jpg",
+      "thumb": "/assets/photos/library/t/casey-sunset-ridge.jpg",
+      "w": 2400,
+      "h": 1800,
+      "alt": "Rider at golden hour on a high ridge, Needle Mountains behind",
+      "use": "Basecamp / About"
+    },
+    {
+      "file": "/assets/photos/library/son-alpine-lake.jpg",
+      "thumb": "/assets/photos/library/t/son-alpine-lake.jpg",
+      "w": 1800,
+      "h": 2400,
+      "alt": "Casey's son resting on a rock beside an alpine lake in fall color below the Needles",
+      "use": "Instagram / About"
+    },
+    {
+      "file": "/assets/photos/library/scree-traverse.jpg",
+      "thumb": "/assets/photos/library/t/scree-traverse.jpg",
+      "w": 2016,
+      "h": 1512,
+      "alt": "Rider stopped on red-dirt singletrack beside a huge scree slope, La Platas on the horizon",
+      "use": "Basecamp routes"
+    },
+    {
+      "file": "/assets/photos/library/lake-campfire.jpg",
+      "thumb": "/assets/photos/library/t/lake-campfire.jpg",
+      "w": 1512,
+      "h": 2016,
+      "alt": "Fire ring above a forested alpine lake beneath the Needle Mountains, aspens turning",
+      "use": "Journal / Instagram"
+    },
+    {
+      "file": "/assets/photos/library/moose-river.jpg",
+      "thumb": "/assets/photos/library/t/moose-river.jpg",
+      "w": 1512,
+      "h": 2016,
+      "alt": "Moose wading a willow-lined river in a high San Juan valley",
+      "use": "Journal / Instagram"
+    },
+    {
+      "file": "/assets/photos/library/kids-camp-overlook.jpg",
+      "thumb": "/assets/photos/library/t/kids-camp-overlook.jpg",
+      "w": 1600,
+      "h": 2400,
+      "alt": "Group of young riders gathered on a meadow singletrack overlooking the West Needles",
+      "use": "Family stays"
+    },
+    {
+      "file": "/assets/photos/library/kids-camp-wide.jpg",
+      "thumb": "/assets/photos/library/t/kids-camp-wide.jpg",
+      "w": 2400,
+      "h": 1600,
+      "alt": "Young riders and coaches at a meadow overlook above the Animas Valley",
+      "use": "Family stays"
+    },
+    {
+      "file": "/assets/photos/library/kids-camp-engineer.jpg",
+      "thumb": "/assets/photos/library/t/kids-camp-engineer.jpg",
+      "w": 2400,
+      "h": 1600,
+      "alt": "Line of young riders on a wildflower meadow, Engineer Mountain behind",
+      "use": "Family stays"
+    },
+    {
+      "file": "/assets/photos/library/engineer-snowfield.jpg",
+      "thumb": "/assets/photos/library/t/engineer-snowfield.jpg",
+      "w": 1512,
+      "h": 2016,
+      "alt": "Rider on meadow singletrack below Engineer Mountain with late snow",
+      "use": "Basecamp"
+    },
+    {
+      "file": "/assets/photos/library/high-country-crew.jpg",
+      "thumb": "/assets/photos/library/t/high-country-crew.jpg",
+      "w": 2400,
+      "h": 1596,
+      "alt": "Four riders crossing golden tundra toward red and orange San Juan peaks",
+      "use": "Basecamp hero option"
+    },
+    {
+      "file": "/assets/photos/library/ridge-crew.jpg",
+      "thumb": "/assets/photos/library/t/ridge-crew.jpg",
+      "w": 2048,
+      "h": 1365,
+      "alt": "Rider descending a golden ridge as three others crest behind, Needles in the distance",
+      "use": "Basecamp"
+    },
+    {
+      "file": "/assets/photos/library/ridge-silhouette.jpg",
+      "thumb": "/assets/photos/library/t/ridge-silhouette.jpg",
+      "w": 2048,
+      "h": 1365,
+      "alt": "Three riders silhouetted on a ridge above layered San Juan ranges",
+      "use": "Basecamp"
+    },
+    {
+      "file": "/assets/photos/library/bike-overlook.jpg",
+      "thumb": "/assets/photos/library/t/bike-overlook.jpg",
+      "w": 1512,
+      "h": 2016,
+      "alt": "Santa Cruz bike leaning on red rock at a high overlook toward Engineer Mountain",
+      "use": "Basecamp / gear"
+    },
+    {
+      "file": "/assets/photos/library/ridge-descent-engineer.jpg",
+      "thumb": "/assets/photos/library/t/ridge-descent-engineer.jpg",
+      "w": 2048,
+      "h": 1365,
+      "alt": "Four riders dropping off a ridge toward Engineer Mountain",
+      "use": "Basecamp"
+    },
+    {
+      "file": "/assets/photos/library/tundra-descent.jpg",
+      "thumb": "/assets/photos/library/t/tundra-descent.jpg",
+      "w": 2048,
+      "h": 1365,
+      "alt": "Riders descending a golden tundra ridge in single file",
+      "use": "Basecamp routes"
+    },
+    {
+      "file": "/assets/photos/library/ridge-top-four.jpg",
+      "thumb": "/assets/photos/library/t/ridge-top-four.jpg",
+      "w": 2048,
+      "h": 1365,
+      "alt": "Four riders small on the crest of a huge golden ridge",
+      "use": "Basecamp / wide banner"
+    },
+    {
+      "file": "/assets/photos/library/engineer-climb.jpg",
+      "thumb": "/assets/photos/library/t/engineer-climb.jpg",
+      "w": 2016,
+      "h": 1512,
+      "alt": "Rider climbing meadow singletrack toward Engineer Mountain in midsummer",
+      "use": "Basecamp / Journal"
+    },
+    {
+      "file": "/assets/photos/library/ice-lake.jpg",
+      "thumb": "/assets/photos/library/t/ice-lake.jpg",
+      "w": 2400,
+      "h": 1800,
+      "alt": "Two hikers walking the shore of Ice Lake in the San Juans",
+      "use": "Ophir / Journal"
+    },
+    {
+      "file": "/assets/photos/library/son-durango-overlook.jpg",
+      "thumb": "/assets/photos/library/t/son-durango-overlook.jpg",
+      "w": 1800,
+      "h": 2400,
+      "alt": "Young rider on a dirt overlook above Durango and the Animas Valley",
+      "use": "Instagram / About / Journal"
+    },
+    {
+      "file": "/assets/photos/library/son-alpine-push.jpg",
+      "thumb": "/assets/photos/library/t/son-alpine-push.jpg",
+      "w": 1800,
+      "h": 2400,
+      "alt": "Young rider pushing his bike up red alpine singletrack through corn lilies, San Juans behind",
+      "use": "Basecamp / Instagram"
+    },
+    {
+      "file": "/assets/photos/library/son-aspen-drop.jpg",
+      "thumb": "/assets/photos/library/t/son-aspen-drop.jpg",
+      "w": 1206,
+      "h": 2109,
+      "alt": "Young rider dropping a rock ledge through aspens",
+      "use": "Basecamp / Instagram"
+    },
+    {
+      "file": "/assets/photos/library/son-creek-walk.jpg",
+      "thumb": "/assets/photos/library/t/son-creek-walk.jpg",
+      "w": 1800,
+      "h": 2400,
+      "alt": "Young rider walking his bike along a high-country creek under summer clouds",
+      "use": "Instagram / Journal"
+    },
+    {
+      "file": "/assets/photos/library/sunset-slickrock-motion.jpg",
+      "thumb": "/assets/photos/library/t/sunset-slickrock-motion.jpg",
+      "w": 1206,
+      "h": 2144,
+      "alt": "Casey blurring off a sandstone ledge at sunset above Durango (motion blur)",
+      "use": "Instagram only"
+    },
+    {
+      "file": "/assets/photos/library/sunset-slickrock-drop.jpg",
+      "thumb": "/assets/photos/library/t/sunset-slickrock-drop.jpg",
+      "w": 1206,
+      "h": 2144,
+      "alt": "Casey rolling off a sandstone ledge at sunset, Durango and the mesas below",
+      "use": "Basecamp / Instagram"
+    },
+    {
+      "file": "/assets/photos/library/fort-lewis-ledge.jpg",
+      "thumb": "/assets/photos/library/t/fort-lewis-ledge.jpg",
+      "w": 1206,
+      "h": 2144,
+      "alt": "Casey's friend in Fort Lewis kit dropping a sandstone ledge above Durango at golden hour",
+      "use": "Basecamp / About"
+    },
+    {
+      "file": "/assets/photos/library/fort-lewis-snag.jpg",
+      "thumb": "/assets/photos/library/t/fort-lewis-snag.jpg",
+      "w": 1206,
+      "h": 2144,
+      "alt": "Casey's friend in Fort Lewis kit dropping past a juniper snag above Durango",
+      "use": "Basecamp / Instagram"
+    },
+    {
+      "file": "/assets/photos/library/sunset-rear-wheel.jpg",
+      "thumb": "/assets/photos/library/t/sunset-rear-wheel.jpg",
+      "w": 1350,
+      "h": 2400,
+      "alt": "Casey dropping a sandstone ledge at sunset, rear wheel up, valley below",
+      "use": "Basecamp hero option"
+    },
+    {
+      "file": "/assets/photos/library/sunset-front-wheel.jpg",
+      "thumb": "/assets/photos/library/t/sunset-front-wheel.jpg",
+      "w": 1350,
+      "h": 2400,
+      "alt": "Close low angle of Casey rolling sandstone at sunset above Durango",
+      "use": "Instagram / Journal"
+    },
+    {
+      "file": "/assets/photos/library/sunset-sunburst.jpg",
+      "thumb": "/assets/photos/library/t/sunset-sunburst.jpg",
+      "w": 1860,
+      "h": 2400,
+      "alt": "Casey backlit by the setting sun dropping into rocky singletrack above Durango",
+      "use": "Basecamp / wide banner"
+    },
+    {
+      "file": "/assets/photos/library/red-ridge-overlook.jpg",
+      "thumb": "/assets/photos/library/t/red-ridge-overlook.jpg",
+      "w": 1800,
+      "h": 2400,
+      "alt": "Casey resting on a red-dirt ridge facing the San Juan peaks under blue sky",
+      "use": "Basecamp / Instagram (sky room for text)"
+    },
+    {
+      "file": "/assets/photos/library/red-ridge-overlook-2.jpg",
+      "thumb": "/assets/photos/library/t/red-ridge-overlook-2.jpg",
+      "w": 1800,
+      "h": 2400,
+      "alt": "Casey on a red-dirt ridge looking out at the San Juan peaks (alternate)",
+      "use": "Basecamp / Instagram"
+    },
+    {
+      "file": "/assets/photos/library/ridge-singletrack-laplatas.jpg",
+      "thumb": "/assets/photos/library/t/ridge-singletrack-laplatas.jpg",
+      "w": 1800,
+      "h": 2400,
+      "alt": "Casey on narrow ridge singletrack above forested valleys, La Plata peaks in the distance",
+      "use": "Basecamp routes / Journal"
+    },
+    {
+      "file": "/assets/photos/library/arnica-meadow-bike.jpg",
+      "thumb": "/assets/photos/library/t/arnica-meadow-bike.jpg",
+      "w": 1512,
+      "h": 2016,
+      "alt": "Bike parked on singletrack through a meadow of yellow alpine wildflowers, high San Juan ridges under blue sky",
+      "use": "Basecamp / Instagram"
+    },
+    {
+      "file": "/assets/photos/library/alpine-lake-cirque.jpg",
+      "thumb": "/assets/photos/library/t/alpine-lake-cirque.jpg",
+      "w": 1800,
+      "h": 2400,
+      "alt": "Green alpine lake beneath a towering San Juan cirque under building clouds",
+      "use": "Basecamp routes / Journal"
+    },
+    {
+      "file": "/assets/photos/library/purg-storm-over-valley.jpg",
+      "thumb": "/assets/photos/library/t/purg-storm-over-valley.jpg",
+      "w": 1800,
+      "h": 2400,
+      "alt": "Young skier carving a groomed run at Purgatory with a snow squall filling the Animas valley and snowy San Juan peaks beyond",
+      "use": "Winter hero option / Instagram / Family stays"
+    },
+    {
+      "file": "/assets/photos/library/purg-aspen-turn.jpg",
+      "thumb": "/assets/photos/library/t/purg-aspen-turn.jpg",
+      "w": 1800,
+      "h": 2400,
+      "alt": "Young skier mid-turn on soft chopped snow beside a stand of bare aspens under deep blue sky at Purgatory",
+      "use": "Winter / Family stays / Instagram"
+    },
+    {
+      "file": "/assets/photos/library/purg-groomer-chase.jpg",
+      "thumb": "/assets/photos/library/t/purg-groomer-chase.jpg",
+      "w": 1800,
+      "h": 2400,
+      "alt": "Following a young skier down a fresh-snow run at Purgatory, snow-loaded spruce and a chairlift line ahead",
+      "use": "Winter / Family stays / Journal"
+    },
+    {
+      "file": "/assets/photos/library/purg-ski-tips-pov.jpg",
+      "thumb": "/assets/photos/library/t/purg-ski-tips-pov.jpg",
+      "w": 1800,
+      "h": 2400,
+      "alt": "Skier's-eye view over ski tips, following a young skier down a fresh-snow run at Purgatory",
+      "use": "Instagram / Journal"
+    },
+    {
+      "file": "/assets/photos/library/purg-cat-track-tuck.jpg",
+      "thumb": "/assets/photos/library/t/purg-cat-track-tuck.jpg",
+      "w": 1800,
+      "h": 2400,
+      "alt": "Young skier in a tuck on a sun-dappled cat track through snowy spruce at Purgatory",
+      "use": "Instagram / Journal"
+    },
+    {
+      "file": "/assets/photos/library/purg-ski-school-lineup.jpg",
+      "thumb": "/assets/photos/library/t/purg-ski-school-lineup.jpg",
+      "w": 1800,
+      "h": 2400,
+      "alt": "Line of kids in ski school at the top of Purgatory with the West Needle peaks behind",
+      "use": "HOLD - other families' kids; get parent consent before any public use"
+    },
+    {
+      "file": "/assets/photos/library/purg-chairlift-selfie.jpg",
+      "thumb": "/assets/photos/library/t/purg-chairlift-selfie.jpg",
+      "w": 1800,
+      "h": 2400,
+      "alt": "Dad and son grinning on a Purgatory chairlift in helmets and mirrored goggles, bluebird day",
+      "use": "HOLD - Casey's face; About / Family stays once he is ready to appear"
+    },
+    {
+      "file": "/assets/photos/library/purg-storm-day-chair.jpg",
+      "thumb": "/assets/photos/library/t/purg-storm-day-chair.jpg",
+      "w": 1800,
+      "h": 2400,
+      "alt": "Skier on a Purgatory chairlift in a snowstorm, yellow storm lens and snow-dusted shell",
+      "use": "HOLD - Casey's face; About / storm-day Journal once he is ready to appear"
+    },
+    {
+      "file": "/assets/photos/library/ski-storm-lift-tower.jpg",
+      "thumb": "/assets/photos/library/t/ski-storm-lift-tower.jpg",
+      "w": 1512,
+      "h": 2016,
+      "alt": "Chairlift tower and snow-loaded spruce disappearing into a heavy snowstorm",
+      "use": "Instagram / Journal (storm day)"
+    },
+    {
+      "file": "/assets/photos/library/kid-snow-faceplant.jpg",
+      "thumb": "/assets/photos/library/t/kid-snow-faceplant.jpg",
+      "w": 1512,
+      "h": 2016,
+      "alt": "Small skier face-down and spread-eagle in the snow after a tumble, skis splayed",
+      "use": "Instagram (humor / family stays) - face not visible"
+    },
+    {
+      "file": "/assets/photos/library/ski-early-season-chair-aspens.jpg",
+      "thumb": "/assets/photos/library/t/ski-early-season-chair-aspens.jpg",
+      "w": 1512,
+      "h": 2016,
+      "alt": "Chairlift riders passing bare aspens and snow-dusted spruce in an early-season storm",
+      "use": "Instagram / Journal (opening day)"
+    },
+    {
+      "file": "/assets/photos/library/ski-local-hill-sunburst.jpg",
+      "thumb": "/assets/photos/library/t/ski-local-hill-sunburst.jpg",
+      "w": 1512,
+      "h": 2016,
+      "alt": "Sunburst over a small local ski hill seen from the chairlift, tracked snow below",
+      "use": "Instagram / Journal (local hill)"
+    },
+    {
+      "file": "/assets/photos/library/ski-powder-day-chair.jpg",
+      "thumb": "/assets/photos/library/t/ski-powder-day-chair.jpg",
+      "w": 1512,
+      "h": 2016,
+      "alt": "Two riders on a chairlift above fresh powder tracks in falling snow",
+      "use": "Instagram / Journal (powder day)"
+    },
+    {
+      "file": "/assets/photos/library/ski-bluebird-lift-tower.jpg",
+      "thumb": "/assets/photos/library/t/ski-bluebird-lift-tower.jpg",
+      "w": 1512,
+      "h": 2016,
+      "alt": "Sun flaring over a lift tower above untracked powder and a mogul face, deep blue sky",
+      "use": "Site ski section / Instagram"
+    },
+    {
+      "file": "/assets/photos/library/ski-powder-tip-pov.jpg",
+      "thumb": "/assets/photos/library/t/ski-powder-tip-pov.jpg",
+      "w": 1800,
+      "h": 2400,
+      "alt": "Neon ski tip poking out of deep powder in a snow-loaded aspen and spruce glade",
+      "use": "Instagram / Journal (powder day)"
+    },
+    {
+      "file": "/assets/photos/library/ski-powder-aspen-glade.jpg",
+      "thumb": "/assets/photos/library/t/ski-powder-aspen-glade.jpg",
+      "w": 1800,
+      "h": 2400,
+      "alt": "Untracked powder rolling through aspens and snow-plastered spruce",
+      "use": "Site ski section / Instagram"
+    },
+    {
+      "file": "/assets/photos/library/purg-storm-skier-bull-run.jpg",
+      "thumb": "/assets/photos/library/t/purg-storm-skier-bull-run.jpg",
+      "w": 2400,
+      "h": 1800,
+      "alt": "Skier in goggles looking back on a storm day at Purgatory near the Bull Run sign",
+      "use": "Instagram / Journal - friend in frame (goggles on); confirm he is fine with it"
+    },
+    {
+      "file": "/assets/photos/library/bc-skin-track-red-hat.jpg",
+      "thumb": "/assets/photos/library/t/bc-skin-track-red-hat.jpg",
+      "w": 1800,
+      "h": 2400,
+      "alt": "Backcountry skier in a red hat skinning across a powder slope toward San Juan peaks",
+      "use": "Basecamp backcountry / Instagram"
+    },
+    {
+      "file": "/assets/photos/library/bc-skinner-valley-view.jpg",
+      "thumb": "/assets/photos/library/t/bc-skinner-valley-view.jpg",
+      "w": 1800,
+      "h": 2400,
+      "alt": "Backcountry skier pausing on the skin track to look across a deep San Juan valley",
+      "use": "Basecamp backcountry / Instagram"
+    },
+    {
+      "file": "/assets/photos/library/bc-poles-peaks.jpg",
+      "thumb": "/assets/photos/library/t/bc-poles-peaks.jpg",
+      "w": 1800,
+      "h": 2400,
+      "alt": "Two ski poles planted in untracked snow below cloud-wrapped San Juan peaks",
+      "use": "Basecamp backcountry / Instagram"
+    },
+    {
+      "file": "/assets/photos/library/bc-skin-track-trio.jpg",
+      "thumb": "/assets/photos/library/t/bc-skin-track-trio.jpg",
+      "w": 1800,
+      "h": 2400,
+      "alt": "Three backcountry skiers climbing a skin track up a wide open powder slope",
+      "use": "Basecamp backcountry / Instagram"
+    },
+    {
+      "file": "/assets/photos/library/bc-pack-helmet-summit.jpg",
+      "thumb": "/assets/photos/library/t/bc-pack-helmet-summit.jpg",
+      "w": 1800,
+      "h": 2400,
+      "alt": "Orange touring pack and helmet resting in the snow above a snowbound San Juan basin",
+      "use": "Basecamp backcountry / Instagram"
+    },
+    {
+      "file": "/assets/photos/library/bc-touring-party-wide.jpg",
+      "thumb": "/assets/photos/library/t/bc-touring-party-wide.jpg",
+      "w": 2400,
+      "h": 1800,
+      "alt": "Four backcountry skiers crossing a snowfield below sunlit San Juan peaks",
+      "use": "Basecamp backcountry banner / site"
+    },
+    {
+      "file": "/assets/photos/library/bc-touring-party-tall.jpg",
+      "thumb": "/assets/photos/library/t/bc-touring-party-tall.jpg",
+      "w": 1800,
+      "h": 2400,
+      "alt": "Backcountry skiers crossing a snowfield below sunlit San Juan peaks, vertical",
+      "use": "Basecamp backcountry / Instagram"
+    },
+    {
+      "file": "/assets/photos/library/bc-skin-track-solo.jpg",
+      "thumb": "/assets/photos/library/t/bc-skin-track-solo.jpg",
+      "w": 1800,
+      "h": 2400,
+      "alt": "Lone skier climbing a fresh skin track between spruce toward a rounded summit",
+      "use": "Basecamp backcountry / Instagram"
+    }
+  ],
+  "video": [
+    {
+      "file": "/assets/video/high-country-pan.mp4",
+      "poster": "/assets/video/high-country-pan.jpg",
+      "w": 1080,
+      "h": 1920,
+      "seconds": 15,
+      "alt": "Slow pan across golden high-country tundra toward the Needle Mountains",
+      "use": "Basecamp background / Instagram Reel"
+    },
+    {
+      "file": "/assets/video/tundra-ride.mp4",
+      "poster": "/assets/video/tundra-ride.jpg",
+      "w": 1080,
+      "h": 1920,
+      "seconds": 8,
+      "alt": "Red-dirt tundra ridge under blue sky with the Needles on the horizon",
+      "use": "Basecamp background / Instagram Reel"
+    },
+    {
+      "file": "/assets/video/alpine-singletrack-pass.mp4",
+      "poster": "/assets/video/alpine-singletrack-pass.jpg",
+      "w": 1080,
+      "h": 1920,
+      "seconds": 8,
+      "alt": "Rider passing on red-dirt alpine singletrack through wildflowers, San Juan peaks behind",
+      "use": "Instagram Reel / Basecamp"
+    },
+    {
+      "file": "/assets/video/lizard-head-pan.mp4",
+      "poster": "/assets/video/lizard-head-pan.jpg",
+      "w": 1080,
+      "h": 1920,
+      "seconds": 13,
+      "alt": "Pan from Lizard Head across fall high country to a parked bike and the San Juan peaks",
+      "use": "Instagram Reel / Basecamp background"
+    },
+    {
+      "file": "/assets/video/fall-singletrack-pov.mp4",
+      "poster": "/assets/video/fall-singletrack-pov.jpg",
+      "w": 1080,
+      "h": 1920,
+      "seconds": 7,
+      "alt": "Rider's-eye view down red-dirt singletrack through fall grass toward San Juan peaks",
+      "use": "Instagram Reel / Basecamp"
+    },
+    {
+      "file": "/assets/video/purg-follow-cam-side-hits.mp4",
+      "poster": "/assets/video/purg-follow-cam-side-hits.jpg",
+      "w": 1080,
+      "h": 1920,
+      "seconds": 46,
+      "alt": "Follow-cam lap down a Purgatory groomer with the West Needles ahead, young skier popping side hits along the trees",
+      "use": "Instagram Reel source (cut down) / Family stays"
+    },
+    {
+      "file": "/assets/video/purg-jan-2025-edit.mp4",
+      "poster": "/assets/video/purg-jan-2025-edit.jpg",
+      "w": 1080,
+      "h": 1920,
+      "seconds": 45,
+      "alt": "Edited Purgatory day: chairlift ride, groomers with West Needle views, side hits and a terrain-park rail",
+      "use": "Instagram Reel (already cut) - note two other skiers in frame early"
+    },
+    {
+      "file": "/assets/video/purg-groomer-flyby.mp4",
+      "poster": "/assets/video/purg-groomer-flyby.jpg",
+      "w": 1080,
+      "h": 1920,
+      "seconds": 13,
+      "alt": "Young skier flies past the camera on a wide Purgatory groomer, panning to the West Needles and base village",
+      "use": "Instagram Reel / winter background"
+    },
+    {
+      "file": "/assets/video/purg-run-to-base.mp4",
+      "poster": "/assets/video/purg-run-to-base.jpg",
+      "w": 1080,
+      "h": 1920,
+      "seconds": 9,
+      "alt": "Young skier carves past on a tree-lined run that opens to Purgatory base village and the West Needles",
+      "use": "Instagram Reel / winter background"
+    },
+    {
+      "file": "/assets/video/purg-cat-track-air.mp4",
+      "poster": "/assets/video/purg-cat-track-air.jpg",
+      "w": 1080,
+      "h": 1920,
+      "seconds": 11,
+      "alt": "Young skier pops a small air off a roller on a tree-lined Purgatory run",
+      "use": "Instagram Reel"
+    },
+    {
+      "file": "/assets/video/purg-rock-drop.mp4",
+      "poster": "/assets/video/purg-rock-drop.jpg",
+      "w": 1080,
+      "h": 1920,
+      "seconds": 9,
+      "alt": "Young skier drops a snow-covered rock under the chairlift and skis out past the camera",
+      "use": "Instagram Reel"
+    },
+    {
+      "file": "/assets/video/purg-tree-bank-drop.mp4",
+      "poster": "/assets/video/purg-tree-bank-drop.jpg",
+      "w": 1080,
+      "h": 1920,
+      "seconds": 14,
+      "alt": "Young skier drops off a powder bank out of the trees and skis away under the chairlift",
+      "use": "Instagram Reel"
+    },
+    {
+      "file": "/assets/video/purg-sunlit-roller.mp4",
+      "poster": "/assets/video/purg-sunlit-roller.jpg",
+      "w": 1080,
+      "h": 1920,
+      "seconds": 8,
+      "alt": "Backlit young skier crests a roller into the sun and skis into the trees at Purgatory",
+      "use": "Instagram Reel"
+    },
+    {
+      "file": "/assets/video/purg-lift-line-roller.mp4",
+      "poster": "/assets/video/purg-lift-line-roller.jpg",
+      "w": 1080,
+      "h": 1920,
+      "seconds": 26,
+      "alt": "Young skier and a coach take turns off a roller under the lift line at Purgatory",
+      "use": "Instagram Reel source - second skier in frame, shown from behind"
+    },
+    {
+      "file": "/assets/video/purg-park-rail-follow.mp4",
+      "poster": "/assets/video/purg-park-rail-follow.jpg",
+      "w": 1080,
+      "h": 1920,
+      "seconds": 25,
+      "alt": "Follow-cam through the Purgatory terrain park past a rail and down a tree-lined run",
+      "use": "Instagram Reel source (cut down)"
+    },
+    {
+      "file": "/assets/video/purg-terrain-park-lap.mp4",
+      "poster": "/assets/video/purg-terrain-park-lap.jpg",
+      "w": 1080,
+      "h": 1920,
+      "seconds": 26,
+      "alt": "Young skier laps the Purgatory terrain park toward a box feature",
+      "use": "Instagram Reel source - a snowboarder is in frame in the first seconds"
+    },
+    {
+      "file": "/assets/video/purg-chairlift-selfie-clip.mp4",
+      "poster": "/assets/video/purg-chairlift-selfie-clip.jpg",
+      "w": 1080,
+      "h": 1920,
+      "seconds": 11,
+      "alt": "Dad and son goofing on a Purgatory chairlift in helmets and goggles",
+      "use": "HOLD - Casey's face; Family stays / Instagram once he is ready to appear"
+    }
+  ]
 }

@@ -187,9 +187,9 @@ def collection_grid():
 #   hero-ski.jpg  - hazy, flat snow shot. Replace with a crisp bluebird Purgatory or backcountry photo, landscape, 2400px+.
 #   hero-golf.jpg, golf.jpg - weak golf shots. Replace before golf goes back on any page.
 # The homepage hero uses library/engineer-climb.jpg until a sharp winter photo is in.
-HERO_IMG = '/assets/photos/library/purg-storm-over-valley.jpg'
-HERO_IMG_WIDE = '/assets/photos/library/purg-aspen-turn.jpg'  # wide screens: skier on the right, room for text on the left
-HERO_ALT = 'A young skier on a Purgatory groomer below Twilight Peak and the snowy Animas Valley as a storm clears'
+HERO_IMG = '/assets/photos/library/needles-alpenglow-purgatory.jpg'
+HERO_IMG_WIDE = HERO_IMG
+HERO_ALT = 'Alpenglow on the snowy Needle Mountains above homes near Purgatory at dusk'
 
 EXPS = [('ski', 'Ski Purgatory', '/areas/purgatory', 'Thirty minutes up the valley. What a ski day from Durango looks like, and how we set one up.'),
         ('bike', 'Ride from town', '/trails', 'Ten mountain bike routes, easy to advanced, each with a map, elevation profile and free GPX.'),

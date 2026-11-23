@@ -191,7 +191,7 @@ HERO_IMG = '/assets/photos/library/needles-alpenglow-purgatory.jpg'
 HERO_IMG_WIDE = HERO_IMG
 HERO_ALT = 'Alpenglow on the snowy Needle Mountains above homes near Purgatory at dusk'
 
-EXPS = [('ski', 'Ski Purgatory', '/areas/purgatory', 'Thirty minutes up the valley. What a ski day from Durango looks like, and how we set one up.'),
+EXPS = [('ski', 'Ski Purgatory', '/purgatory-vacation-rentals', 'Twenty-five miles up the valley. Where to stay for a Purgatory ski trip, and when to book.'),
         ('bike', 'Ride from town', '/trails', 'Ten mountain bike routes, easy to advanced, each with a map, elevation profile and free GPX.'),
         ('coffee', 'Eat on Main', '/journal/where-to-eat-durango', 'Where we actually eat in Durango, from coffee to a late table downtown.')]
 exps = ''.join(f'''<a class="card reveal" href="{u}">
@@ -1035,7 +1035,7 @@ post3_body = f'''
     </div>
   </section>
 '''
-post3 = page('Where to eat in Durango, from a local · The Journal · Ophir Stays',
+post3 = page('Best Restaurants in Durango, CO: Where a Local Eats (2026) · Ophir Stays',
              'Thirteen Durango restaurants a local recommends, by occasion: special dinners at Eolus and Serafina\u2019s, date night at Perbacco, pizza with kids at Fired Up, and fast burritos at Zia.',
              '/journal/where-to-eat-durango', 'journal', post3_body)
 
@@ -1107,7 +1107,7 @@ post4_body = f"""
     </div>
   </section>
 """
-post4 = page('Can you rent your Durango home short-term? City and county rules · Ophir Stays',
+post4 = page('Durango Short-Term Rental Rules (2026): City Permits, County Taxes, HOAs · Ophir Stays',
              'Durango short-term rental rules for 2026: city permits are capped and waitlisted; La Plata County has no rental permit but requires lodging and sales tax.',
              '/journal/durango-short-term-rental-rules', 'journal', post4_body)
 
@@ -1641,6 +1641,7 @@ purg_body = f"""
       <p class="eyebrow">Areas · Purgatory and Durango Mountain</p>
       <h1 class="display">Vacation rental management at Purgatory</h1>
       <p class="post-meta">By Casey Roberts · October 2026</p>
+      <p class="fine" style="margin-top:14px">Looking for a place to stay? <a href="/purgatory-vacation-rentals">Where to stay at Purgatory Resort</a>.</p>
     </div>
   </section>
   <div class="wrap">{photo('hero-ski', 'Skiers touring below the San Juan peaks near Purgatory')}</div>
@@ -1710,9 +1711,96 @@ purg_body = f"""
     </div>
   </section>
 """
-purg_page = page('Purgatory Vacation Rental Management · Ophir Stays',
+purg_page = page('Purgatory Vacation Rental Management for Owners · Ophir Stays',
                  'Vacation rental management at Purgatory and Durango Mountain: which condos and homes can rent nightly, what they earn, and how a local manager runs them.',
                  '/areas/purgatory', 'owners', purg_body, image='/assets/photos/hero-ski.jpg')
+
+# ---------------- GUEST GUIDE: PURGATORY VACATION RENTALS ----------------
+PG_FAQ = [
+ ("How far is Purgatory from Durango?", "About 25 miles north on Highway 550, roughly 30 to 40 minutes by car in winter. Leave extra time on storm mornings; the road climbs over 2,000 feet."),
+ ("Is it better to stay at Purgatory or in Durango?", "Stay at the mountain if skiing is the whole trip and you want to walk or drive five minutes to the lift. Stay in or near town if you want restaurants, the hot springs and a day or two off the slopes. Many families split it: a mountain home in the valley between the two."),
+ ("When should I book a Purgatory vacation rental?", "For Christmas, New Year's, Presidents' Day and March spring break, book by early fall. January and early February are the quietest and best-value weeks of the season."),
+ ("Does Ophir Stays have homes to book at Purgatory?", "Not yet. Our first homes open to guests in 2027. Join the list below and you'll hear first, with first pick of dates. Until then, we're happy to answer questions about where to stay."),
+]
+POST_LD['/purgatory-vacation-rentals'] = '<script type="application/ld+json">' + _json.dumps({"@context":"https://schema.org","@graph":[
+  {"@type":"Article","headline":"Purgatory Resort vacation rentals: where to stay","datePublished":"2026-11-22","author":{"@type":"Person","name":"Casey Roberts","url":"https://ophirstays.com/about"},"publisher":{"@type":"Organization","name":"Ophir Stays"},"mainEntityOfPage":"https://ophirstays.com/purgatory-vacation-rentals"},
+  {"@type":"FAQPage","mainEntity":[{"@type":"Question","name":q,"acceptedAnswer":{"@type":"Answer","text":a}} for q,a in PG_FAQ]}]}) + '</script>'
+pg_faq_html = ''.join(f'<details><summary>{q}</summary><p>{a}</p></details>' for q,a in PG_FAQ)
+pg_body = f'''
+  <section class="center" style="padding-bottom:40px">
+    <div class="wrap narrow reveal">
+      <p class="eyebrow">For guests · Purgatory Resort</p>
+      <h1 class="display">Purgatory Resort vacation rentals: where to stay</h1>
+      <p class="post-meta">By Casey Roberts · November 2026</p>
+    </div>
+  </section>
+  <div class="wrap"><div class="photo"><img src="/assets/photos/library/needles-alpenglow-purgatory.jpg" alt="Alpenglow on the Needle Mountains above homes near Purgatory Resort" loading="lazy"></div></div>
+  <section style="padding-top:56px">
+    <div class="wrap narrow article">
+      <p><strong>Purgatory Resort sits 25 miles north of Durango on Highway 550. Where you stay decides your trip: slopeside condos for the most ski time, the valley in between for space, or town for restaurants and the hot springs. Here is how a local would choose.</strong></p>
+
+      <h2>The four places to stay</h2>
+      <div class="table-wrap"><table class="data wrap">
+        <thead><tr><th scope="col">Where</th><th scope="col">To the lifts</th><th scope="col">Best for</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Purgatory Village, at the base</th><td>Walk</td><td>Ski-first trips and families who want to come in for lunch</td></tr>
+          <tr><th scope="row">Durango Mountain homes and townhomes, just off the base</th><td>A few minutes by car or shuttle</td><td>Groups who want more room and a hot tub</td></tr>
+          <tr><th scope="row">Cascade Village, a few minutes north</th><td>About 5 minutes</td><td>Quiet, views of the Needles, good value</td></tr>
+          <tr><th scope="row">Tamarron and the valley toward Durango</th><td>15 to 30 minutes</td><td>Splitting the trip between skiing and town</td></tr>
+        </tbody>
+      </table></div>
+
+      <h2>Purgatory Village</h2>
+      <p>The condos at the base put you closest to the lifts: from many you can walk over in boots, and some let you ski back close to the door. It's the easiest choice with small kids. Evenings are quiet; most dinners mean a drive to Durango.</p>
+
+      <h2>Homes and townhomes at Durango Mountain</h2>
+      <p>The neighborhoods around the base, from the townhomes off the main road to the homes around Lake Purgatory, give a group more bedrooms, a kitchen worth cooking in and, often, a hot tub. Check whether a home is a drive or a walk to the lift before you book.</p>
+
+      <h2>Cascade Village</h2>
+      <p>A few minutes north of the base on Highway 550, under the Needle Mountains. Quieter than the village, with big views and condos that often cost less for the same space.</p>
+
+      <h2>Tamarron, the valley and Durango</h2>
+      <p>Staying farther south trades a short drive for everything else: Durango's restaurants on Main Avenue, Trimble Hot Springs, the train and a day off skiing that doesn't feel like a wait. From downtown, plan on 30 to 40 minutes each way.</p>
+
+      <h2>What to look for in a Purgatory rental</h2>
+      <ul>
+        <li><strong>A place for gear:</strong> a ski room, boot dryers or at least a heated garage.</li>
+        <li><strong>A plowed, reliable driveway</strong> and parking that fits your cars, and four-wheel drive or snow tires for the road.</li>
+        <li><strong>Beds for your whole group.</strong> Many winter groups are six or more.</li>
+        <li><strong>A hot tub.</strong> After a full ski day, it's the thing guests mention most.</li>
+        <li><strong>Someone local to call</strong> if the heat or the hot water quits on a cold night.</li>
+      </ul>
+
+      <h2>When to book</h2>
+      <p>The ski season usually runs from late November into early April. Christmas, New Year's, Presidents' Day and March spring break fill first, so book those by early fall. January and early February have the shortest lift lines and the best rates.</p>
+
+      <h2>Make it a Durango trip</h2>
+      <p>Mix in a day in town: <a href="/journal/where-to-eat-durango">where to eat in Durango</a>, the hot springs, and in summer the <a href="/trails">mountain bike routes</a> from town and the high country around the resort.</p>
+
+      <h2>Questions guests ask</h2>
+      <div class="faq">{pg_faq_html}</div>
+    </div>
+  </section>
+  <section class="tint">
+    <div class="wrap narrow">
+      <form class="su reveal" id="guest-list" data-list="guest" data-source="purgatory-guide" novalidate>
+        <p class="eyebrow">Ophir Stays</p>
+        <h2 class="display">Our homes open in 2027.</h2>
+        <p>Mountain homes near Purgatory and Durango, run by a local who skis here. Join the list for first pick of dates.</p>
+        <div class="nl-row">
+          <label class="sr" for="pg-email">Email</label><input id="pg-email" name="email" type="email" autocomplete="email" placeholder="Your email" required>
+          <button class="btn btn-rust" type="submit">Join the list</button>
+        </div>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <p class="nl-status" role="status" aria-live="polite"></p>
+      </form>
+      <p class="fine" style="margin-top:20px">Own a home at Purgatory? <a href="/areas/purgatory">Vacation rental management at Purgatory</a>.</p>
+    </div>
+  </section>
+'''
+pg_page = page('Purgatory Resort Vacation Rentals: Where to Stay (2026-27) · Ophir Stays',
+               'Where to stay at Purgatory Resort near Durango, Colorado: slopeside condos, Durango Mountain homes, Cascade Village and the valley, with what each is like and when to book.',
+               '/purgatory-vacation-rentals', 'stay', pg_body, SIGNUP_JS, image='/assets/photos/library/needles-alpenglow-purgatory.jpg')
 os.makedirs('areas', exist_ok=True)
 
 # ---------------- OWNER GUIDES + AREA PAGES (Nov 2026) ----------------
@@ -1958,8 +2046,8 @@ letter_page = page('Your Letter from Ophir Stays · Free Estimate', 'For Durango
                    '/letter', 'owners', letter_body, FORM_JS).replace('<meta name="viewport"', '<meta name="robots" content="noindex">\n<meta name="viewport"', 1)
 
 os.makedirs('areas', exist_ok=True)
-for name, html in [('index.html', home), ('owners.html', owners), ('about.html', about), ('journal.html', journal), ('journal/durango-rides.html', post), ('journal/durango-home-earnings.html', post2), ('journal/where-to-eat-durango.html', post3), ('journal/durango-short-term-rental-rules.html', post4), ('trail-map.html', trailmap), ('trails.html', trails_index), ('guest-app.html', guestapp), ('estimate.html', estimate_page), ('homes.html', homes_page), ('stay.html', stay_page), ('areas/purgatory.html', purg_page), ('basecamp.html', basecamp_page), ('buying.html', buying_page), ('owner-checklist.html', checklist_page), ('journal/switch-rental-managers-durango.html', switch_page), ('journal/la-plata-county-short-term-rental-permit.html', permit_page), ('areas/hermosa.html', hermosa_page), ('areas/animas-valley.html', valley_page), ('areas/cascade.html', cascade_page), ('letter.html', letter_page)] + [(f"homes/{h['slug']}.html", home_page(h)) for h in LIVE_HOMES] + [(f"trails/{r['slug']}.html", route_page(r)) for r in ROUTES] + [(f"trails/{r['slug']}.html", hc_page(r)) for r in HIGH_COUNTRY]:
+for name, html in [('index.html', home), ('owners.html', owners), ('about.html', about), ('journal.html', journal), ('journal/durango-rides.html', post), ('journal/durango-home-earnings.html', post2), ('journal/where-to-eat-durango.html', post3), ('journal/durango-short-term-rental-rules.html', post4), ('trail-map.html', trailmap), ('trails.html', trails_index), ('guest-app.html', guestapp), ('estimate.html', estimate_page), ('homes.html', homes_page), ('stay.html', stay_page), ('areas/purgatory.html', purg_page), ('basecamp.html', basecamp_page), ('buying.html', buying_page), ('owner-checklist.html', checklist_page), ('journal/switch-rental-managers-durango.html', switch_page), ('journal/la-plata-county-short-term-rental-permit.html', permit_page), ('areas/hermosa.html', hermosa_page), ('areas/animas-valley.html', valley_page), ('areas/cascade.html', cascade_page), ('letter.html', letter_page), ('purgatory-vacation-rentals.html', pg_page)] + [(f"homes/{h['slug']}.html", home_page(h)) for h in LIVE_HOMES] + [(f"trails/{r['slug']}.html", route_page(r)) for r in ROUTES] + [(f"trails/{r['slug']}.html", hc_page(r)) for r in HIGH_COUNTRY]:
     open(name, 'w').write(html)
 open('sitemap.xml', 'w').write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">\n' +
-    ''.join(f'<url><loc>https://ophirstays.com{p}</loc><lastmod>2026-10-18</lastmod>' + ('<image:image><image:loc>https://ophirstays.com/assets/ophir-durango-trail-map.jpg</image:loc></image:image>' if p == '/trail-map' else ''.join(f'<image:image><image:loc>https://ophirstays.com/assets/routes/{p[8:]}{x}.jpg</image:loc></image:image>' for x in ('', '-card')) if p.startswith('/trails/') else '') + '</url>\n' for p in ['/', '/stay', '/homes', '/owners', '/about', '/journal', '/journal/durango-rides', '/journal/durango-home-earnings', '/journal/where-to-eat-durango', '/journal/durango-short-term-rental-rules', '/trail-map', '/trails', '/guest-app', '/estimate', '/areas/purgatory', '/basecamp', '/buying', '/owner-checklist', '/journal/switch-rental-managers-durango', '/journal/la-plata-county-short-term-rental-permit', '/areas/hermosa', '/areas/animas-valley', '/areas/cascade'] + [f"/trails/{r['slug']}" for r in ROUTES + HIGH_COUNTRY] + [f"/homes/{h['slug']}" for h in HOMES if not h['sample']]) + '</urlset>\n')
+    ''.join(f'<url><loc>https://ophirstays.com{p}</loc><lastmod>2026-10-18</lastmod>' + ('<image:image><image:loc>https://ophirstays.com/assets/ophir-durango-trail-map.jpg</image:loc></image:image>' if p == '/trail-map' else ''.join(f'<image:image><image:loc>https://ophirstays.com/assets/routes/{p[8:]}{x}.jpg</image:loc></image:image>' for x in ('', '-card')) if p.startswith('/trails/') else '') + '</url>\n' for p in ['/', '/stay', '/homes', '/owners', '/about', '/journal', '/journal/durango-rides', '/journal/durango-home-earnings', '/journal/where-to-eat-durango', '/journal/durango-short-term-rental-rules', '/trail-map', '/trails', '/guest-app', '/estimate', '/areas/purgatory', '/basecamp', '/buying', '/owner-checklist', '/journal/switch-rental-managers-durango', '/journal/la-plata-county-short-term-rental-permit', '/areas/hermosa', '/areas/animas-valley', '/areas/cascade', '/purgatory-vacation-rentals'] + [f"/trails/{r['slug']}" for r in ROUTES + HIGH_COUNTRY] + [f"/homes/{h['slug']}" for h in HOMES if not h['sample']]) + '</urlset>\n')
 print('built')

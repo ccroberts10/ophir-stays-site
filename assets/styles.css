@@ -487,3 +487,6 @@ table.data.wrap th[scope=row]{white-space:normal;padding-right:24px}
 .fine a{overflow-wrap:anywhere}
 .form fieldset{min-width:0}
 @media (max-width:720px){.form{grid-template-columns:minmax(0,1fr)}.form .chips,.form .roles{flex-wrap:wrap}}
+
+/* wide screens: keep the alpenglow peaks in the top quarter of the hero */
+@media (min-width:721px) and (min-aspect-ratio:3/2){.hero>picture img{object-position:50% calc(min(78vh,760px) * 0.2 - 33.5vw)}}

@@ -537,7 +537,7 @@ owners_body = f'''
         <p class="lead">Tell us about your home. Within 24 hours you get a three-page report: expected rent month by month, what you keep after every cost, comparable homes and our terms. Free, with no obligation.</p>
         <p class="fine" style="margin-top:16px"><a href="/assets/ophir-earnings-estimate-sample.pdf">See a sample report</a></p>
         <p class="fine" style="margin-top:28px">Prefer to talk? <a href="mailto:casey@ophirstays.com">casey@ophirstays.com</a></p>
-        <p class="fine" style="margin-top:12px">Before you apply: <a href="/journal/durango-home-earnings">what a Durango vacation home earns</a> and <a href="/journal/durango-short-term-rental-rules">the city and county rental rules</a>. Own at Purgatory? <a href="/areas/purgatory">Purgatory vacation rental management</a>.</p>
+        <p class="fine" style="margin-top:12px">Before you apply: <a href="/journal/durango-home-earnings">what a Durango vacation home earns</a> and <a href="/journal/durango-short-term-rental-rules">the city and county rental rules</a>. Own nearby? <a href="/areas/purgatory">Purgatory</a> · <a href="/areas/cascade">Cascade Village</a> · <a href="/areas/hermosa">Hermosa</a> · <a href="/areas/animas-valley">Animas Valley</a>. Switching? <a href="/journal/switch-rental-managers-durango">How to switch managers</a>.</p>
       </div>
       <div class="reveal" id="estimate-box">
         {ESTIMATE_FORM}
@@ -952,6 +952,8 @@ journal_body = f'''
       <a class="card reveal" href="/trail-map"><div class="ph"><img src="/assets/trail-map-web.jpg?v=2" alt="Ophir Stays Durango mountain bike trail map" loading="lazy" style="object-position:top"></div><p class="post-meta">Ride</p><h3>Durango trail map</h3><p>Every trail system around town on one free, printable map.</p><span class="link">Open the map</span></a>
       <a class="card reveal" href="/journal/where-to-eat-durango">{photo('coffee', 'A latte at a Durango café table', 'ph')}<p class="post-meta">Eat</p><h3>Where to eat in Durango, from a local</h3><p>Thirteen places, sorted by the night you're having: a special dinner, a date, friends, kids, or lunch on the run.</p><span class="link">Read</span></a>
       <a class="card reveal" href="/journal/durango-home-earnings">{photo('journal-3', 'Gold aspens below Mount Sneffels', 'ph')}<p class="post-meta">Owners</p><h3>What a Durango vacation home earns, and what decides it</h3><p>Three data firms, three answers. What the numbers say, and the five things that separate the top homes.</p><span class="link">Read</span></a>
+      <a class="card reveal" href="/journal/switch-rental-managers-durango">{photo('hero-fireplace', 'A great room with the fire lit in a Durango home', 'ph')}<p class="post-meta">Owners</p><h3>How to switch rental managers in Durango</h3><p>Your contract, booked stays, reviews, keys and taxes, on a 30 to 60 day timeline.</p><span class="link">Read</span></a>
+      <a class="card reveal" href="/journal/la-plata-county-short-term-rental-permit">{photo('home-1', 'A mountain home in La Plata County', 'ph')}<p class="post-meta">Owners</p><h3>La Plata County rental permits, step by step</h3><p>No county permit yet. What you do need, and what may change in 2027.</p><span class="link">Read</span></a>
       <a class="card reveal" href="/journal/durango-short-term-rental-rules">{photo('ophir', 'Ice Lake Basin in the San Juans near Ophir', 'ph')}<p class="post-meta">Owners</p><h3>Can you rent your Durango home short-term?</h3><p>City permits, county taxes and the HOA question, in plain English.</p><span class="link">Read</span></a>
     </div>
   </section>
@@ -1712,8 +1714,265 @@ purg_page = page('Purgatory Vacation Rental Management · Ophir Stays',
                  'Vacation rental management at Purgatory and Durango Mountain: which condos and homes can rent nightly, what they earn, and how a local manager runs them.',
                  '/areas/purgatory', 'owners', purg_body, image='/assets/photos/hero-ski.jpg')
 os.makedirs('areas', exist_ok=True)
-for name, html in [('index.html', home), ('owners.html', owners), ('about.html', about), ('journal.html', journal), ('journal/durango-rides.html', post), ('journal/durango-home-earnings.html', post2), ('journal/where-to-eat-durango.html', post3), ('journal/durango-short-term-rental-rules.html', post4), ('trail-map.html', trailmap), ('trails.html', trails_index), ('guest-app.html', guestapp), ('estimate.html', estimate_page), ('homes.html', homes_page), ('stay.html', stay_page), ('areas/purgatory.html', purg_page), ('basecamp.html', basecamp_page), ('buying.html', buying_page), ('owner-checklist.html', checklist_page)] + [(f"homes/{h['slug']}.html", home_page(h)) for h in LIVE_HOMES] + [(f"trails/{r['slug']}.html", route_page(r)) for r in ROUTES] + [(f"trails/{r['slug']}.html", hc_page(r)) for r in HIGH_COUNTRY]:
+
+# ---------------- OWNER GUIDES + AREA PAGES (Nov 2026) ----------------
+def lib(name, alt):
+    return f'<div class="photo"><img src="/assets/photos/library/{name}.jpg" alt="{alt}" loading="lazy"></div>'
+
+def guide_page(path, title, desc, eyebrow, h1, pic, body, faq=(), crumb='For owners', image='/assets/og.jpg', area=None):
+    faq_html = ''.join(f'<details><summary>{q}</summary><p>{a}</p></details>' for q, a in faq)
+    graph = [{"@type": "Article", "headline": h1, "datePublished": "2026-11-22", "author": {"@type": "Person", "name": "Casey Roberts", "url": "https://ophirstays.com/about"}, "publisher": {"@type": "Organization", "name": "Ophir Stays"}, "mainEntityOfPage": "https://ophirstays.com" + path},
+             {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Ophir Stays", "item": "https://ophirstays.com/"}, {"@type": "ListItem", "position": 2, "name": crumb, "item": "https://ophirstays.com/owners"}, {"@type": "ListItem", "position": 3, "name": h1, "item": "https://ophirstays.com" + path}]}]
+    if faq:
+        graph.append({"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": a}} for q, a in faq]})
+    if area:
+        graph.append({"@type": "Service", "name": f"Vacation rental management in {area}", "serviceType": "Vacation rental management", "provider": {"@type": "LocalBusiness", "name": "Ophir Stays", "url": "https://ophirstays.com", "telephone": "+1-970-779-8992"}, "areaServed": {"@type": "Place", "name": f"{area}, Colorado"}, "url": "https://ophirstays.com" + path})
+    POST_LD[path] = '<script type="application/ld+json">' + _json.dumps({"@context": "https://schema.org", "@graph": graph}) + '</script>'
+    html_body = f'''
+  <section class="center" style="padding-bottom:40px">
+    <div class="wrap narrow reveal">
+      <p class="eyebrow">{eyebrow}</p>
+      <h1 class="display">{h1}</h1>
+      <p class="post-meta">By Casey Roberts · November 2026</p>
+    </div>
+  </section>
+  <div class="wrap">{pic}</div>
+  <section style="padding-top:56px">
+    <div class="wrap narrow article">
+{body}
+      {('<h2>Questions owners ask</h2><div class="faq">' + faq_html + '</div>') if faq else ''}
+      <p style="margin-top:36px"><a class="btn btn-rust" href="/owners#estimate">Get a free estimate</a></p>
+      <p class="fine" style="margin-top:14px">Related: <a href="/journal/durango-short-term-rental-rules">city and county rental rules</a> · <a href="/journal/la-plata-county-short-term-rental-permit">La Plata County rentals, step by step</a> · <a href="/journal/switch-rental-managers-durango">how to switch managers</a> · <a href="/owner-checklist">the statement checklist</a></p>
+    </div>
+  </section>
+'''
+    return page(title, desc, path, 'owners', html_body, image=image)
+
+AREA_NOTE = '<p class="fine">A plain-English summary from a local manager, not legal advice. HOA covenants differ by subdivision and change; we read yours before you sign anything. Checked November 2026.</p>'
+
+# --- How to switch managers
+SWITCH_FAQ = [
+ ("Will I lose my reviews if I switch?", "It depends on whose account the listing lives on. If your Airbnb or Vrbo listing is under your own account, the reviews stay with you and we join as co-host. If it lives on your manager's account, the reviews usually stay with them, and your home starts a new listing. Ask your manager which it is before you give notice."),
+ ("What happens to stays already booked?", "Every one is honored. Depending on your contract, your current manager either finishes the stays they booked, and we block those dates, or the reservations move to us. Either way the guest arrives to a home that's ready."),
+ ("How long does a switch take?", "Most take 30 to 60 days from notice: your contract's notice period, then a week or two to photograph the home, set up the listing and stock it."),
+ ("When is the best time to switch?", "In Durango, April to May or October to November. The calendar is quiet, so fewer stays are in the handoff and the home is ready before ski season or summer."),
+ ("What does it cost to leave Ophir?", "Nothing. Thirty days' notice, no exit fee."),
+]
+switch_body = '''      <p><strong>Switching rental managers in Durango usually takes 30 to 60 days and costs nothing if you plan it around your contract. The work is in five places: your contract, your calendar, your listing, your home and your taxes. Here is how to handle each, in order.</strong></p>
+
+      <h2>1. Read your contract first</h2>
+      <p>Find four things before you say anything to anyone:</p>
+      <ul>
+        <li><strong>The notice period.</strong> Contracts commonly ask for 30 to 90 days, in writing.</li>
+        <li><strong>Any termination fee.</strong> Some charge one in the first year, or a flat fee to leave.</li>
+        <li><strong>Future bookings.</strong> Who keeps the stays already on the calendar, and whether the old manager earns a fee on them after you leave.</li>
+        <li><strong>Who owns the listing.</strong> Whether your Airbnb and Vrbo listings, photos and reviews sit under your account or the manager's.</li>
+      </ul>
+      <p>Not sure what yours says? Send it to us and we'll read it with you before you decide anything.</p>
+
+      <h2>2. Pick a start date</h2>
+      <p>The best switches land in a quiet stretch: April to May, or October to November. Count back your notice period from that date, then give notice in writing. Email is usually enough; your contract says.</p>
+
+      <h2>3. Plan for the stays already booked</h2>
+      <p>Guests who booked your home should never feel the change. There are two common ways it goes:</p>
+      <ul>
+        <li><strong>Your old manager finishes their bookings.</strong> They host the stays they booked, and your new manager blocks those dates so nothing double-books.</li>
+        <li><strong>The bookings move.</strong> Reservations transfer to the new manager, who contacts each guest with check-in details.</li>
+      </ul>
+      <p>At Ophir, every existing booking is honored either way, and the stays your old manager finishes count toward your first-year take-home under our guarantee.</p>
+
+      <h2>4. Sort out the listing and the reviews</h2>
+      <p>If the listing is on your own account, the switch is simple: the old manager is removed as co-host and the new one is added, and your reviews stay. If it's on the manager's account, your home will likely start a new listing. That costs some momentum for a few months, which is why good photos and early pricing matter most in the first season.</p>
+
+      <h2>5. Hand over the home</h2>
+      <ul>
+        <li>Keys, garage remotes and lock codes. Change every code on the day of the switch.</li>
+        <li>An inventory of what you own: linens, kitchen, gear, hot tub chemicals.</li>
+        <li>Vendor contacts: cleaner, snow removal, hot tub, propane, trash.</li>
+        <li>Your owner statements for the last twelve months. They set your baseline for our guarantee.</li>
+      </ul>
+
+      <h2>6. Update your taxes</h2>
+      <p>Whoever collects lodging and sales tax on direct bookings changes with the manager. Make sure your old manager files through their last month, and your new one is registered from the first. In unincorporated La Plata County that means the state sales tax license that covers county sales and lodging tax; inside city limits, the city's taxes too.</p>
+
+      <h2>A switch timeline</h2>
+      <div class="table-wrap"><table class="data wrap">
+        <thead><tr><th scope="col">When</th><th scope="col">What happens</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Week 1</th><td>Read the contract, pick a start date, get a free estimate and a copy of last year's statements.</td></tr>
+          <tr><th scope="row">Week 1 to 2</th><td>Sign with the new manager and give written notice to the old one.</td></tr>
+          <tr><th scope="row">During notice</th><td>Walkthrough, photos, listing setup. Booked stays are mapped and blocked.</td></tr>
+          <tr><th scope="row">Start date</th><td>Codes change, the new listing goes live, the first guest is welcomed.</td></tr>
+        </tbody>
+      </table></div>
+'''
+switch_page = guide_page('/journal/switch-rental-managers-durango',
+    'How to Switch Vacation Rental Managers in Durango · Ophir Stays',
+    'Switching vacation rental managers in Durango, Colorado: your contract, booked stays, your listing and reviews, keys, taxes and a 30 to 60 day timeline, from a local manager.',
+    'Owners', 'How to switch vacation rental managers in Durango', photo('hero-fireplace', 'A great room with the fire lit in a Durango mountain home'),
+    switch_body, SWITCH_FAQ, image='/assets/photos/hero-fireplace.jpg')
+
+# --- La Plata County permits, step by step
+PERMIT_FAQ = [
+ ("Do I need a short-term rental permit in La Plata County?", "Not outside city limits, as of November 2026. Unincorporated La Plata County has no short-term rental permit or license. You do need a Colorado sales tax license to collect state and county sales tax and the county lodging tax, and your HOA has to allow it. The county lists short-term rental rules as a future code amendment, targeted for the third quarter of 2027."),
+ ("Is my home in the city or the county?", "Look up your parcel on the La Plata County assessor's map. An address that says Durango can still be in the county: most of the Animas Valley, Hermosa and Purgatory are."),
+ ("Do Airbnb and Vrbo collect the taxes for me?", "On their own bookings, they collect and remit some or all of the state and local taxes. Check each platform's tax page for your address, and remit anything they don't collect. Direct bookings are always yours, or your manager's, to collect."),
+]
+permit_body = '''      <p><strong>There is no short-term rental permit in unincorporated La Plata County, as of November 2026. What you need is a Colorado sales tax license, your HOA's permission and a home that meets the county's good-neighbor guidelines. Inside Durango city limits it's different: you need a city permit first, and most are capped. Here are the steps for each.</strong></p>
+
+      <h2>Step 1: City or county?</h2>
+      <p>Everything depends on this. Look up your parcel on the La Plata County assessor's map. A Durango mailing address doesn't mean the city: most of the Animas Valley, Hermosa and the Purgatory area are unincorporated county.</p>
+
+      <h2>In the county: five steps</h2>
+      <ol>
+        <li><strong>Get your HOA's answer in writing.</strong> In the county, covenants are usually the real rule. Some subdivisions ban stays under 30 days; others set their own registration.</li>
+        <li><strong>Get a Colorado sales tax license.</strong> It's issued by the Colorado Department of Revenue, online. The state collects state sales tax, the county's 2% sales tax and the county lodging tax through it.</li>
+        <li><strong>Check what the platforms collect.</strong> Airbnb and Vrbo collect some taxes on their own bookings. You file and remit the rest, including every direct booking.</li>
+        <li><strong>Set the home up as the county recommends.</strong> A local contact who answers, shared with neighbors. Two guests per bedroom plus one. Parking on the property. Trash that keeps up. If you're on septic, ask La Plata County Public Health whether it can handle rental use.</li>
+        <li><strong>Insure it for rental.</strong> Most homeowner's policies exclude short-term rental use. Get a policy that covers it.</li>
+      </ol>
+      <p>Hosting an event of 50 people or more, such as a wedding? That needs a separate county event permit.</p>
+
+      <h2>Inside Durango city limits</h2>
+      <ol>
+        <li><strong>Check your zone.</strong> The city allows vacation rentals (stays of 1 to 29 nights) only in certain zones, and caps the permits in the main residential ones. Those caps are full, with waitlists.</li>
+        <li><strong>Apply for a Limited Use Permit</strong> before you advertise, and get a city business license.</li>
+        <li><strong>Register for city lodgers and sales taxes</strong> as well as the state license.</li>
+        <li><strong>Know the permit doesn't transfer.</strong> A sale ends it, and a buyer starts again.</li>
+      </ol>
+      <p>Stays of 30 nights or more aren't regulated as vacation rentals by the city.</p>
+
+      <h2>What could change</h2>
+      <p>La Plata County lists short-term rentals among its planned code amendments, with a target of the third quarter of 2027. Nothing has been proposed in detail yet. If you're buying a home for its rental income, plan as if a county registration or permit could come, and watch for public hearings.</p>
+
+      <h2>How Ophir handles it</h2>
+      <p>Before we sign a home, we confirm city or county, read the HOA documents and check septic and parking. Once it's live, we hold the tax registration for direct bookings, remit monthly and act as the local contact.</p>
+
+      <h2 style="font-size:20px;margin-top:48px">Sources</h2>
+      <p class="fine" style="margin:0">
+        <a href="https://www.lpcgov.org/services/community_development_services/planning/long_range_planning/code_amendments.php" rel="noopener">La Plata County: planned code amendments</a> (short-term rentals, target Q3 2027; checked November 2026)<br>
+        <a href="https://cohost.freshdesk.com/support/solutions/articles/48000493608-la-plata-county-short-term-rental-guidelines" rel="noopener">La Plata County short-term rental guidelines, as summarized by a local manager</a><br>
+        <a href="https://www.19pine.ai/short-term-rental-laws/colorado/durango/limited-use-permit" rel="noopener">City of Durango Limited Use Permit steps</a><br>
+        A plain-English summary, not legal or tax advice. Confirm with the county, the city, the Colorado Department of Revenue and your HOA.
+      </p>
+'''
+permit_page = guide_page('/journal/la-plata-county-short-term-rental-permit',
+    'La Plata County Short-Term Rental Permit: Step by Step (2026) · Ophir Stays',
+    "Do you need a short-term rental permit in La Plata County, Colorado? Not outside city limits, as of November 2026. The tax license, HOA, county guidelines and Durango city permit, step by step.",
+    'Owners', 'La Plata County short-term rental permits, step by step', photo('home-1', 'A mountain home outside Durango in La Plata County'),
+    permit_body, PERMIT_FAQ)
+
+# --- Area pages
+def area_body(lead, rent, guests, homes):
+    return f'''      <p><strong>{lead}</strong></p>
+      <h2>Can you rent here?</h2>
+      {rent}
+      {AREA_NOTE}
+      <h2>What guests come for</h2>
+      <ul>{''.join(f'<li>{g}</li>' for g in guests)}</ul>
+      <h2>How we run a home here</h2>
+      <ul>{''.join(f'<li>{h}</li>' for h in homes)}</ul>
+      <p>Want numbers for your home? Our free estimate shows expected rent by month and what you keep, within 24 hours.</p>
+'''
+
+hermosa_page = guide_page('/areas/hermosa', 'Hermosa Vacation Rental Management · Ophir Stays',
+    'Vacation rental management in Hermosa, north of Durango, Colorado: whether you can rent nightly, what guests come for, and how a local manager runs a Hermosa home.',
+    'Areas · Hermosa', 'Vacation rental management in Hermosa', lib('bike-overlook', 'A mountain biker above the Animas Valley north of Durango'),
+    area_body("Hermosa sits about ten miles north of downtown Durango on Highway 550, halfway between town and Purgatory. Homes here have room: acreage, valley views and space for gear. That makes them some of the best Basecamp homes we know.",
+      '<p>Hermosa is unincorporated La Plata County, so there is no rental permit. You need a state sales tax license for county sales and lodging tax, and your HOA or covenants decide the rest. Many Hermosa homes sit on acreage with no HOA at all.</p>',
+      ['Hermosa Creek Trail, one of the best long rides in Colorado, starting minutes away.',
+       'Purgatory in about 20 minutes, without paying resort prices to stay at the base.',
+       'Downtown Durango in 15 minutes for dinner.',
+       'The Durango and Silverton train running up the valley below.'],
+      ['Snow cleared from the drive and walks before every winter arrival.',
+       'Septic and well checked before we list, and on a schedule after.',
+       'A gear room set up for bikes in summer and skis in winter.',
+       'Rates priced around Purgatory holidays and summer trail season.']),
+    area='Hermosa')
+
+valley_page = guide_page('/areas/animas-valley', 'Animas Valley Vacation Rental Management · Ophir Stays',
+    'Vacation rental management in the Animas Valley north of Durango, Colorado: rental rules, what guests come for, and how a local manager runs a valley home.',
+    'Areas · Animas Valley', 'Vacation rental management in the Animas Valley', lib('son-durango-overlook', 'Looking down on Durango and the Animas Valley'),
+    area_body("The Animas Valley runs north from Durango along the river, with homes on the West Side Road, East Animas Road and Highway 550. It's the quiet side of a Durango stay: big views, the river, and town ten minutes away.",
+      '<p>Most of the valley is unincorporated La Plata County, so there is no county rental permit. A few homes near the north edge of town are inside city limits, where a city permit applies and most are capped. Look up your parcel, then check your covenants: some valley subdivisions limit short stays.</p>',
+      ['The Animas River for fishing, floating and the river trail into town.',
+       'Trimble Hot Springs, a few minutes up the valley from town.',
+       'Purgatory in about 30 minutes, downtown in 10.',
+       'The Durango and Silverton train passing through the valley.'],
+      ['Snow removal on the drive and walks before every winter arrival.',
+       'Irrigation, well and septic checks on homes that have them.',
+       'Pricing around river season, fall colors and ski holidays.',
+       'A local host who meets guests and plans their trip.']),
+    area='Animas Valley')
+
+cascade_page = guide_page('/areas/cascade', 'Cascade Village Vacation Rental Management · Ophir Stays',
+    'Vacation rental management at Cascade Village and the Purgatory area north of Durango, Colorado: which county, rental rules, what guests come for and how a local manager runs a condo here.',
+    'Areas · Cascade and Purgatory', 'Vacation rental management at Cascade Village', lib('needles-alpenglow-purgatory', 'Alpenglow on the Needle Mountains above homes near Purgatory'),
+    area_body("Cascade Village sits a few minutes north of Purgatory on Highway 550, under the Needle Mountains. Condos here earn most of the year in ski season, with a strong summer behind it.",
+      '<p>Cascade Village sits near the line between La Plata and San Juan counties, and the county decides which rules and taxes apply. Check your parcel on the assessor\'s map. San Juan County sets its own rules and taxes, and we confirm the current requirements with the county before we take on a Cascade home. Then the condo association decides whether nightly stays are allowed. Most Cascade Village condos rent nightly today.</p><p>For the rest of the mountain, see <a href="/areas/purgatory">vacation rental management at Purgatory</a>.</p>',
+      ['Ski days at Purgatory, minutes away.',
+       'The San Juan Skyway north to Silverton and Ouray.',
+       'Summer hiking, biking and fishing at the edge of the Weminuche.',
+       'Quiet: no resort base crowds outside the door.'],
+      ['The walk cleared and heat checked before every winter arrival.',
+       'Heat tape and pipes checked in every cold snap, occupied or not.',
+       'Rates moved daily around holidays, spring break and powder forecasts.',
+       'A deep clean and a repair report every mud season.']),
+    area='Cascade Village, Durango Mountain')
+
+edgemont_page = guide_page('/areas/edgemont', 'Edgemont Ranch Short-Term Rentals: What Owners Should Know · Ophir Stays',
+    'Can you rent an Edgemont Ranch home in Durango, Colorado as a vacation rental? What the covenants mean for owners and buyers, from a local manager.',
+    'Areas · Edgemont Ranch', 'Edgemont Ranch: can you rent your home nightly?', photo('fireplace', 'A fire lit in a Durango mountain home'),
+    '''      <p><strong>Edgemont Ranch, east of Durango off Florida Road, is one of the area's best neighborhoods to live in. It is not a nightly rental neighborhood: its covenants have not allowed short-term rentals. If you own there, that's worth knowing before you list. If you're buying, it matters more.</strong></p>
+      <h2>What the rules mean</h2>
+      <p>Edgemont is unincorporated La Plata County, where there's no county rental permit. That means the HOA's covenants are the rule, and Edgemont's have not allowed short stays. Ask the HOA for the current declaration and any amendments, in writing, before you rent or buy.</p>
+      ''' + AREA_NOTE + '''
+      <h2>If you own in Edgemont</h2>
+      <p>Don't list the home on Airbnb or Vrbo without the HOA's written approval. Covenant fines and a neighbor dispute cost more than a season of rent.</p>
+      <h2>If you're buying for rental income</h2>
+      <p>Look at areas where nightly rentals are allowed: Purgatory and Durango Mountain, much of the Animas Valley and Hermosa, depending on the covenants. We'll check any home you're considering and estimate what it would earn, free, within 24 hours. <a href="/buying">See how buyer reports work.</a></p>
+''', area='Edgemont Ranch, Durango')
+
+# --- Landing page for mailed letters (QR code target)
+LETTER_FORM = ESTIMATE_FORM.replace('name="source" placeholder="A friend, an agent, a letter…"', 'name="source" value="Letter from Casey"').replace('<option>Yes, with a manager</option>', '<option selected>Yes, with a manager</option>', 1)
+letter_body = f'''
+  <section class="center" style="padding-bottom:40px">
+    <div class="wrap narrow reveal">
+      <p class="eyebrow">You got my letter</p>
+      <h1 class="display">Thanks for scanning.</h1>
+      <hr class="rule">
+      <p class="lead">I'm Casey Roberts. I've lived in Durango for 23 years, and I run Ophir Stays, a local rental manager capped at twenty-five homes. Here's the short version, and a two-minute form for your free estimate.</p>
+    </div>
+  </section>
+  <section style="padding-top:0">
+    <div class="wrap">
+      <div class="offer-grid">
+        <div class="ocard"><p class="eyebrow">Keep more</p><h3 class="display">22%, locked for life.</h3><p>Our founding rate for the first ten homes. If you take home less in your first year than the year before, we refund the difference, up to our full fee.</p><a class="link" href="/owners#guarantee">How the guarantee works</a></div>
+        <div class="ocard"><p class="eyebrow">Switch easily</p><h3 class="display">Every booked stay honored.</h3><p>Thirty days' notice to leave, no fee, no long contract. Here's <a href="/journal/switch-rental-managers-durango">how a switch works</a>, step by step.</p><a class="link" href="/owner-checklist">Check your current statement</a></div>
+      </div>
+    </div>
+  </section>
+  <section class="tint" id="estimate">
+    <div class="wrap split top">
+      <div class="reveal">
+        <p class="eyebrow">Free estimate</p>
+        <h2 class="display">What would you keep with Ophir?</h2>
+        <p class="lead">Send last year's rent if you have it, and I'll show you, line by line, what you would have kept. If I don't think we can do better, I'll tell you that too.</p>
+        <p class="fine" style="margin-top:20px">Or call or text me: 970-779-8992 · <a href="mailto:casey@ophirstays.com">casey@ophirstays.com</a></p>
+      </div>
+      <div class="reveal" id="estimate-box">
+        {LETTER_FORM}
+        <div class="thanks" tabindex="-1"><svg aria-hidden="true"><use href="#summit"/></svg><h3>Thank you. I have your request.</h3><p style="color:var(--muted);margin:12px 0 0">I'll check the numbers myself and email your estimate within 24 hours.</p></div>
+      </div>
+    </div>
+  </section>
+'''
+letter_page = page('Your Letter from Ophir Stays · Free Estimate', 'For Durango owners who received a letter from Casey Roberts at Ophir Stays: the founding rate, the guarantee and a free estimate.',
+                   '/letter', 'owners', letter_body, FORM_JS).replace('<meta name="viewport"', '<meta name="robots" content="noindex">\n<meta name="viewport"', 1)
+
+os.makedirs('areas', exist_ok=True)
+for name, html in [('index.html', home), ('owners.html', owners), ('about.html', about), ('journal.html', journal), ('journal/durango-rides.html', post), ('journal/durango-home-earnings.html', post2), ('journal/where-to-eat-durango.html', post3), ('journal/durango-short-term-rental-rules.html', post4), ('trail-map.html', trailmap), ('trails.html', trails_index), ('guest-app.html', guestapp), ('estimate.html', estimate_page), ('homes.html', homes_page), ('stay.html', stay_page), ('areas/purgatory.html', purg_page), ('basecamp.html', basecamp_page), ('buying.html', buying_page), ('owner-checklist.html', checklist_page), ('journal/switch-rental-managers-durango.html', switch_page), ('journal/la-plata-county-short-term-rental-permit.html', permit_page), ('areas/hermosa.html', hermosa_page), ('areas/animas-valley.html', valley_page), ('areas/cascade.html', cascade_page), ('areas/edgemont.html', edgemont_page), ('letter.html', letter_page)] + [(f"homes/{h['slug']}.html", home_page(h)) for h in LIVE_HOMES] + [(f"trails/{r['slug']}.html", route_page(r)) for r in ROUTES] + [(f"trails/{r['slug']}.html", hc_page(r)) for r in HIGH_COUNTRY]:
     open(name, 'w').write(html)
 open('sitemap.xml', 'w').write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">\n' +
-    ''.join(f'<url><loc>https://ophirstays.com{p}</loc><lastmod>2026-10-18</lastmod>' + ('<image:image><image:loc>https://ophirstays.com/assets/ophir-durango-trail-map.jpg</image:loc></image:image>' if p == '/trail-map' else ''.join(f'<image:image><image:loc>https://ophirstays.com/assets/routes/{p[8:]}{x}.jpg</image:loc></image:image>' for x in ('', '-card')) if p.startswith('/trails/') else '') + '</url>\n' for p in ['/', '/stay', '/homes', '/owners', '/about', '/journal', '/journal/durango-rides', '/journal/durango-home-earnings', '/journal/where-to-eat-durango', '/journal/durango-short-term-rental-rules', '/trail-map', '/trails', '/guest-app', '/estimate', '/areas/purgatory', '/basecamp', '/buying'] + [f"/trails/{r['slug']}" for r in ROUTES + HIGH_COUNTRY] + [f"/homes/{h['slug']}" for h in HOMES if not h['sample']]) + '</urlset>\n')
+    ''.join(f'<url><loc>https://ophirstays.com{p}</loc><lastmod>2026-10-18</lastmod>' + ('<image:image><image:loc>https://ophirstays.com/assets/ophir-durango-trail-map.jpg</image:loc></image:image>' if p == '/trail-map' else ''.join(f'<image:image><image:loc>https://ophirstays.com/assets/routes/{p[8:]}{x}.jpg</image:loc></image:image>' for x in ('', '-card')) if p.startswith('/trails/') else '') + '</url>\n' for p in ['/', '/stay', '/homes', '/owners', '/about', '/journal', '/journal/durango-rides', '/journal/durango-home-earnings', '/journal/where-to-eat-durango', '/journal/durango-short-term-rental-rules', '/trail-map', '/trails', '/guest-app', '/estimate', '/areas/purgatory', '/basecamp', '/buying', '/owner-checklist', '/journal/switch-rental-managers-durango', '/journal/la-plata-county-short-term-rental-permit', '/areas/hermosa', '/areas/animas-valley', '/areas/cascade', '/areas/edgemont'] + [f"/trails/{r['slug']}" for r in ROUTES + HIGH_COUNTRY] + [f"/homes/{h['slug']}" for h in HOMES if not h['sample']]) + '</urlset>\n')
 print('built')

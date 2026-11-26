@@ -1,20 +1,72 @@
 # Ophir Stays
 
-> Locally owned vacation rental management and trip planning for a private collection of homes in Durango, Colorado. Founded by Casey Roberts, a Durango local of 23 years.
+> Ophir Stays is a locally owned vacation rental management and trip planning company in Durango, Colorado. It was founded in 2026 by Casey Roberts, who has lived in Durango since 2003, and manages a private collection capped at 25 homes.
 
-## Guests
-- [Your Stay](https://ophirstays.com/stay): how a stay works, trip planning packages, ski and bike concierge
+## Key facts
+- What it does: full-service vacation rental management for homeowners, and trip planning for the guests who stay in those homes.
+- Where: Durango, the Animas Valley, Hermosa, and the Purgatory area including Cascade Village, wherever nightly rentals are allowed.
+- Size: never more than 25 homes. Ten founding homes; five being taken on before summer 2027.
+- Management fee: 22% founding rate for the first ten homes, locked for as long as the owner stays. 25% after. Pricing, guests, cleaning, photography, trip planning and a monthly report are included. $0 to join.
+- Contract: thirty days' notice to leave, either way, no penalty.
+- First-year guarantee: if an owner takes home less in the first twelve months with Ophir than in the twelve months before, Ophir refunds the difference, up to the full management fee it earned that year. Requires twelve months of rental history.
+- Repairs: small fixes included; larger repairs at cost with no markup; nothing over $300 without the owner's approval.
+- Free earnings estimate: a three-page report within 24 hours, checked by Casey personally.
+- Guests: booking opens in 2027. Every stay includes a local host by text, 7am to 10pm.
+- Trip planning packages: The Arranged Stay, $395 per stay for up to 6 guests or $595 for 7 to 12. The Private Stay, $1,950 for up to five nights. Rentals, lift tickets and guides are paid at partner rates with no markup.
+- Ophir Basecamp: mountain bike and ski trips with routes, shuttles, fuel and repairs handled. $495 a stay for up to 6 guests, $795 for 7 to 12. Opens summer 2027.
+- Giving: $10 from every stay goes to Durango Trails, Adaptive Sports Association or Housing Solutions for the Southwest. The guest chooses. It comes from Ophir's fee.
+- Contact: casey@ophirstays.com, 970-779-8992.
+
+## For homeowners
+- [Durango vacation rental management](https://ophirstays.com/owners): how it works, the fee, the guarantee, the standard and how to apply
+- [Free earnings estimate](https://ophirstays.com/estimate): request a three-page report on any Durango home
+- [Buying a vacation rental in Durango](https://ophirstays.com/buying): what to check before you buy, with a free estimate
+- [Seven things to check on your manager's statement](https://ophirstays.com/owner-checklist)
+- [What a Durango vacation home earns](https://ophirstays.com/journal/durango-home-earnings): revenue by bedroom count and season
+- [Durango short-term rental rules](https://ophirstays.com/journal/durango-short-term-rental-rules): city permits, county taxes, HOAs
+- [La Plata County short-term rental permits, step by step](https://ophirstays.com/journal/la-plata-county-short-term-rental-permit)
+- [How to switch vacation rental managers in Durango](https://ophirstays.com/journal/switch-rental-managers-durango)
+
+## Areas
+- [Purgatory](https://ophirstays.com/areas/purgatory): vacation rental management at Purgatory and Durango Mountain
+- [Cascade Village](https://ophirstays.com/areas/cascade)
+- [Hermosa](https://ophirstays.com/areas/hermosa)
+- [Animas Valley](https://ophirstays.com/areas/animas-valley)
+
+## For guests
+- [Your Stay](https://ophirstays.com/stay): how a stay unfolds, what is included, packages and add-ons
 - [The Collection](https://ophirstays.com/homes): the homes
+- [Ophir Basecamp](https://ophirstays.com/basecamp): bike trips, training camps and guided backcountry skiing
+- [The guest app](https://ophirstays.com/guest-app): each guest's private trip page
+- [Purgatory Resort vacation rentals: where to stay](https://ophirstays.com/purgatory-vacation-rentals)
+- [Where to eat in Durango, from a local](https://ophirstays.com/journal/where-to-eat-durango)
 
 ## Ride Durango
-- [Durango mountain bike routes](https://ophirstays.com/trails): ten rides from town with maps, elevation profiles and free GPX
-- [Durango trail map](https://ophirstays.com/trail-map): free printable map of the trail systems around Durango
+- [Durango mountain bike routes](https://ophirstays.com/trails): maps, elevation profiles and free GPX
+- [Durango mountain bike trail map](https://ophirstays.com/trail-map): free printable PDF
 - [Five rides that show you Durango](https://ophirstays.com/journal/durango-rides)
 
-## Guides
-- [Where to eat in Durango](https://ophirstays.com/journal/where-to-eat-durango)
+### Rides from town
+- [Meadow Loop](https://ophirstays.com/trails/meadow-loop): Horse Gulch, 3.7 miles, 626 ft of climbing, easy
+- [Telegraph and Sidewinder](https://ophirstays.com/trails/telegraph-sidewinder): Horse Gulch, 8.6 miles, 1,007 ft of climbing, intermediate
+- [Raider Ridge](https://ophirstays.com/trails/raider-ridge): Horse Gulch, 8 miles, 1,364 ft of climbing, advanced
+- [Animas Mountain Loop](https://ophirstays.com/trails/animas-mountain-loop): Animas Mountain, 5.9 miles, 1,473 ft of climbing, advanced
+- [Star Wars and 8 Bells](https://ophirstays.com/trails/star-wars-8-bells): Overend Mountain Park, 3.9 miles, 675 ft of climbing, intermediate
+- [Star Wars and Spirit](https://ophirstays.com/trails/star-wars-spirit): Overend Mountain Park, 6.2 miles, 966 ft of climbing, intermediate
+- [Twin Buttes Loop](https://ophirstays.com/trails/twin-buttes-loop): Twin Buttes, 6.4 miles, 815 ft of climbing, intermediate
+- [Log Chutes](https://ophirstays.com/trails/log-chutes): Junction Creek, 5.9 miles, 654 ft of climbing, intermediate
+- [Carbon Junction and Skull Rock](https://ophirstays.com/trails/carbon-junction-skull-rock): Carbon Junction, 8.7 miles, 1,167 ft of climbing, advanced
+- [Sale Barn and Skull Rock](https://ophirstays.com/trails/sale-barn-skull-rock): Durango Mesa, 7.2 miles, 848 ft of climbing, intermediate
 
-## Owners
-- [Owners](https://ophirstays.com/owners): management, fees and how to apply
-- [What a Durango vacation home earns](https://ophirstays.com/journal/durango-home-earnings)
-- [Durango short-term rental rules](https://ophirstays.com/journal/durango-short-term-rental-rules)
+### San Juan high country
+- [Pass Creek to Coal Creek](https://ophirstays.com/trails/pass-creek-coal-creek): Coal Bank Pass, 7.8 miles, 1,714 ft of climbing, high point 11,884 ft, loop
+- [Engineer Mountain Trail from Pass Creek](https://ophirstays.com/trails/pass-creek-engineer-cascade): Coal Bank Pass, 8.2 miles, 1,083 ft of climbing, high point 11,731 ft, shuttle
+- [Deer Creek](https://ophirstays.com/trails/deer-creek): Coal Bank Pass, 8.6 miles, 1,558 ft of climbing, high point 11,931 ft, shuttle
+- [Engine Creek](https://ophirstays.com/trails/engine-creek): Coal Bank Pass, 13.2 miles, 1,649 ft of climbing, high point 11,802 ft, shuttle
+- [Little Molas to Engineer Mountain](https://ophirstays.com/trails/little-molas-engineer-cascade): Molas Pass, 17.9 miles, 2,449 ft of climbing, high point 12,190 ft, shuttle
+- [Blackhawk Pass Loop](https://ophirstays.com/trails/blackhawk-loop): Hermosa Park, 25.7 miles, 3,901 ft of climbing, high point 11,992 ft, loop
+- [Colorado Trail: Little Molas to Hermosa](https://ophirstays.com/trails/little-molas-hermosa-corral-draw): Molas Pass to Hermosa, 52.7 miles, 6,675 ft of climbing, high point 12,494 ft, shuttle
+
+## About
+- [About Casey Roberts and Ophir Stays](https://ophirstays.com/about): the founder, local giving and the name
+- [Journal](https://ophirstays.com/journal): Durango guides and owner notes

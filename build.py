@@ -29,16 +29,72 @@ NAV = [('/', 'Home', 'welcome', 'home'),
        ('/journal', 'Journal', 'stories & guides', 'journal'),
        ('/about', 'About', 'who we are', 'about')]
 
-import json as _json
-LD = '<script type="application/ld+json">' + _json.dumps({
-  "@context": "https://schema.org", "@type": "LodgingBusiness", "name": "Ophir Stays",
-  "description": "Locally owned vacation rental management and trip planning for a private collection of 25 homes in Durango, Colorado.",
-  "url": "https://ophirstays.com", "logo": "https://ophirstays.com/assets/email-mark.png", "image": "https://ophirstays.com/assets/og.jpg",
-  "email": "casey@ophirstays.com", "founder": {"@type": "Person", "name": "Casey Roberts"},
+import json as _json, re as _re, html as _html, hashlib as _hashlib, datetime as _dt
+SITE = 'https://ophirstays.com'
+ORG_ID, PERSON_ID, WEBSITE_ID = SITE + '/#org', SITE + '/#casey', SITE + '/#website'
+PHONE = '+1-970-779-8992'
+# Paste the Instagram and Google Business Profile URLs here. They tie this site to those profiles for Google and AI engines.
+SAME_AS = []
+ORG = {"@type": ["ProfessionalService", "LodgingBusiness"], "@id": ORG_ID, "name": "Ophir Stays",
+  "description": "Locally owned vacation rental management and trip planning for a private collection of no more than 25 homes in Durango, Colorado.",
+  "slogan": "Durango homes, run by someone who lives here.",
+  "url": SITE, "logo": SITE + "/assets/email-mark.png", "image": SITE + "/assets/og.jpg",
+  "email": "casey@ophirstays.com", "telephone": PHONE, "foundingDate": "2026", "founder": {"@id": PERSON_ID},
   "address": {"@type": "PostalAddress", "addressLocality": "Durango", "addressRegion": "CO", "postalCode": "81301", "addressCountry": "US"},
-  "areaServed": [{"@type": "City", "name": "Durango, Colorado"}, {"@type": "Place", "name": "Purgatory, Colorado"}, {"@type": "Place", "name": "Vallecito Lake, Colorado"}, {"@type": "AdministrativeArea", "name": "La Plata County, Colorado"}],
-  "knowsAbout": ["vacation rental management", "short-term rental management", "Durango trip planning"]
-}) + '</script>'
+  "geo": {"@type": "GeoCoordinates", "latitude": 37.2753, "longitude": -107.8801},
+  "areaServed": [{"@type": "City", "name": "Durango, Colorado"}, {"@type": "Place", "name": "Animas Valley, Colorado"}, {"@type": "Place", "name": "Hermosa, Colorado"}, {"@type": "Place", "name": "Purgatory, Colorado"}, {"@type": "Place", "name": "Cascade Village, Colorado"}, {"@type": "Place", "name": "Vallecito Lake, Colorado"}, {"@type": "AdministrativeArea", "name": "La Plata County, Colorado"}],
+  "knowsAbout": ["vacation rental management", "short-term rental management", "Durango short-term rental rules", "Durango trip planning", "mountain biking in Durango", "skiing at Purgatory Resort"]}
+if SAME_AS: ORG["sameAs"] = SAME_AS
+def _offer(name, desc, url, price=None):
+    o = {"@type": "Offer", "url": SITE + url, "itemOffered": {"@type": "Service", "name": name, "description": desc, "provider": {"@id": ORG_ID}}}
+    if price is not None: o.update({"price": str(price), "priceCurrency": "USD"})
+    return o
+OFFERS = {"@type": "OfferCatalog", "name": "Ophir Stays services", "itemListElement": [
+  _offer("Durango vacation rental management", "Full-service management for no more than 25 homes: pricing, guests, cleaning, photography, trip planning and a monthly owner report. 22% founding rate for the first ten homes, 25% after, with a first-year take-home guarantee and thirty days' notice to leave.", "/owners"),
+  _offer("Free vacation rental earnings estimate", "A three-page report within 24 hours: expected rent month by month, what the owner keeps after every cost, and comparable homes.", "/estimate", 0),
+  _offer("The Arranged Stay", "Trip planning for a stay of up to six guests: gear sized and waiting, lift tickets, guides and dinner reservations booked.", "/stay", 395),
+  _offer("The Private Stay", "A dedicated host for a stay of up to five nights: groceries stocked, arrival setup, chef, massage and transfers booked.", "/stay", 1950),
+  _offer("Ophir Basecamp", "Mountain bike and ski trip planning for groups of up to six: routes, shuttles, fuel and repairs handled.", "/basecamp", 495)]}
+PERSON = {"@type": "Person", "@id": PERSON_ID, "name": "Casey Roberts", "jobTitle": "Founder", "url": SITE + "/about", "worksFor": {"@id": ORG_ID},
+  "homeLocation": {"@type": "City", "name": "Durango, Colorado"}, "alumniOf": {"@type": "CollegeOrUniversity", "name": "Fort Lewis College"},
+  "knowsAbout": ["Durango, Colorado", "vacation rental management", "mountain biking in the San Juan Mountains", "skiing at Purgatory Resort"]}
+WEBSITE = {"@type": "WebSite", "@id": WEBSITE_ID, "url": SITE, "name": "Ophir Stays", "publisher": {"@id": ORG_ID}, "inLanguage": "en-US"}
+PAGE_TYPE = {'/about': 'AboutPage', '/journal': 'CollectionPage', '/trails': 'CollectionPage', '/homes': 'CollectionPage', '/estimate': 'ContactPage'}
+
+def site_ld(title, desc, path):
+    """Every page carries the same business, founder and website nodes, so search and AI engines read one entity."""
+    org = dict(ORG, hasOfferCatalog=OFFERS) if path == '/' else ORG
+    wp = {"@type": PAGE_TYPE.get(path, 'WebPage'), "@id": SITE + path + '#webpage', "url": SITE + path, "name": _html.unescape(title), "description": _html.unescape(desc), "isPartOf": {"@id": WEBSITE_ID}, "about": {"@id": ORG_ID}, "inLanguage": "en-US"}
+    if path == '/about': wp["mainEntity"] = {"@id": PERSON_ID}
+    return '<script type="application/ld+json">' + _json.dumps({"@context": "https://schema.org", "@graph": [org, PERSON, WEBSITE, wp]}) + '</script>\n'
+
+def _link_entities(html):
+    """Point every mention of the business or founder in page-level schema at the shared nodes."""
+    kinds = {'Organization', 'LocalBusiness', 'ProfessionalService', 'LodgingBusiness'}
+    def fix(n):
+        if isinstance(n, dict):
+            t = n.get('@type'); ts = set(t if isinstance(t, list) else [t])
+            if '@id' not in n:
+                if 'Person' in ts and n.get('name') == 'Casey Roberts': n['@id'] = PERSON_ID
+                elif n.get('name') == 'Ophir Stays' and ts & kinds: n['@id'] = ORG_ID
+            for v in n.values(): fix(v)
+        elif isinstance(n, list):
+            for v in n: fix(v)
+    def sub(m):
+        d = _json.loads(m.group(1)); fix(d)
+        return '<script type="application/ld+json">' + _json.dumps(d) + '</script>'
+    return _re.sub(r'<script type="application/ld\+json">(.*?)</script>', sub, html, flags=_re.S)
+
+def _plain(x):
+    x = _re.sub(r'\s*<a [^>]*>[^<]*</a>\.\s*$', '', x)  # a closing "read more" link is for the page, not the answer
+    return _html.unescape(_re.sub('<[^>]+>', '', x)).strip()
+def faq_html(faq): return ''.join(f'<details><summary>{q}</summary><p>{a}</p></details>' for q, a in faq)
+def faq_ld(faq): return {"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": _plain(q), "acceptedAnswer": {"@type": "Answer", "text": _plain(a)}} for q, a in faq]}
+def fit_title(t):
+    """Keep search titles from being cut off: drop the brand suffix when a title runs long."""
+    for suf in (' · The Journal', ' · Ophir Stays'):
+        if len(_html.unescape(t)) > 65: t = t.replace(suf, '')
+    return t
 
 POST_LD = {p: '<script type="application/ld+json">' + _json.dumps({'@context':'https://schema.org','@type':'BlogPosting','headline':h,'image':f'https://ophirstays.com/assets/photos/{img}.jpg','datePublished':'2026-10-15','dateModified':'2026-10-17','author':{'@type':'Person','name':'Casey Roberts','url':'https://ophirstays.com/about'},'publisher':{'@type':'Organization','name':'Ophir Stays','logo':{'@type':'ImageObject','url':'https://ophirstays.com/assets/email-mark.png'}},'mainEntityOfPage':'https://ophirstays.com'+p}) + '</script>' for p,(h,img) in {'/journal/durango-rides': ('Five rides that show you Durango', 'rides'), '/journal/durango-home-earnings': ('What a Durango vacation home earns, and what decides it', 'journal-3'), '/journal/where-to-eat-durango': ('Where to eat in Durango, from a local', 'hero-coffee'), '/journal/durango-short-term-rental-rules': ('Can you rent your Durango home short-term? The rules, city and county', 'ophir')}.items()}
 
@@ -68,6 +124,7 @@ def ptile(r, big=False, link=True):
 
 
 def head(title, desc, path, image='/assets/og.jpg'):
+    title = fit_title(title)
     return f'''<!doctype html>
 <html lang="en">
 <head>
@@ -76,11 +133,12 @@ def head(title, desc, path, image='/assets/og.jpg'):
 <title>{title}</title>
 <meta name="description" content="{desc}">
 <link rel="canonical" href="https://ophirstays.com{path}">
-{LD if path == "/" else POST_LD.get(path, "")}{TRAIL_LD if path == "/trail-map" else ""}
+{site_ld(title, desc, path)}{POST_LD.get(path, "")}{TRAIL_LD if path == "/trail-map" else ""}
 <meta property="og:title" content="{title}">
 <meta property="og:description" content="{desc}">
 <meta property="og:image" content="https://ophirstays.com{image}">
-<meta property="og:type" content="website">
+<meta property="og:type" content="{"article" if path.startswith("/journal/") else "website"}">
+<meta property="og:url" content="https://ophirstays.com{path}">
 <meta property="og:site_name" content="Ophir Stays">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#FFFFFF">
@@ -128,7 +186,7 @@ FOOT = '''<footer class="site-foot">
       <p class="nl-status" role="status" aria-live="polite"></p>
     </form>
     <nav class="foot-links" aria-label="Footer"><a href="/stay">Your Stay</a><a href="/basecamp">Basecamp</a><a href="/owners">Owners</a><a href="/buying">Buying a Rental</a><a href="/journal">Journal</a><a href="/trails">Bike Routes</a><a href="/trail-map">Trail Map</a><a href="/about">About</a><a href="mailto:casey@ophirstays.com">casey@ophirstays.com</a></nav>
-    <div class="foot-base"><span>© 2026 Ophir Stays</span><span>Guest booking opens 2027</span></div>
+    <div class="foot-base"><span>© 2026 Ophir Stays</span><span>Durango, Colorado · <a href="tel:+19707798992">970-779-8992</a></span><span>Guest booking opens 2027</span></div>
   </div>
 </footer>
 <script>
@@ -145,7 +203,7 @@ b.disabled=false;});})();
 </script>'''
 
 def page(title, desc, path, current, body, extra_js='', image='/assets/og.jpg'):
-    return head(title, desc, path, image) + masthead(current) + '\n<main id="main">\n' + body + '\n</main>\n' + FOOT + extra_js + '\n</body>\n</html>\n'
+    return _link_entities(head(title, desc, path, image) + masthead(current) + '\n<main id="main">\n' + body + '\n</main>\n' + FOOT + extra_js + '\n</body>\n</html>\n')
 
 def photo(name, alt, cls='photo'):
     return f'<div class="{cls}"><img src="/assets/photos/{name}.jpg" alt="{alt}" loading="lazy"></div>'
@@ -205,6 +263,16 @@ CHECKLIST = [('What the fee is charged on.', 'Nightly rent only, or cleaning and
              ('Your calendar.', 'Nights rented, nights you used, and nights that were blocked without a reason.'),
              ('Event pricing.', 'Compare the rate on Snowdown or Iron Horse weekend with an ordinary weekend. If they match, money was left behind.'),
              ('Your contract.', 'The notice period, any exit fee, and who owns the listing and its reviews if you leave.')]
+
+HOME_FAQ = [
+  ('What is Ophir Stays?', 'Ophir Stays is a locally owned vacation rental management company in Durango, Colorado, founded by Casey Roberts, who has lived here since 2003. It manages a private collection capped at twenty-five homes and plans each guest\'s trip. <a href="/about">About Ophir</a>.'),
+  ('How much does Ophir Stays charge to manage a Durango vacation rental?', 'The management fee is 22% for the first ten founding homes, locked for as long as the owner stays, and 25% after that. It covers pricing, guests, cleaning, photography, trip planning and a monthly report. It costs $0 to join, and either side can leave with thirty days\' notice. <a href="/owners">See what owners get</a>.'),
+  ('What is the first-year guarantee?', 'If an owner takes home less in the first twelve months with Ophir than in the twelve months before, Ophir refunds the difference, up to the full management fee it earned that year. Homes need at least twelve months of rental history to qualify. <a href="/owners#guarantee">How the guarantee works</a>.'),
+  ('Where does Ophir Stays manage homes?', 'In Durango, the <a href="/areas/animas-valley">Animas Valley</a>, <a href="/areas/hermosa">Hermosa</a> and the <a href="/areas/purgatory">Purgatory</a> area, including <a href="/areas/cascade">Cascade Village</a>, wherever nightly rentals are allowed. Every home is within 45 minutes of town or Purgatory.'),
+  ('How is Ophir different from a large vacation rental manager?', 'Ophir is one local manager with no more than twenty-five homes. Owners and guests text Casey directly from 7am to 10pm, repairs are billed at cost with no markup, there is no long contract, and every guest stay comes with trip planning.'),
+  ('What could my Durango home earn as a vacation rental?', 'Ask for a free estimate. Within 24 hours you get a three-page report with expected rent month by month, what you keep after every cost, and comparable homes. Casey checks every number himself. <a href="/estimate">Request an estimate</a>, or read <a href="/journal/durango-home-earnings">what a Durango vacation home earns</a>.'),
+  ('Can I book a stay with Ophir Stays?', 'Guest booking opens in 2027. Join the guest list below for first pick of dates, or see <a href="/stay">how a stay works</a> and <a href="/basecamp">Ophir Basecamp</a> for bike and ski trips.')]
+POST_LD['/'] = '<script type="application/ld+json">' + _json.dumps({"@context": "https://schema.org", **faq_ld(HOME_FAQ)}) + '</script>'
 
 home_body = f'''
   <section class="hero">
@@ -293,6 +361,14 @@ home_body = f'''
     </div>
   </section>
 
+  <section id="questions">
+    <div class="wrap narrow">
+      <p class="eyebrow">Questions</p>
+      <h2 class="display" style="margin-bottom:24px">Ophir Stays, in short.</h2>
+      <div class="faq">{faq_html(HOME_FAQ)}</div>
+    </div>
+  </section>
+
   <section id="signup">
     <div class="wrap">
       <div class="signups">
@@ -335,7 +411,7 @@ b.disabled=false;});});
 </script>'''
 
 home = page('Ophir Stays · Durango Vacation Rental Management, Locally Owned',
-            'A locally owned Durango vacation rental manager, capped at twenty-five homes. Founding owners keep 22% for life, with a written first-year guarantee. Guest booking opens in 2027.',
+            'Locally owned Durango vacation rental management, capped at 25 homes. 22% founding rate for life and a written first-year guarantee. Guest booking opens 2027.',
             '/', 'home', home_body, SIGNUP_JS, image=HERO_IMG)
 
 checklist_body = '<section><div class="wrap narrow"><p class="eyebrow">For owners</p><h1 class="display">Seven things to check on your manager\'s statement</h1><hr class="rule" style="margin-left:0"><ol class="cklist">' + ''.join(f'<li><b>{t}</b> {d}</li>' for t, d in CHECKLIST) + '''</ol>
@@ -394,7 +470,7 @@ owners_body = f'''
     <div class="wrap">
       <div class="reveal"><p class="eyebrow">How it works</p><h2 class="display">Four steps to your first guest.</h2></div>
       <ol class="steps reveal">
-        <li><h3>Estimate</h3><p>Tell us about your home. Within two days you get a personal income estimate built from real Durango booking data.</p></li>
+        <li><h3>Estimate</h3><p>Tell us about your home. Within 24 hours you get a personal income estimate built from real Durango booking data.</p></li>
         <li><h3>Walkthrough</h3><p>We meet you at the house, or on a video call if you're out of state, and go through the standard together.</p></li>
         <li><h3>Ready</h3><p>Linens, photography, smart lock, gear room. We handle every item on the list and send you one bill.</p></li>
         <li><h3>Live</h3><p>Your home goes live. Every month you get a report: income, reviews, photos after each clean, and anything we fixed.</p></li>
@@ -589,7 +665,7 @@ FORM_JS = '''
 import re as _re, html as _html
 _faq = [(_html.unescape(_re.sub('<[^>]+>','',q)).strip(), _html.unescape(_re.sub('<[^>]+>','',x)).strip()) for q,x in _re.findall(r'<details><summary>(.*?)</summary><p>(.*?)</p></details>', owners_body, _re.S)]
 POST_LD['/owners'] = '<script type="application/ld+json">' + _json.dumps({"@context":"https://schema.org","@graph":[
-  {"@type":"ProfessionalService","name":"Ophir Stays","url":"https://ophirstays.com/owners","description":"Locally owned Durango vacation rental management: pricing, guests, cleaning, trip planning and a first-year income guarantee, for no more than 25 homes.","email":"casey@ophirstays.com","telephone":"+1-970-779-8992","address":{"@type":"PostalAddress","addressLocality":"Durango","addressRegion":"CO","postalCode":"81301","addressCountry":"US"},"areaServed":["Durango, CO","Purgatory, CO","Vallecito Lake, CO","La Plata County, CO"],"serviceType":"Vacation rental management","founder":{"@type":"Person","name":"Casey Roberts"}},
+  {"@type":"Service","@id":SITE+"/owners#service","name":"Durango vacation rental management","serviceType":"Vacation rental management","url":SITE+"/owners","provider":{"@id":ORG_ID},"description":"Locally owned Durango vacation rental management: pricing, guests, cleaning, photography, trip planning and a monthly report, for no more than 25 homes. 22% founding rate for the first ten homes, 25% after, with a first-year take-home guarantee and thirty days' notice to leave.","areaServed":["Durango, CO","Animas Valley, CO","Hermosa, CO","Purgatory, CO","La Plata County, CO"]},
   {"@type":"FAQPage","mainEntity":[{"@type":"Question","name":q,"acceptedAnswer":{"@type":"Answer","text":x}} for q,x in _faq]}]}) + '</script>'
 
 OWNER_BC_JS = '''
@@ -609,7 +685,7 @@ OWNER_BC_JS = '''
   });
 })();
 </script>'''
-owners = page('Durango Vacation Rental Management · Ophir Stays',
+owners = page('Durango Vacation Rental Management: Fees and Guarantee · Ophir Stays',
               'Apply to the Ophir Collection: twenty-five Durango homes, one standard, and a first-year income guarantee. Get a free estimate of what your home could earn.',
               '/owners', 'owners', owners_body, FORM_JS + OWNER_BC_JS)
 
@@ -641,6 +717,19 @@ TIMELINE = [('30 days before', 'Tell us what you love', 'Skiing, riding, the riv
             ('During your stay', 'We adjust', 'Storms coming in? Your ride moves to tomorrow and we suggest the hot springs. Text us anything, any time.'),
             ('After you leave', 'We remember', 'Your sizes, your coffee and your favorite table, saved for next time.')]
 timeline = ''.join(f'<li class="reveal"><span class="when">{w}</span><div><h3>{h}</h3><p>{p}</p></div></li>' for w,h,p in TIMELINE)
+
+STAY_FAQ = [
+  ('What is included with every Ophir stay?', 'A home inspected before every arrival, hotel-grade linens, robes and toiletries, a welcome kit of local coffee and chocolate, your door code and house guide in the app, weather-aware ideas for every day, and a local host by text from 7am to 10pm.'),
+  ('How much does trip planning cost?', 'The Arranged Stay is $395 per stay for up to six guests and $595 for groups of seven to twelve. The Private Stay, with a dedicated host, is $1,950 for up to five nights and $295 for each additional night.'),
+  ('Do package prices include rentals, lift tickets and guides?', 'No. Package prices cover our planning, booking and hosting. Rentals, lift tickets, guides, chefs, massage, transport and groceries are paid separately at our partners\' rates, with no markup. You see and confirm every price in the app before anything is charged.'),
+  ('Can skis, boots and bikes be waiting at the house?', 'Yes. With the Arranged Stay, skis and boots are sized to each guest and bikes are fitted and delivered before you arrive. On any other stay it is a single add-on: $95 for up to four guests and $20 each after, plus the rental.'),
+  ('What happens if the weather changes?', 'Your itinerary is built around the forecast and moves with it. If a storm is coming in, your ride moves to tomorrow and we suggest something else for today.'),
+  ('How do I reach someone during my stay?', 'Text your local host from 7am to 10pm. Urgent issues get a response at any hour.'),
+  ('When can I book?', 'Guest booking opens in 2027. Email us your dates and we will hold the first look at our homes for you.')]
+POST_LD['/stay'] = '<script type="application/ld+json">' + _json.dumps({"@context": "https://schema.org", "@graph": [
+  {"@type": "Service", "@id": SITE + "/stay#service", "name": "Durango trip planning and concierge", "serviceType": "Trip planning", "url": SITE + "/stay", "provider": {"@id": ORG_ID}, "areaServed": {"@type": "City", "name": "Durango, Colorado"},
+   "offers": [{"@type": "Offer", "name": "The Arranged Stay, up to 6 guests", "price": "395", "priceCurrency": "USD"}, {"@type": "Offer", "name": "The Arranged Stay, 7 to 12 guests", "price": "595", "priceCurrency": "USD"}, {"@type": "Offer", "name": "The Private Stay, up to five nights", "price": "1950", "priceCurrency": "USD"}]},
+  faq_ld(STAY_FAQ)]}) + '</script>'
 
 stay_body = f'''
   <section class="center" style="padding-bottom:56px">
@@ -709,6 +798,14 @@ stay_body = f'''
     </div>
   </section>
 
+  <section id="questions">
+    <div class="wrap narrow">
+      <p class="eyebrow">Questions</p>
+      <h2 class="display" style="margin-bottom:24px">Before you come.</h2>
+      <div class="faq">{faq_html(STAY_FAQ)}</div>
+    </div>
+  </section>
+
   <section class="tint center">
     <div class="wrap narrow">
       <p class="eyebrow reveal">Guest booking opens 2027</p>
@@ -724,6 +821,22 @@ stay_page = page('Durango Trip Planning, Ski and Bike Concierge · Ophir Stays',
 
 
 # ---------------- BASECAMP ----------------
+BASECAMP_FAQ = [
+  ('What is Ophir Basecamp?', 'Ophir Basecamp is a mountain bike and ski trip service in Durango, Colorado: a home set up for riders and skiers, and a local who plans the routes, books the shuttles, stocks the fuel and handles repairs. It opens for summer 2027.'),
+  ('How much does Basecamp cost?', 'Basecamp is $495 a stay for up to six guests and $795 for seven to twelve. Training camps of a week or more are quoted to the group. Shuttles, guides, rentals and lift tickets are booked at the partner\'s own rate, with no markup.'),
+  ('When is the best time to mountain bike the high country near Durango?', 'Mid-July to early October for the San Juan rides above 10,000 feet from Coal Bank and Molas Pass. Start early and be off the ridges by noon. Spring and fall are for the lower trails closer to town.'),
+  ('Which high-country rides does Basecamp plan?', 'Seven San Juan routes: <a href="/trails/pass-creek-coal-creek">Pass Creek to Coal Creek</a>, <a href="/trails/pass-creek-engineer-cascade">Engineer Mountain Trail from Pass Creek</a>, <a href="/trails/deer-creek">Deer Creek</a>, <a href="/trails/engine-creek">Engine Creek</a>, <a href="/trails/little-molas-engineer-cascade">Little Molas to Engineer Mountain</a>, the <a href="/trails/blackhawk-loop">Blackhawk Pass Loop</a> and the <a href="/trails/little-molas-hermosa-corral-draw">Colorado Trail from Little Molas to Hermosa</a>, from 7.8 to 52.7 miles. Closer to town there are <a href="/trails">ten Durango rides</a> for arrival and rest days.'),
+  ('Do the rides need a shuttle?', 'Most do. Pass Creek to Coal Creek and the Blackhawk Pass Loop are loops back to the car. The other five are point to point, and we book the shuttle with a licensed local shuttle company.'),
+  ('What does a Basecamp home have?', 'A garage or locked bike storage, a wash station and a gear room, in Durango, the Animas Valley or up toward Purgatory.'),
+  ('Does Basecamp offer guided backcountry skiing?', 'Yes, always with certified, permitted mountain guides, with Purgatory for the rest days.'),
+  ('How far ahead should a group book?', 'Most groups book three months ahead. Spring and fall camps fill first.')]
+POST_LD['/basecamp'] = '<script type="application/ld+json">' + _json.dumps({"@context": "https://schema.org", "@graph": [
+  {"@type": "Service", "@id": SITE + "/basecamp#service", "name": "Ophir Basecamp", "serviceType": "Mountain bike and ski trip planning", "url": SITE + "/basecamp", "provider": {"@id": ORG_ID},
+   "description": "Durango homes set up for riders and skiers, with San Juan high-country routes planned, shuttles booked, fuel stocked and repairs handled.",
+   "areaServed": [{"@type": "City", "name": "Durango, Colorado"}, {"@type": "Place", "name": "San Juan Mountains, Colorado"}],
+   "offers": [{"@type": "Offer", "name": "Basecamp, up to 6 guests", "price": "495", "priceCurrency": "USD"}, {"@type": "Offer", "name": "Basecamp, 7 to 12 guests", "price": "795", "priceCurrency": "USD"}]},
+  faq_ld(BASECAMP_FAQ)]}) + '</script>'
+
 basecamp_body = f'''
   <section class="center" style="padding-bottom:48px">
     <div class="wrap narrow reveal">
@@ -818,6 +931,14 @@ basecamp_body = f'''
     </div>
   </section>
 
+  <section id="questions">
+    <div class="wrap narrow">
+      <p class="eyebrow">Questions</p>
+      <h2 class="display" style="margin-bottom:24px">Before you plan.</h2>
+      <div class="faq">{faq_html(BASECAMP_FAQ)}</div>
+    </div>
+  </section>
+
   <section class="tint" id="inquire">
     <div class="wrap split top">
       <div class="reveal">
@@ -861,7 +982,7 @@ BASECAMP_JS = '''
 })();
 </script>'''
 basecamp_page = page('Durango Mountain Bike and Ski Trips, Planned · Ophir Basecamp',
-  'Ophir Basecamp: Durango homes built for riders and skiers, with San Juan high-country routes planned, shuttles booked, fuel stocked and repairs handled. Plan a bike trip, training camp or ski week.',
+  'Ophir Basecamp: Durango homes set up for riders and skiers. San Juan high-country routes planned, shuttles booked, fuel stocked, repairs handled.',
   '/basecamp', 'stay', basecamp_body, BASECAMP_JS, image='/assets/photos/basecamp-hero.jpg')
 
 # ---------------- ABOUT ----------------
@@ -1154,7 +1275,7 @@ trailmap_body = f"""
   </section>
 """
 trailmap = page('Durango Mountain Bike Trail Map (Free PDF) · Ophir Stays',
-                'Free printable Durango mountain bike trail map: Horse Gulch, Raider Ridge, Animas Mountain, Overend, Twin Buttes, the Colorado Trail, Log Chutes and Carbon Junction, with trailheads.',
+                'Free printable Durango mountain bike trail map: Horse Gulch, Raider Ridge, Animas Mountain, Overend, Twin Buttes, Log Chutes and the Colorado Trail.',
                 '/trail-map', 'journal', trailmap_body, image='/assets/og-trail-map.jpg')
 
 # ---------------- HOMES PAGES ----------------
@@ -1516,7 +1637,7 @@ trails_index_body = f"""
   </section>
 """
 trails_index = page('Durango Mountain Bike Routes: Maps, Elevation and GPX · Ophir Stays',
-                    'Ten Durango mountain bike routes from town, easy to advanced: Horse Gulch, Raider Ridge, Animas Mountain, Overend, Twin Buttes, Log Chutes and more. Free maps, elevation profiles and GPX.',
+                    'Ten Durango mountain bike routes from town, easy to advanced: Horse Gulch, Raider Ridge, Animas Mountain, Twin Buttes and more. Free maps and GPX.',
                     '/trails', 'journal', trails_index_body, image='/assets/routes/telegraph-sidewinder-card.jpg').replace('</head>', '<script type="application/ld+json">' + _json.dumps({'@context': 'https://schema.org', '@type': 'ItemList', 'name': 'Durango mountain bike routes', 'itemListElement': [{'@type': 'ListItem', 'position': i + 1, 'url': 'https://ophirstays.com/trails/' + r['slug'], 'name': r['name']} for i, r in enumerate(sorted(ROUTES, key=lambda r: (DIFF_ORDER[r['difficulty']], r['miles'])))]}) + '</script>\n</head>', 1)
 
 
@@ -1557,7 +1678,7 @@ estimate_body = f'''
     </div>
   </section>
 '''
-estimate_page = page('Free Durango Vacation Rental Earnings Estimate · Ophir Stays', 'Owners and agents: tell us about a Durango home and get a free three-page earnings report within 24 hours, with monthly rent, what the owner keeps and comparable homes.', '/estimate', 'owners', estimate_body, FORM_JS)
+estimate_page = page('Free Durango Vacation Rental Earnings Estimate · Ophir Stays', 'Owners and agents: get a free three-page earnings report on any Durango home within 24 hours. Monthly rent, what the owner keeps, comparable homes.', '/estimate', 'owners', estimate_body, FORM_JS)
 
 # ---------------- BUYERS ----------------
 BUY_FAQ = [
@@ -1619,7 +1740,7 @@ buying_body = f"""
   </section>
 """
 buying_page = page('Buying a Vacation Rental in Durango? Free Earnings Estimate · Ophir Stays',
-                   'Buying a short-term rental in Durango, Colorado? Get a free earnings report within 24 hours from a local manager: monthly rent, what you keep, and whether the home can rent nightly.',
+                   'Buying a short-term rental in Durango? Free earnings report in 24 hours from a local manager: monthly rent, what you keep, and whether it can rent nightly.',
                    '/buying', 'owners', buying_body, FORM_JS, image='/assets/photos/hero-fireplace.jpg')
 
 os.makedirs('journal', exist_ok=True); os.makedirs('homes', exist_ok=True); os.makedirs('trails', exist_ok=True)
@@ -1994,7 +2115,7 @@ valley_page = guide_page('/areas/animas-valley', 'Animas Valley Vacation Rental 
     area='Animas Valley')
 
 cascade_page = guide_page('/areas/cascade', 'Cascade Village Vacation Rental Management · Ophir Stays',
-    'Vacation rental management at Cascade Village and the Purgatory area north of Durango, Colorado: which county, rental rules, what guests come for and how a local manager runs a condo here.',
+    'Vacation rental management at Cascade Village near Purgatory, north of Durango: which county, the rental rules, and how a local manager runs a condo here.',
     'Areas · Cascade and Purgatory', 'Vacation rental management at Cascade Village', lib('needles-alpenglow-purgatory', 'Alpenglow on the Needle Mountains above homes near Purgatory'),
     area_body("Cascade Village sits a few minutes north of Purgatory on Highway 550, under the Needle Mountains. Condos here earn most of the year in ski season, with a strong summer behind it.",
       '<p>Cascade Village sits near the line between La Plata and San Juan counties, and the county decides which rules and taxes apply. Check your parcel on the assessor\'s map. San Juan County sets its own rules and taxes, and we confirm the current requirements with the county before we take on a Cascade home. Then the condo association decides whether nightly stays are allowed. Most Cascade Village condos rent nightly today.</p><p>For the rest of the mountain, see <a href="/areas/purgatory">vacation rental management at Purgatory</a>.</p>',
@@ -2048,6 +2169,81 @@ letter_page = page('Your Letter from Ophir Stays · Free Estimate', 'For Durango
 os.makedirs('areas', exist_ok=True)
 for name, html in [('index.html', home), ('owners.html', owners), ('about.html', about), ('journal.html', journal), ('journal/durango-rides.html', post), ('journal/durango-home-earnings.html', post2), ('journal/where-to-eat-durango.html', post3), ('journal/durango-short-term-rental-rules.html', post4), ('trail-map.html', trailmap), ('trails.html', trails_index), ('guest-app.html', guestapp), ('estimate.html', estimate_page), ('homes.html', homes_page), ('stay.html', stay_page), ('areas/purgatory.html', purg_page), ('basecamp.html', basecamp_page), ('buying.html', buying_page), ('owner-checklist.html', checklist_page), ('journal/switch-rental-managers-durango.html', switch_page), ('journal/la-plata-county-short-term-rental-permit.html', permit_page), ('areas/hermosa.html', hermosa_page), ('areas/animas-valley.html', valley_page), ('areas/cascade.html', cascade_page), ('letter.html', letter_page), ('purgatory-vacation-rentals.html', pg_page)] + [(f"homes/{h['slug']}.html", home_page(h)) for h in LIVE_HOMES] + [(f"trails/{r['slug']}.html", route_page(r)) for r in ROUTES] + [(f"trails/{r['slug']}.html", hc_page(r)) for r in HIGH_COUNTRY]:
     open(name, 'w').write(html)
+
+# ---------------- SITEMAP DATES ----------------
+# data/lastmod.json remembers a fingerprint of each page's body. A page's date only moves when its content does.
+_LM_FILE = 'data/lastmod.json'
+_LM = _json.load(open(_LM_FILE)) if os.path.exists(_LM_FILE) else {}
+def lastmod(p):
+    f = 'index.html' if p == '/' else p[1:] + '.html'
+    h = open(f, encoding='utf-8').read()
+    fp = _hashlib.sha1(_re.search(r'<main id="main">(.*?)</main>', h, _re.S).group(1).encode()).hexdigest()[:16]
+    if _LM.get(p, {}).get('hash') != fp:
+        _LM[p] = {'hash': fp, 'date': _dt.date.today().isoformat()}
+    return _LM[p]['date']
 open('sitemap.xml', 'w').write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">\n' +
-    ''.join(f'<url><loc>https://ophirstays.com{p}</loc><lastmod>2026-10-18</lastmod>' + ('<image:image><image:loc>https://ophirstays.com/assets/ophir-durango-trail-map.jpg</image:loc></image:image>' if p == '/trail-map' else ''.join(f'<image:image><image:loc>https://ophirstays.com/assets/routes/{p[8:]}{x}.jpg</image:loc></image:image>' for x in ('', '-card')) if p.startswith('/trails/') else '') + '</url>\n' for p in ['/', '/stay', '/homes', '/owners', '/about', '/journal', '/journal/durango-rides', '/journal/durango-home-earnings', '/journal/where-to-eat-durango', '/journal/durango-short-term-rental-rules', '/trail-map', '/trails', '/guest-app', '/estimate', '/areas/purgatory', '/basecamp', '/buying', '/owner-checklist', '/journal/switch-rental-managers-durango', '/journal/la-plata-county-short-term-rental-permit', '/areas/hermosa', '/areas/animas-valley', '/areas/cascade', '/purgatory-vacation-rentals'] + [f"/trails/{r['slug']}" for r in ROUTES + HIGH_COUNTRY] + [f"/homes/{h['slug']}" for h in HOMES if not h['sample']]) + '</urlset>\n')
+    ''.join(f'<url><loc>https://ophirstays.com{p}</loc><lastmod>{lastmod(p)}</lastmod>' + ('<image:image><image:loc>https://ophirstays.com/assets/ophir-durango-trail-map.jpg</image:loc></image:image>' if p == '/trail-map' else ''.join(f'<image:image><image:loc>https://ophirstays.com/assets/routes/{p[8:]}{x}.jpg</image:loc></image:image>' for x in ('', '-card')) if p.startswith('/trails/') else '') + '</url>\n' for p in ['/', '/stay', '/homes', '/owners', '/about', '/journal', '/journal/durango-rides', '/journal/durango-home-earnings', '/journal/where-to-eat-durango', '/journal/durango-short-term-rental-rules', '/trail-map', '/trails', '/guest-app', '/estimate', '/areas/purgatory', '/basecamp', '/buying', '/owner-checklist', '/journal/switch-rental-managers-durango', '/journal/la-plata-county-short-term-rental-permit', '/areas/hermosa', '/areas/animas-valley', '/areas/cascade', '/purgatory-vacation-rentals'] + [f"/trails/{r['slug']}" for r in ROUTES + HIGH_COUNTRY] + [f"/homes/{h['slug']}" for h in HOMES if not h['sample']]) + '</urlset>\n')
+
+_json.dump(_LM, open(_LM_FILE, 'w'), indent=1, sort_keys=True)
+
+# ---------------- LLMS.TXT ----------------
+# The plain-text summary AI assistants read. Keep the facts here in step with the pages.
+_route_lines = ''.join(f"- [{r['name']}]({SITE}/trails/{r['slug']}): {r['area']}, {r['miles']} miles, {r['climb']:,} ft of climbing, {r['difficulty'].lower()}\n" for r in ROUTES)
+_hc_lines = ''.join(f"- [{r['name']}]({SITE}/trails/{r['slug']}): {r['area']}, {r['miles']} miles, {r['climb']:,} ft of climbing, high point {r['high']:,} ft, {'shuttle' if r['shuttle'] else 'loop'}\n" for r in sorted(HIGH_COUNTRY, key=lambda r: HC_ORDER.index(r['slug'])))
+open('llms.txt', 'w').write(f"""# Ophir Stays
+
+> Ophir Stays is a locally owned vacation rental management and trip planning company in Durango, Colorado. It was founded in 2026 by Casey Roberts, who has lived in Durango since 2003, and manages a private collection capped at 25 homes.
+
+## Key facts
+- What it does: full-service vacation rental management for homeowners, and trip planning for the guests who stay in those homes.
+- Where: Durango, the Animas Valley, Hermosa, and the Purgatory area including Cascade Village, wherever nightly rentals are allowed.
+- Size: never more than 25 homes. Ten founding homes; five being taken on before summer 2027.
+- Management fee: 22% founding rate for the first ten homes, locked for as long as the owner stays. 25% after. Pricing, guests, cleaning, photography, trip planning and a monthly report are included. $0 to join.
+- Contract: thirty days' notice to leave, either way, no penalty.
+- First-year guarantee: if an owner takes home less in the first twelve months with Ophir than in the twelve months before, Ophir refunds the difference, up to the full management fee it earned that year. Requires twelve months of rental history.
+- Repairs: small fixes included; larger repairs at cost with no markup; nothing over $300 without the owner's approval.
+- Free earnings estimate: a three-page report within 24 hours, checked by Casey personally.
+- Guests: booking opens in 2027. Every stay includes a local host by text, 7am to 10pm.
+- Trip planning packages: The Arranged Stay, $395 per stay for up to 6 guests or $595 for 7 to 12. The Private Stay, $1,950 for up to five nights. Rentals, lift tickets and guides are paid at partner rates with no markup.
+- Ophir Basecamp: mountain bike and ski trips with routes, shuttles, fuel and repairs handled. $495 a stay for up to 6 guests, $795 for 7 to 12. Opens summer 2027.
+- Giving: $10 from every stay goes to Durango Trails, Adaptive Sports Association or Housing Solutions for the Southwest. The guest chooses. It comes from Ophir's fee.
+- Contact: casey@ophirstays.com, 970-779-8992.
+
+## For homeowners
+- [Durango vacation rental management]({SITE}/owners): how it works, the fee, the guarantee, the standard and how to apply
+- [Free earnings estimate]({SITE}/estimate): request a three-page report on any Durango home
+- [Buying a vacation rental in Durango]({SITE}/buying): what to check before you buy, with a free estimate
+- [Seven things to check on your manager's statement]({SITE}/owner-checklist)
+- [What a Durango vacation home earns]({SITE}/journal/durango-home-earnings): revenue by bedroom count and season
+- [Durango short-term rental rules]({SITE}/journal/durango-short-term-rental-rules): city permits, county taxes, HOAs
+- [La Plata County short-term rental permits, step by step]({SITE}/journal/la-plata-county-short-term-rental-permit)
+- [How to switch vacation rental managers in Durango]({SITE}/journal/switch-rental-managers-durango)
+
+## Areas
+- [Purgatory]({SITE}/areas/purgatory): vacation rental management at Purgatory and Durango Mountain
+- [Cascade Village]({SITE}/areas/cascade)
+- [Hermosa]({SITE}/areas/hermosa)
+- [Animas Valley]({SITE}/areas/animas-valley)
+
+## For guests
+- [Your Stay]({SITE}/stay): how a stay unfolds, what is included, packages and add-ons
+- [The Collection]({SITE}/homes): the homes
+- [Ophir Basecamp]({SITE}/basecamp): bike trips, training camps and guided backcountry skiing
+- [The guest app]({SITE}/guest-app): each guest's private trip page
+- [Purgatory Resort vacation rentals: where to stay]({SITE}/purgatory-vacation-rentals)
+- [Where to eat in Durango, from a local]({SITE}/journal/where-to-eat-durango)
+
+## Ride Durango
+- [Durango mountain bike routes]({SITE}/trails): maps, elevation profiles and free GPX
+- [Durango mountain bike trail map]({SITE}/trail-map): free printable PDF
+- [Five rides that show you Durango]({SITE}/journal/durango-rides)
+
+### Rides from town
+{_route_lines}
+### San Juan high country
+{_hc_lines}
+## About
+- [About Casey Roberts and Ophir Stays]({SITE}/about): the founder, local giving and the name
+- [Journal]({SITE}/journal): Durango guides and owner notes
+""")
 print('built')

@@ -33,8 +33,8 @@ import json as _json, re as _re, html as _html, hashlib as _hashlib, datetime as
 SITE = 'https://ophirstays.com'
 ORG_ID, PERSON_ID, WEBSITE_ID = SITE + '/#org', SITE + '/#casey', SITE + '/#website'
 PHONE = '+1-970-779-8992'
-# Paste the Instagram and Google Business Profile URLs here. They tie this site to those profiles for Google and AI engines.
-SAME_AS = []
+# Profiles that are also Ophir Stays. They tie this site to those profiles for Google and AI engines. Add the Google Business Profile URL.
+SAME_AS = ['https://www.instagram.com/ophirstays']
 ORG = {"@type": ["ProfessionalService", "LodgingBusiness"], "@id": ORG_ID, "name": "Ophir Stays",
   "description": "Locally owned vacation rental management and trip planning for a private collection of no more than 25 homes in Durango, Colorado.",
   "slogan": "Durango homes, run by someone who lives here.",
@@ -185,7 +185,7 @@ FOOT = '''<footer class="site-foot">
       <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
       <p class="nl-status" role="status" aria-live="polite"></p>
     </form>
-    <nav class="foot-links" aria-label="Footer"><a href="/stay">Your Stay</a><a href="/basecamp">Basecamp</a><a href="/owners">Owners</a><a href="/buying">Buying a Rental</a><a href="/journal">Journal</a><a href="/trails">Bike Routes</a><a href="/trail-map">Trail Map</a><a href="/about">About</a><a href="mailto:casey@ophirstays.com">casey@ophirstays.com</a></nav>
+    <nav class="foot-links" aria-label="Footer"><a href="/stay">Your Stay</a><a href="/basecamp">Basecamp</a><a href="/owners">Owners</a><a href="/buying">Buying a Rental</a><a href="/journal">Journal</a><a href="/trails">Bike Routes</a><a href="/trail-map">Trail Map</a><a href="/about">About</a><a href="mailto:casey@ophirstays.com">casey@ophirstays.com</a><a href="https://www.instagram.com/ophirstays" rel="me noopener">Instagram</a></nav>
     <div class="foot-base"><span>© 2026 Ophir Stays</span><span>Durango, Colorado · <a href="tel:+19707798992">970-779-8992</a></span><span>Guest booking opens 2027</span></div>
   </div>
 </footer>

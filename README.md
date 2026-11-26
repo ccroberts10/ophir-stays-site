@@ -88,7 +88,7 @@ The guest trip page has an "Ask Ophir" box once the trip is planned. It answers 
 `assets/photos/library/` (with 480px thumbs in `t/`) and `assets/video/` hold Casey's own high-country, Basecamp and family photos and two vertical clips, ready to drop into any page. Every file, its alt text and suggested use is listed in `data/media-library.json`. GPS metadata stripped.
 
 ## Search and AI visibility
-- **Business details for Google and AI engines** live at the top of `build.py` (`ORG`, `PERSON`, `OFFERS`). Every page carries them. Paste the Instagram and Google Business Profile URLs into `SAME_AS`.
+- **Business details for Google and AI engines** live at the top of `build.py` (`ORG`, `PERSON`, `OFFERS`). Every page carries them. Instagram is in `SAME_AS`; add the Google Business Profile URL there too.
 - **FAQs** on the home, Your Stay and Basecamp pages are the lists `HOME_FAQ`, `STAY_FAQ` and `BASECAMP_FAQ`. Each question shows on the page and in the page's schema. If a price or term changes, change it there and in the `llms.txt` block at the bottom of `build.py`.
 - **`llms.txt`** is written by `build.py`. Edit the block at the bottom of `build.py`, not the file.
 - **Sitemap dates** come from `data/lastmod.json`. A page's date moves only when its body changes. Commit that file with each build.

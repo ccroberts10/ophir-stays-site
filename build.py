@@ -613,7 +613,7 @@ owners_body = f'''
         <p class="lead">Tell us about your home. Within 24 hours you get a three-page report: expected rent month by month, what you keep after every cost, comparable homes and our terms. Free, with no obligation.</p>
         <p class="fine" style="margin-top:16px"><a href="/assets/ophir-earnings-estimate-sample.pdf">See a sample report</a></p>
         <p class="fine" style="margin-top:28px">Prefer to talk? <a href="mailto:casey@ophirstays.com">casey@ophirstays.com</a></p>
-        <p class="fine" style="margin-top:12px">Before you apply: <a href="/journal/durango-home-earnings">what a Durango vacation home earns</a> and <a href="/journal/durango-short-term-rental-rules">the city and county rental rules</a>. Own nearby? <a href="/areas/purgatory">Purgatory</a> · <a href="/areas/cascade">Cascade Village</a> · <a href="/areas/hermosa">Hermosa</a> · <a href="/areas/animas-valley">Animas Valley</a>. Switching? <a href="/journal/switch-rental-managers-durango">How to switch managers</a>.</p>
+        <p class="fine" style="margin-top:12px">Before you apply: <a href="/journal/durango-home-earnings">what a Durango vacation home earns</a> and <a href="/journal/durango-short-term-rental-rules">the city and county rental rules</a>. Own nearby? <a href="/areas/purgatory">Purgatory</a> · <a href="/areas/cascade">Cascade Village</a> · <a href="/areas/hermosa">Hermosa</a> · <a href="/areas/animas-valley">Animas Valley</a>. Switching? <a href="/journal/switch-rental-managers-durango">How to switch managers</a> and <a href="/journal/durango-vacation-rental-managers-compared">Durango managers compared</a>.</p>
       </div>
       <div class="reveal" id="estimate-box">
         {ESTIMATE_FORM}
@@ -1073,6 +1073,7 @@ journal_body = f'''
       <a class="card reveal" href="/trail-map"><div class="ph"><img src="/assets/trail-map-web.jpg?v=2" alt="Ophir Stays Durango mountain bike trail map" loading="lazy" style="object-position:top"></div><p class="post-meta">Ride</p><h3>Durango trail map</h3><p>Every trail system around town on one free, printable map.</p><span class="link">Open the map</span></a>
       <a class="card reveal" href="/journal/where-to-eat-durango">{photo('coffee', 'A latte at a Durango café table', 'ph')}<p class="post-meta">Eat</p><h3>Where to eat in Durango, from a local</h3><p>Thirteen places, sorted by the night you're having: a special dinner, a date, friends, kids, or lunch on the run.</p><span class="link">Read</span></a>
       <a class="card reveal" href="/journal/durango-home-earnings">{photo('journal-3', 'Gold aspens below Mount Sneffels', 'ph')}<p class="post-meta">Owners</p><h3>What a Durango vacation home earns, and what decides it</h3><p>Three data firms, three answers. What the numbers say, and the five things that separate the top homes.</p><span class="link">Read</span></a>
+      <a class="card reveal" href="/journal/durango-vacation-rental-managers-compared"><div class="ph"><img src="{HERO_IMG}" alt="{HERO_ALT}" loading="lazy"></div><p class="post-meta">Owners</p><h3>Durango vacation rental managers, compared</h3><p>Seven managers side by side: who publishes fees, exit terms and what to ask.</p><span class="link">Read</span></a>
       <a class="card reveal" href="/journal/switch-rental-managers-durango">{photo('hero-fireplace', 'A great room with the fire lit in a Durango home', 'ph')}<p class="post-meta">Owners</p><h3>How to switch rental managers in Durango</h3><p>Your contract, booked stays, reviews, keys and taxes, on a 30 to 60 day timeline.</p><span class="link">Read</span></a>
       <a class="card reveal" href="/journal/la-plata-county-short-term-rental-permit">{photo('home-1', 'A mountain home in La Plata County', 'ph')}<p class="post-meta">Owners</p><h3>La Plata County rental permits, step by step</h3><p>No county permit yet. What you do need, and what may change in 2027.</p><span class="link">Read</span></a>
       <a class="card reveal" href="/journal/durango-short-term-rental-rules">{photo('ophir', 'Ice Lake Basin in the San Juans near Ophir', 'ph')}<p class="post-meta">Owners</p><h3>Can you rent your Durango home short-term?</h3><p>City permits, county taxes and the HOA question, in plain English.</p><span class="link">Read</span></a>
@@ -1928,9 +1929,9 @@ os.makedirs('areas', exist_ok=True)
 def lib(name, alt):
     return f'<div class="photo"><img src="/assets/photos/library/{name}.jpg" alt="{alt}" loading="lazy"></div>'
 
-def guide_page(path, title, desc, eyebrow, h1, pic, body, faq=(), crumb='For owners', image='/assets/og.jpg', area=None):
+def guide_page(path, title, desc, eyebrow, h1, pic, body, faq=(), crumb='For owners', image='/assets/og.jpg', area=None, published='2026-11-22'):
     faq_html = ''.join(f'<details><summary>{q}</summary><p>{a}</p></details>' for q, a in faq)
-    graph = [{"@type": "Article", "headline": h1, "datePublished": "2026-11-22", "author": {"@type": "Person", "name": "Casey Roberts", "url": "https://ophirstays.com/about"}, "publisher": {"@type": "Organization", "name": "Ophir Stays"}, "mainEntityOfPage": "https://ophirstays.com" + path},
+    graph = [{"@type": "Article", "headline": h1, "datePublished": published, "author": {"@type": "Person", "name": "Casey Roberts", "url": "https://ophirstays.com/about"}, "publisher": {"@type": "Organization", "name": "Ophir Stays"}, "mainEntityOfPage": "https://ophirstays.com" + path},
              {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Ophir Stays", "item": "https://ophirstays.com/"}, {"@type": "ListItem", "position": 2, "name": crumb, "item": "https://ophirstays.com/owners"}, {"@type": "ListItem", "position": 3, "name": h1, "item": "https://ophirstays.com" + path}]}]
     if faq:
         graph.append({"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": a}} for q, a in faq]})
@@ -1951,7 +1952,7 @@ def guide_page(path, title, desc, eyebrow, h1, pic, body, faq=(), crumb='For own
 {body}
       {('<h2>Questions owners ask</h2><div class="faq">' + faq_html + '</div>') if faq else ''}
       <p style="margin-top:36px"><a class="btn btn-rust" href="/owners#estimate">Get a free estimate</a></p>
-      <p class="fine" style="margin-top:14px">Related: <a href="/journal/durango-short-term-rental-rules">city and county rental rules</a> · <a href="/journal/la-plata-county-short-term-rental-permit">La Plata County rentals, step by step</a> · <a href="/journal/switch-rental-managers-durango">how to switch managers</a> · <a href="/owner-checklist">the statement checklist</a></p>
+      <p class="fine" style="margin-top:14px">Related: <a href="/journal/durango-short-term-rental-rules">city and county rental rules</a> · <a href="/journal/la-plata-county-short-term-rental-permit">La Plata County rentals, step by step</a> · <a href="/journal/switch-rental-managers-durango">how to switch managers</a> · <a href="/journal/durango-vacation-rental-managers-compared">Durango managers compared</a> · <a href="/owner-checklist">the statement checklist</a></p>
     </div>
   </section>
 '''
@@ -2022,6 +2023,95 @@ switch_page = guide_page('/journal/switch-rental-managers-durango',
     switch_body, SWITCH_FAQ, image='/assets/photos/hero-fireplace.jpg')
 
 # --- La Plata County permits, step by step
+# ---------------- MANAGERS COMPARED ----------------
+# Every fact about another company comes from the source linked beside it. Re-check each link before changing a row, and update "Checked" below.
+def _src(url, label): return f'<a href="{url}" rel="noopener nofollow">{label}</a>'
+S_VRC = _src('https://www.durango.org/listing/vacation-rental-collective/626/', 'Visit Durango listing')
+S_VRC_MAR = _src('https://homes-and-villas.marriott.com/en/properties/40315448-durango-lake-purgatory-drive', 'its Marriott Homes &amp; Villas listings')
+S_VRC_AIRROI = _src('https://www.airroi.com/airbnb-data/management-companies/vacation-rental-collective', 'AirROI')
+S_PURG = _src('https://www.purgatory.ski/lodging/purgatory-lodging-rental-program/', 'Purgatory Lodging Rental Program page')
+S_PURG_LODGING = _src('https://www.purgatory.ski/lodging', 'its lodging page')
+S_CASAGO = _src('https://casago.com/durango/property-management/', 'Casago&rsquo;s Durango page')
+S_VACASA = _src('https://www.vacasa.com/property-Management/', 'Vacasa&rsquo;s own site')
+S_EVOLVE = _src('https://evolve.com/homeowners', 'Evolve&rsquo;s plans page')
+S_DCV = _src('https://airbtics.com/airbnb-management-companies/durango-colorado-vacations-103732354', 'Airbtics')
+S_RED = _src('https://www.durangomagazine.com/directory/durango-red-cliff-properties/', 'Durango Magazine directory')
+S_RED_VD = _src('https://www.durango.org/listing/red-cliff-properties-inc/625/', 'Visit Durango listing')
+
+MGR_ROWS = [
+  ('Vacation Rental Collective', 'Full service. Durango and the Purgatory area.', 'Not published', 'Not published', False),
+  ('Purgatory Resort rental program', 'Resort rental pool, for units at the mountain.', 'Resort keeps 35%. Owner receives 65%.', 'Not published', False),
+  ('Casago (formerly Vacasa)', 'Full service. National brand, local franchise.', 'Not published', 'Says no long-term contracts', False),
+  ('Evolve', 'Marketing and booking. You arrange cleaning and repairs.', '10% Core, 15% Plus, plus a one-time $250', 'No long-term commitment', False),
+  ('Durango Colorado Vacations', 'Vacation rental management. Durango based.', 'Not published', 'Not published', False),
+  ('Red Cliff Properties', 'Vacation rentals and property management. Family owned.', 'Not published', 'Not published', False),
+  ('Ophir Stays', 'Full service plus guest trip planning. Capped at 25 homes.', '22% for the first ten homes, 25% after', '30 days&rsquo; notice, either way', True)]
+mgr_table = ('<table class="compare"><thead><tr><th scope="col">Manager</th><th scope="col">Model</th><th scope="col">Published owner cost</th><th scope="col">Published exit terms</th></tr></thead><tbody>'
+  + ''.join(f'<tr><th scope="row">{n}</th><td{c} data-l="Model">{m}</td><td{c} data-l="Published owner cost">{f}</td><td{c} data-l="Published exit terms">{x}</td></tr>' for n, m, f, x, us in MGR_ROWS for c in [' class="us"' if us else ''])
+  + '</tbody></table>')
+
+MGR_FAQ = [
+  ('Which Durango vacation rental managers publish their fees?', 'Three do. Evolve publishes 10% on its Core plan and 15% on Plus. Purgatory Resort publishes a 65% revenue split for owners in its rental program, so the resort keeps 35%. Ophir Stays publishes 22% for its first ten homes and 25% after. Vacation Rental Collective, Casago, Durango Colorado Vacations and Red Cliff Properties do not publish a rate on their public pages.'),
+  ('How much does vacation rental management cost in Durango?', 'Published rates run from 10% for marketing-only service, where you still pay for cleaning and repairs yourself, to the 35% Purgatory Resort keeps in its rental pool. Airbtics estimates that full-service managers in Durango typically charge 20 to 30%. Always ask what the percentage is charged on and what is billed on top of it.'),
+  ('Is Vacasa still in Durango?', 'Vacasa says its property management is moving to Casago, its parent company, which runs each market through a local franchise owner. In Durango that business now operates as Casago Durango.'),
+  ('What is the difference between full-service and marketing-only management?', 'A full-service manager handles the home itself: cleaning, inspections, repairs and guests on the ground. A marketing-only manager, such as Evolve, handles the listing, pricing and bookings and leaves the work at the house to you or to people you hire. Compare the two on total cost, not on the percentage.'),
+  ('Can I switch vacation rental managers in Durango?', 'Yes. Read the termination clause in your agreement first, then plan the handover around stays already booked. Most switches take 30 to 60 days.')]
+
+managers_body = f"""      <p><strong>Seven companies are the ones a Durango owner is most likely to compare, and only three publish what they charge: Evolve (10% or 15%, with cleaning and repairs left to you), Purgatory Resort&rsquo;s rental program (the resort keeps 35%) and Ophir Stays (22% for founding homes, 25% after). The others don&rsquo;t publish a rate. Here is what each one says about itself, with sources, and what to ask before you sign.</strong></p>
+      <p>We are one of the companies on this list, so read it that way. Every fact about another company comes from its own website or a public listing, linked beside it. Where a company doesn&rsquo;t publish something, we say so and don&rsquo;t guess. Checked November 2026.</p>
+      <h2>Side by side</h2>
+      {mgr_table}
+      <p class="fine">&ldquo;Not published&rdquo; means we couldn&rsquo;t find it on the company&rsquo;s public pages. It says nothing about whether the terms are good. Ask for them in writing.</p>
+
+      <h2>Vacation Rental Collective (VRC)</h2>
+      <p>A full-service manager with an office at 12 Lizard Head Drive, renting cabins, luxury homes, townhomes and condos in Durango and around Purgatory ({S_VRC}). In {S_VRC_MAR} it describes itself as locally owned and operated and says every home is inspected before arrival. It also lists on Airbnb and Vrbo. {S_VRC_AIRROI} counts 512 active Airbnb listings under its name for the year to September 2026, a little over half of them in Durango.</p>
+      <p>It doesn&rsquo;t publish its owner fee or contract terms. <em>Ask:</em> the rate for your home, what it is charged on, and the notice period.</p>
+
+      <h2>Purgatory Resort rental program</h2>
+      <p>The resort&rsquo;s own rental pool for units at the mountain. It publishes its split: owners receive 65% of revenue ({S_PURG}). The program includes a front desk that greets guests, in-house maintenance, housekeeping at departure at no added charge to the owner, and group and event bookings through the resort. {_src('https://www.purgatory.ski/lodging', 'Its lodging page')} also lists two free season passes for whole-ownership units.</p>
+      <p>The page doesn&rsquo;t say whether anything comes off before the split, or how long the agreement runs. <em>Ask:</em> both, and what restocking costs.</p>
+
+      <h2>Casago (formerly Vacasa)</h2>
+      <p>{S_VACASA} says its property management is moving to Casago, its parent company, which runs each market through a franchise owner who lives there. {S_CASAGO} describes full service: housekeeping, maintenance, marketing, guest screening and round-the-clock guest support, with homes listed on its own site and more than 25 booking sites. It says there are no long-term contracts and no hidden fees.</p>
+      <p>It doesn&rsquo;t publish the fee. <em>Ask:</em> the rate, and who owns and runs the Durango franchise.</p>
+
+      <h2>Evolve</h2>
+      <p>A national company that handles the listing, pricing, marketing and bookings and leaves the work at the house to you. You hire the cleaner and the handyman, use Evolve&rsquo;s vetted local partners, or do it yourself. Fees are published: 10% on the Core plan, 15% on Plus and a custom rate on Pro, plus a one-time $250 onboarding fee, charged only after guests check in ({S_EVOLVE}).</p>
+      <p>The percentage is the lowest here because it covers the least. <em>Ask yourself:</em> what cleaning, inspections and repairs will cost on top, and who checks the house between guests.</p>
+
+      <h2>Durango Colorado Vacations</h2>
+      <p>A Durango-based manager. {S_DCV} shows a 4.8 average guest rating on Airbnb and says owner fees are quoted by the home. We couldn&rsquo;t find published owner terms.</p>
+      <p><em>Ask:</em> the rate, what it is charged on, and the notice period.</p>
+
+      <h2>Red Cliff Properties</h2>
+      <p>A family-owned and operated company at 97 Orchard Lane, offering vacation rentals and property management ({S_RED_VD}) and representing more than 50 properties in and around Durango ({S_RED}).</p>
+      <p>It doesn&rsquo;t publish its owner fee or contract terms. <em>Ask:</em> the same three questions.</p>
+
+      <h2>Ophir Stays</h2>
+      <p>Us. Locally owned, founded in 2026 and capped at twenty-five homes. The fee is 22% for the first ten homes, locked for as long as you stay, and 25% after. It covers pricing, guests, cleaning, photography, trip planning for every guest and a monthly report. If you take home less in your first twelve months than in the twelve before, we refund the difference, up to our full fee. Thirty days&rsquo; notice to leave, either way. <a href="/owners">Full owner terms</a>.</p>
+      <p>What we don&rsquo;t have yet: guests and reviews. Guest booking opens in 2027, so our first owners are trusting a new company. The guarantee exists for that reason. If a long track record matters most to you, one of the established companies above is the safer choice today.</p>
+
+      <h2>Managing it yourself</h2>
+      <p>Many Durango owners do. You keep everything but the platform fees and you control the calendar. It costs hours every week and the late calls, and it is hard to do well from out of state. It suits owners who live nearby and enjoy the work.</p>
+
+      <h2>How to compare them</h2>
+      <ol>
+        <li><strong>What is the fee charged on?</strong> Nightly rent only, or cleaning and other guest fees too.</li>
+        <li><strong>What is billed on top?</strong> Linens, supplies, card fees, and whether repairs carry a markup.</li>
+        <li><strong>How do you leave?</strong> The notice period, any exit fee, and what happens to booked stays.</li>
+        <li><strong>Who answers, and where do they live?</strong> For you, and for a guest at nine at night.</li>
+        <li><strong>How many homes does each manager look after?</strong></li>
+        <li><strong>Can you see a real owner statement?</strong> Use <a href="/owner-checklist">our seven-point statement checklist</a> to read it.</li>
+      </ol>
+      <p>Compare on what you keep at the end of the year, not on the percentage. A free estimate from us shows that number for your home: <a href="/estimate">request one</a>.</p>
+      <p class="fine">Company names belong to their owners. This is a summary of public information, not a review of anyone&rsquo;s service, and terms change. If something here is out of date, email <a href="mailto:casey@ophirstays.com">casey@ophirstays.com</a> and we&rsquo;ll correct it.</p>
+"""
+managers_page = guide_page('/journal/durango-vacation-rental-managers-compared',
+    'Durango Vacation Rental Management Companies Compared (2026) · Ophir Stays',
+    'Seven Durango vacation rental managers side by side: who publishes fees, what each includes, exit terms and what to ask. Sourced, checked November 2026.',
+    'Owners', 'Durango vacation rental managers, compared', lib('needles-alpenglow-purgatory', HERO_ALT),
+    managers_body, MGR_FAQ, image=HERO_IMG, published='2026-11-25')
+
 PERMIT_FAQ = [
  ("Do I need a short-term rental permit in La Plata County?", "Not outside city limits, as of November 2026. Unincorporated La Plata County has no short-term rental permit or license. You do need a Colorado sales tax license to collect state and county sales tax and the county lodging tax, and your HOA has to allow it. The county lists short-term rental rules as a future code amendment, targeted for the third quarter of 2027."),
  ("Is my home in the city or the county?", "Look up your parcel on the La Plata County assessor's map. An address that says Durango can still be in the county: most of the Animas Valley, Hermosa and Purgatory are."),
@@ -2167,7 +2257,7 @@ letter_page = page('Your Letter from Ophir Stays · Free Estimate', 'For Durango
                    '/letter', 'owners', letter_body, FORM_JS).replace('<meta name="viewport"', '<meta name="robots" content="noindex">\n<meta name="viewport"', 1)
 
 os.makedirs('areas', exist_ok=True)
-for name, html in [('index.html', home), ('owners.html', owners), ('about.html', about), ('journal.html', journal), ('journal/durango-rides.html', post), ('journal/durango-home-earnings.html', post2), ('journal/where-to-eat-durango.html', post3), ('journal/durango-short-term-rental-rules.html', post4), ('trail-map.html', trailmap), ('trails.html', trails_index), ('guest-app.html', guestapp), ('estimate.html', estimate_page), ('homes.html', homes_page), ('stay.html', stay_page), ('areas/purgatory.html', purg_page), ('basecamp.html', basecamp_page), ('buying.html', buying_page), ('owner-checklist.html', checklist_page), ('journal/switch-rental-managers-durango.html', switch_page), ('journal/la-plata-county-short-term-rental-permit.html', permit_page), ('areas/hermosa.html', hermosa_page), ('areas/animas-valley.html', valley_page), ('areas/cascade.html', cascade_page), ('letter.html', letter_page), ('purgatory-vacation-rentals.html', pg_page)] + [(f"homes/{h['slug']}.html", home_page(h)) for h in LIVE_HOMES] + [(f"trails/{r['slug']}.html", route_page(r)) for r in ROUTES] + [(f"trails/{r['slug']}.html", hc_page(r)) for r in HIGH_COUNTRY]:
+for name, html in [('index.html', home), ('owners.html', owners), ('about.html', about), ('journal.html', journal), ('journal/durango-rides.html', post), ('journal/durango-home-earnings.html', post2), ('journal/where-to-eat-durango.html', post3), ('journal/durango-short-term-rental-rules.html', post4), ('trail-map.html', trailmap), ('trails.html', trails_index), ('guest-app.html', guestapp), ('estimate.html', estimate_page), ('homes.html', homes_page), ('stay.html', stay_page), ('areas/purgatory.html', purg_page), ('basecamp.html', basecamp_page), ('buying.html', buying_page), ('owner-checklist.html', checklist_page), ('journal/switch-rental-managers-durango.html', switch_page), ('journal/la-plata-county-short-term-rental-permit.html', permit_page), ('journal/durango-vacation-rental-managers-compared.html', managers_page), ('areas/hermosa.html', hermosa_page), ('areas/animas-valley.html', valley_page), ('areas/cascade.html', cascade_page), ('letter.html', letter_page), ('purgatory-vacation-rentals.html', pg_page)] + [(f"homes/{h['slug']}.html", home_page(h)) for h in LIVE_HOMES] + [(f"trails/{r['slug']}.html", route_page(r)) for r in ROUTES] + [(f"trails/{r['slug']}.html", hc_page(r)) for r in HIGH_COUNTRY]:
     open(name, 'w').write(html)
 
 # ---------------- SITEMAP DATES ----------------
@@ -2182,7 +2272,7 @@ def lastmod(p):
         _LM[p] = {'hash': fp, 'date': _dt.date.today().isoformat()}
     return _LM[p]['date']
 open('sitemap.xml', 'w').write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">\n' +
-    ''.join(f'<url><loc>https://ophirstays.com{p}</loc><lastmod>{lastmod(p)}</lastmod>' + ('<image:image><image:loc>https://ophirstays.com/assets/ophir-durango-trail-map.jpg</image:loc></image:image>' if p == '/trail-map' else ''.join(f'<image:image><image:loc>https://ophirstays.com/assets/routes/{p[8:]}{x}.jpg</image:loc></image:image>' for x in ('', '-card')) if p.startswith('/trails/') else '') + '</url>\n' for p in ['/', '/stay', '/homes', '/owners', '/about', '/journal', '/journal/durango-rides', '/journal/durango-home-earnings', '/journal/where-to-eat-durango', '/journal/durango-short-term-rental-rules', '/trail-map', '/trails', '/guest-app', '/estimate', '/areas/purgatory', '/basecamp', '/buying', '/owner-checklist', '/journal/switch-rental-managers-durango', '/journal/la-plata-county-short-term-rental-permit', '/areas/hermosa', '/areas/animas-valley', '/areas/cascade', '/purgatory-vacation-rentals'] + [f"/trails/{r['slug']}" for r in ROUTES + HIGH_COUNTRY] + [f"/homes/{h['slug']}" for h in HOMES if not h['sample']]) + '</urlset>\n')
+    ''.join(f'<url><loc>https://ophirstays.com{p}</loc><lastmod>{lastmod(p)}</lastmod>' + ('<image:image><image:loc>https://ophirstays.com/assets/ophir-durango-trail-map.jpg</image:loc></image:image>' if p == '/trail-map' else ''.join(f'<image:image><image:loc>https://ophirstays.com/assets/routes/{p[8:]}{x}.jpg</image:loc></image:image>' for x in ('', '-card')) if p.startswith('/trails/') else '') + '</url>\n' for p in ['/', '/stay', '/homes', '/owners', '/about', '/journal', '/journal/durango-rides', '/journal/durango-home-earnings', '/journal/where-to-eat-durango', '/journal/durango-short-term-rental-rules', '/trail-map', '/trails', '/guest-app', '/estimate', '/areas/purgatory', '/basecamp', '/buying', '/owner-checklist', '/journal/switch-rental-managers-durango', '/journal/la-plata-county-short-term-rental-permit', '/journal/durango-vacation-rental-managers-compared', '/areas/hermosa', '/areas/animas-valley', '/areas/cascade', '/purgatory-vacation-rentals'] + [f"/trails/{r['slug']}" for r in ROUTES + HIGH_COUNTRY] + [f"/homes/{h['slug']}" for h in HOMES if not h['sample']]) + '</urlset>\n')
 
 _json.dump(_LM, open(_LM_FILE, 'w'), indent=1, sort_keys=True)
 
@@ -2218,6 +2308,7 @@ open('llms.txt', 'w').write(f"""# Ophir Stays
 - [Durango short-term rental rules]({SITE}/journal/durango-short-term-rental-rules): city permits, county taxes, HOAs
 - [La Plata County short-term rental permits, step by step]({SITE}/journal/la-plata-county-short-term-rental-permit)
 - [How to switch vacation rental managers in Durango]({SITE}/journal/switch-rental-managers-durango)
+- [Durango vacation rental management companies compared]({SITE}/journal/durango-vacation-rental-managers-compared): seven managers, published fees and exit terms, with sources
 
 ## Areas
 - [Purgatory]({SITE}/areas/purgatory): vacation rental management at Purgatory and Durango Mountain

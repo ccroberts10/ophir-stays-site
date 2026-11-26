@@ -8,16 +8,16 @@
   "hash": "c4f66a7307515e5d"
  },
  "/areas/animas-valley": {
-  "date": "2026-11-22",
-  "hash": "3b11263d3ab7d172"
+  "date": "2026-11-25",
+  "hash": "da9ea117adb905e1"
  },
  "/areas/cascade": {
-  "date": "2026-11-22",
-  "hash": "cd5b3d4bf74f661c"
+  "date": "2026-11-25",
+  "hash": "514409dde1645e51"
  },
  "/areas/hermosa": {
-  "date": "2026-11-22",
-  "hash": "691d47746d728023"
+  "date": "2026-11-25",
+  "hash": "1cbd8264b39407fe"
  },
  "/areas/purgatory": {
   "date": "2026-11-22",
@@ -44,8 +44,8 @@
   "hash": "72f78d3fb4ce4032"
  },
  "/journal": {
-  "date": "2026-11-22",
-  "hash": "12f25467bc97783a"
+  "date": "2026-11-25",
+  "hash": "b52962f9b5c5549e"
  },
  "/journal/durango-home-earnings": {
   "date": "2026-11-21",
@@ -59,13 +59,17 @@
   "date": "2026-11-22",
   "hash": "5afd019d5711ff92"
  },
+ "/journal/durango-vacation-rental-managers-compared": {
+  "date": "2026-11-25",
+  "hash": "a9893bec720fc06d"
+ },
  "/journal/la-plata-county-short-term-rental-permit": {
-  "date": "2026-11-22",
-  "hash": "e394c34c4786dc44"
+  "date": "2026-11-25",
+  "hash": "3f5aadf1258e4451"
  },
  "/journal/switch-rental-managers-durango": {
-  "date": "2026-11-22",
-  "hash": "4ea0d5897958d9cb"
+  "date": "2026-11-25",
+  "hash": "9558c23f53d1fa04"
  },
  "/journal/where-to-eat-durango": {
   "date": "2026-11-22",
@@ -77,7 +81,7 @@
  },
  "/owners": {
   "date": "2026-11-25",
-  "hash": "7fbaac9adfcaf16a"
+  "hash": "7d8669a27c6cc715"
  },
  "/purgatory-vacation-rentals": {
   "date": "2026-11-22",
